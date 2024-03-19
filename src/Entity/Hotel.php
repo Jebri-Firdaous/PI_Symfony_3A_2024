@@ -1,81 +1,55 @@
 <?php
 
 namespace App\Entity;
-
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-
+use App\Repository\HotelRepository;
 /**
- * Hotel
- *
- * @ORM\Table(name="hotel")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\HotelRepository")
  */
+
+#[ORM\Entity(repositoryClass: HotelRepository::class)]
+
 class Hotel
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id_hotel", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $idHotel;
+    
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="nom_hotel", type="string", length=30, nullable=false)
-     */
-    private $nomHotel;
+     #[ORM\Id]
+     #[ORM\GeneratedValue]
+     #[ORM\Column]
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="adress_hotel", type="string", length=50, nullable=false)
-     */
-    private $adressHotel;
+    private ?int  $idHotel = null;
 
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="prix1", type="float", precision=10, scale=0, nullable=false)
-     */
-    private $prix1;
 
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="prix2", type="float", precision=10, scale=0, nullable=false)
-     */
-    private $prix2;
+     #[ORM\Column(length: 15)]
+    private  ?string $nomHotel = null;
 
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="prix3", type="float", precision=10, scale=0, nullable=false)
-     */
-    private $prix3;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="numero1", type="integer", nullable=false)
-     */
-    private $numero1;
+     #[ORM\Column(length: 30)]
+     private  ?string $adressHotel = null;
+    
+    
+     #[ORM\Column]
+    private  ?float $prix1 = null;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="numero2", type="integer", nullable=false)
-     */
-    private $numero2;
+   
+    #[ORM\Column]
+    private ?float $prix2 = null;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="numero3", type="integer", nullable=false)
-     */
-    private $numero3;
+    #[ORM\Column]
+    private ?float  $prix3 = null;
+
+  
+    #[ORM\Column]
+   
+    private ?int $numero1 = null ;
+
+    #[ORM\Column]
+    private ?int $numero2 = null ;
+
+  
+    #[ORM\Column]
+    private ?int $numero3 = null ;
 
     public function getIdHotel(): ?int
     {
