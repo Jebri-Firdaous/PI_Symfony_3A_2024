@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Entity;
-use App\Entity\Personne; // Add the use statement for Personne
 use Doctrine\ORM\Mapping as ORM;
 
 /**

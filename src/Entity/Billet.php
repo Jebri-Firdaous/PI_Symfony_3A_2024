@@ -4,8 +4,7 @@ namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use App\Entity\Station; 
-use App\Entity\Client;
+
 /**
  * Billet
  *
@@ -124,10 +123,6 @@ class Billet
         return $this;
     }
 
-    public function getStation(): ?Station
-    {
-        return $this->station;
-    }
 
     public function setStation(?Station $station): static
     {
@@ -136,16 +131,22 @@ class Billet
         return $this;
     }
 
-    public function getIdPersonne(): ?Client
-    {
-        return $this->idPersonne;
-    }
 
     public function setIdPersonne(?Client $idPersonne): static
     {
         $this->idPersonne = $idPersonne;
 
         return $this;
+    }
+
+    public function getStation(): ?Station
+    {
+        return $this->station;
+    }
+
+    public function getIdPersonne(): ?Client
+    {
+        return $this->idPersonne;
     }
 
 
