@@ -19,7 +19,7 @@ class Administrateur extends Personne
     private ?string $role = '';
 
     #[ORM\OneToOne( inversedBy: "administrateur")]
-    protected ?Personne $idPersonne;
+    private ?Personne $idPersonne;
 
     public function getRole(): ?string
     {
@@ -30,6 +30,16 @@ class Administrateur extends Personne
     {
         $this->role = $role;
 
+        return $this;
+    }
+    public function getIdPersonne(): ?int
+    {
+        return $this->idPersonne;
+    }
+
+    public function setIdPersonne(?Personne $idPersonne): static
+    {
+        $this->idPersonne = $idPersonne;
         return $this;
     }
 

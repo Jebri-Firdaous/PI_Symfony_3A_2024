@@ -20,8 +20,18 @@ class Client extends Personne
     private ?int $age=0;
     
     #[ORM\OneToOne( inversedBy: "lesclient")]
-    protected ?Personne $idPersonne;
-    
+    private ?Personne $idPersonne;
+    public function getIdPersonne(): ?int
+    {
+        return $this->idPersonne;
+    }
+
+    public function setIdPersonne(?Personne $idPersonne): static
+    {
+        $this->idPersonne = $idPersonne;
+        return $this;
+    }
+
 
     public function getGenre(): ?string
     {
