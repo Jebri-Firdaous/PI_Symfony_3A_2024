@@ -4,10 +4,12 @@ namespace App\Entity;
 use repository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+
 use App\Entity\Station; 
 use App\Entity\Client;
 use DateTime;
 use App\Repository\billetRepository ;
+
 /**
  * @ORM\Entity(repositoryClass="App\Repository\billetRepository")
  */
@@ -90,10 +92,6 @@ class Billet
         return $this;
     }
 
-    public function getStation(): ?Station
-    {
-        return $this->station;
-    }
 
     public function setStation(?Station $station): static
     {
@@ -102,16 +100,22 @@ class Billet
         return $this;
     }
 
-    public function getIdPersonne(): ?Client
-    {
-        return $this->idPersonne;
-    }
 
     public function setIdPersonne(?Client $idPersonne): static
     {
         $this->idPersonne = $idPersonne;
 
         return $this;
+    }
+
+    public function getStation(): ?Station
+    {
+        return $this->station;
+    }
+
+    public function getIdPersonne(): ?Client
+    {
+        return $this->idPersonne;
     }
 
 
