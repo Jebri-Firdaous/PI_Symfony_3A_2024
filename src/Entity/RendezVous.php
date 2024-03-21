@@ -1,35 +1,23 @@
 <?php
 
 namespace App\Entity;
-
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use App\Entity\Medecin;
-use App\Entity\Client;
-
+use App\Repository\RendezVousRepository;
 /**
- * RendezVous
- *
- * @ORM\Table(name="rendez-vous", indexes={@ORM\Index(name="id_personne", columns={"id_personne"}), @ORM\Index(name="id_medecin", columns={"id_medecin"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\RendezVousRepository")
  */
+
+#[ORM\Entity(repositoryClass: RendezVousRepository::class)]
 class RendezVous
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="ref_rendez_vous", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
     private $refRendezVous;
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="date_rendez_vous", type="datetime", nullable=false)
-     */
-    private $dateRendezVous;
+    #[ORM\Column]
+    private ?DateTime $dateRendezVous;
 
     /**
      * @var \Medecin
@@ -39,17 +27,12 @@ class RendezVous
      *   @ORM\JoinColumn(name="id_medecin", referencedColumnName="id_medecin")
      * })
      */
-    private $idMedecin;
+    #[ORM\ManyToOne(inversedBy: 'lesRendezVousMedecins')]
+    private ?Medecin $idMedecin;
 
-    /**
-     * @var \Client
-     *
-     * @ORM\ManyToOne(targetEntity="Client")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_personne", referencedColumnName="id_personne")
-     * })
-     */
-    private $idPersonne;
+
+    #[ORM\ManyToOne(inversedBy: 'lesRendezVousClients')]
+    private ?Client $idPersonne;
 
     public function getRefRendezVous(): ?int
     {

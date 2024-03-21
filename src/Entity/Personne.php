@@ -1,67 +1,35 @@
 <?php
-
 namespace App\Entity;
-
+use repository;
 use Doctrine\ORM\Mapping as ORM;
-
+use App\Repository\PersonneRepository;
 /**
- * Personne
- *
- * @ORM\Table(name="personne")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\PersonneRepository")
  */
+#[ORM\Entity(repositoryClass: PersonneRepository::class)]
 class Personne
-{
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id_personne", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $idPersonne;
+{   #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $idPersonne=null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="nom_personne", type="string", length=30, nullable=false)
-     */
-    private $nomPersonne;
+    #[ORM\Column(length: 30)]
+    private ?string $nomPersonne=null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="prenom_personne", type="string", length=30, nullable=false)
-     */
-    private $prenomPersonne;
+    #[ORM\Column(length: 30)]
+    private ?string $prenomPersonne = null;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="numero_telephone", type="integer", nullable=false)
-     */
-    private $numeroTelephone;
+    #[ORM\Column]
+    private ?int $numeroTelephone= 0;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="mail_personne", type="string", length=50, nullable=false)
-     */
-    private $mailPersonne;
+    #[ORM\Column( length: 50)]
+    private ?string $mailPersonne = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="mdp_personne", type="string", length=50, nullable=false)
-     */
-    private $mdpPersonne;
+    #[ORM\Column( length: 50)]
+    private ?string $mdpPersonne=null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="image_personne", type="string", length=255, nullable=false)
-     */
-    private $imagePersonne;
+    #[ORM\Column(length: 255)]
+    private ?string $imagePersonne=null;
 
     public function getIdPersonne(): ?int
     {

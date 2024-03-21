@@ -1,60 +1,34 @@
 <?php
 
 namespace App\Entity;
-
+use repository;
 use Doctrine\ORM\Mapping as ORM;
-
+use App\Repository\MedecinRepository;
 /**
- * Medecin
- *
- * @ORM\Table(name="medecin")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\MedecinRepository")
  */
+#[ORM\Entity(repositoryClass: MedecinRepository::class)]
 class Medecin
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id_medecin", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $idMedecin;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $idMedecin = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="nom_medecin", type="string", length=30, nullable=false)
-     */
-    private $nomMedecin;
+    #[ORM\Column(length: 30)]
+    private ?string $nomMedecin;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="prenom_medecin_medecin", type="string", length=30, nullable=false)
-     */
-    private $prenomMedecinMedecin;
+    #[ORM\Column(length: 30)]
+    private ?string $prenomMedecinMedecin;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="numero_telephone_medecin", type="integer", nullable=false)
-     */
-    private $numeroTelephoneMedecin;
+    #[ORM\Column]
+    private ?int $numeroTelephoneMedecin;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="address_medecin", type="string", length=50, nullable=false)
-     */
-    private $addressMedecin;
+    #[ORM\Column(length: 50)]
+    private ?string $addressMedecin;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="specialite_medecin", type="string", length=50, nullable=false)
-     */
-    private $specialiteMedecin;
+    #[ORM\Column(length: 50)]
+    private ?string $specialiteMedecin;
 
     public function getIdMedecin(): ?int
     {
