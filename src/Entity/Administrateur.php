@@ -21,7 +21,7 @@ class Administrateur
     private $role;
 
     /**
-     * @var Personne|null
+     * @var int
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
@@ -44,7 +44,7 @@ class Administrateur
         return $this;
     }
 
-    public function getIdPersonne(): ?Personne
+    public function getIdPersonne(): ?int
     {
         return $this->idPersonne;
     }

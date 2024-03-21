@@ -45,7 +45,7 @@ class Commande
     private $delaisCommande;
 
     /**
-     * @var \Client
+     * @var int
      *
      * @ORM\ManyToOne(targetEntity="Client")
      * @ORM\JoinColumns({
@@ -95,7 +95,7 @@ class Commande
         return $this;
     }
 
-    public function getIdPersonne(): ?Client
+    public function getIdPersonne(): ?int
     {
         return $this->idPersonne;
     }

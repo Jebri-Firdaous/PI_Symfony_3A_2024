@@ -51,7 +51,7 @@ class Billet
     private $duree;
 
     /**
-     * @var \Station
+     * @var int
      *
      * @ORM\ManyToOne(targetEntity="Station")
      * @ORM\JoinColumns({
@@ -61,7 +61,7 @@ class Billet
     private $station;
 
     /**
-     * @var \Client
+     * @var int
      *
      * @ORM\ManyToOne(targetEntity="Client")
      * @ORM\JoinColumns({
@@ -139,12 +139,12 @@ class Billet
         return $this;
     }
 
-    public function getStation(): ?Station
+    public function getStation(): ?int
     {
         return $this->station;
     }
 
-    public function getIdPersonne(): ?Client
+    public function getIdPersonne(): ?int
     {
         return $this->idPersonne;
     }

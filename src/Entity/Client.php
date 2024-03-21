@@ -26,7 +26,7 @@ class Client
     private $age;
 
     /**
-     * @var \Personne
+     * @var int
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
@@ -62,7 +62,7 @@ class Client
     }
 
 
-    public function getIdPersonne(): ?Personne
+    public function getIdPersonne(): ?int
     {
         return $this->idPersonne;
     }
