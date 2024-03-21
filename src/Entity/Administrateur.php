@@ -2,36 +2,31 @@
 
 namespace App\Entity;
 
-
+use App\Entity\Personne;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\AdminRepository;
+
+
+
+
 
 
 /**
- * Administrateur
- *
- * @ORM\Table(name="administrateur", indexes={@ORM\Index(name="id_personne", columns={"id_personne"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\AdminRepository")
  */
-class Administrateur
-{
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="role", type="string", length=100, nullable=false)
-     */
-    private $role;
 
-    /**
-     * @var Personne|null
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="Personne")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_personne", referencedColumnName="id_personne")
-     * })
-     */
-    private $idPersonne;
+#[ORM\Entity(repositoryClass: AdminRepository::class)]
+
+
+class Administrateur extends Personne
+{
+    #[ORM\Column(name: "role", type: "string", length: 30, nullable: false)]
+
+    private ?string $role = '';
+
+    #[ORM\OneToOne( inversedBy: "administrateur")]
+    private ?Personne $idPersonne;
 
     public function getRole(): ?string
     {
@@ -44,8 +39,7 @@ class Administrateur
 
         return $this;
     }
-
-    public function getIdPersonne(): ?Personne
+    public function getIdPersonne(): ?int
     {
         return $this->idPersonne;
     }
@@ -53,7 +47,8 @@ class Administrateur
     public function setIdPersonne(?Personne $idPersonne): static
     {
         $this->idPersonne = $idPersonne;
-
         return $this;
     }
+
+
 }
