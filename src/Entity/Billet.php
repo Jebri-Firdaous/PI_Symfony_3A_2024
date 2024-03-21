@@ -1,74 +1,43 @@
 <?php
 
 namespace App\Entity;
-
+use repository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+use App\Entity\Station; 
+use App\Entity\Client;
+use DateTime;
+use App\Repository\billetRepository ;
+
 /**
- * Billet
- *
- * @ORM\Table(name="billet", indexes={@ORM\Index(name="id_station", columns={"station"}), @ORM\Index(name="indexIdPersonne", columns={"id_personne"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\billetRepository")
  */
+#[ORM\Entity(repositoryClass: billetRepository::class)]
 class Billet
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="ref_voyage", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $refVoyage;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $refVoyage = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="destination_voyage", type="string", length=30, nullable=false)
-     */
-    private $destinationVoyage;
+    #[ORM\Column(length:30)]
+    private ?string $destinationVoyage = null;
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="date_depart", type="datetime", nullable=false)
-     */
-    private $dateDepart;
+    #[ORM\Column]
+    private ?DateTime $dateDepart = null ;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="prix", type="string", length=50, nullable=false)
-     */
+    #[ORM\Column(length:50)]
     private $prix;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="duree", type="string", length=40, nullable=false)
-     */
+    #[ORM\Column(length:40)]
     private $duree;
 
-    /**
-     * @var \Station
-     *
-     * @ORM\ManyToOne(targetEntity="Station")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="station", referencedColumnName="id_station")
-     * })
-     */
-    private $station;
+#[ORM\ManyToOne(inversedBy:'LesBilletsdeChaqueStation')]
+    private ?Station $station;
 
-    /**
-     * @var \Client
-     *
-     * @ORM\ManyToOne(targetEntity="Client")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_personne", referencedColumnName="id_personne")
-     * })
-     */
-    private $idPersonne;
+    #[ORM\ManyToOne(inversedBy: 'lesClients')]
+    private ?Client $idPersonne;
 
     public function getRefVoyage(): ?int
     {
