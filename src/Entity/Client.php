@@ -65,17 +65,6 @@ class Client extends Personne
     }
 
 
-    public function getIdPersonne(): ?Personne
-    {
-        return $this->idPersonne;
-    }
-
-    public function setIdPersonne(?Personne $idPersonne): static
-    {
-        $this->idPersonne = $idPersonne;
-
-        return $this;
-    }
 
 
 }

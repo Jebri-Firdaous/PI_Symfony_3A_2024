@@ -2,57 +2,32 @@
 
 namespace App\Entity;
 
+use repository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Client;
+use App\Repository\CommandeRepository;
+use DateTime;
 
-/**
- * Commande
- *
- * @ORM\Table(name="commande", indexes={@ORM\Index(name="id_personne", columns={"id_personne"})})
- * @ORM\Entity
- */
+#[ORM\Entity(repositoryClass: CommandeRepository::class)]
 class Commande
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id_commande", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $idCommande;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $idCommande;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="nombre_article", type="integer", nullable=false)
-     */
-    private $nombreArticle;
+    #[ORM\Column]
+    private ?int $nombreArticle;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="prix_totale", type="decimal", precision=10, scale=2, nullable=false)
-     */
-    private $prixTotale;
+    #[ORM\Column(length: 10)]
+    private ?string $prixTotale;
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="delais_commande", type="date", nullable=false)
-     */
-    private $delaisCommande;
+    #[ORM\Column]
+    private ?DateTime $delaisCommande;
 
-    /**
-     * @var int
-     *
-     * @ORM\ManyToOne(targetEntity="Client")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_personne", referencedColumnName="id_personne")
-     * })
-     */
-    private $idPersonne;
+    #[ORM\ManyToOne(inversedBy: 'lesCommandesClients')]
+    private ?Client $idPersonne;
 
     public function getIdCommande(): ?int
     {
