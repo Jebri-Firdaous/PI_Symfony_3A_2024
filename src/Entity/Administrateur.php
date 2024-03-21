@@ -2,8 +2,9 @@
 
 namespace App\Entity;
 
+
 use Doctrine\ORM\Mapping as ORM;
-use App\Entity\Personne; // Add the use statement for Personne
+
 
 /**
  * Administrateur
