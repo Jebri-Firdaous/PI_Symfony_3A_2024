@@ -2,39 +2,20 @@
 
 namespace App\Entity;
 
+use repository;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Commande;
 use App\Entity\Article;
+use App\Repository\CommandeArticleRepository;
 
-/**
- * CommandeArticle
- *
- * @ORM\Table(name="commande_article", indexes={@ORM\Index(name="id_commande", columns={"id_commande"}), @ORM\Index(name="id_article", columns={"id_article"})})
- * @ORM\Entity
- */
+#[ORM\Entity(repositoryClass: CommandeArticleRepository::class)]
 class CommandeArticle
 {
-    /**
-     * @var \Commande
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="Commande")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_commande", referencedColumnName="id_commande")
-     * })
-     */
-    private $idCommande;
+    #[ORM\OneToOne(inversedBy: 'lesCommandes')]
+    private ?Commande $idCommande;
 
-    /**
-     * @var \Article
-     *
-     * @ORM\ManyToOne(targetEntity="Article")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_article", referencedColumnName="id_article")
-     * })
-     */
-    private $idArticle;
+    #[ORM\ManyToMany(inversedBy: 'lesArticles')]
+    private ?Article $idArticle;
 
     public function getIdCommande(): ?Commande
     {
@@ -52,7 +33,7 @@ class CommandeArticle
     {
         return $this->idArticle;
     }
-
+    
     public function setIdArticle(?Article $idArticle): static
     {
         $this->idArticle = $idArticle;
