@@ -1,41 +1,44 @@
 <?php
 
 namespace App\Entity;
+
+
+
+use Doctrine\DBAL\Types\Types;
+
+  
+  
+  
 use Doctrine\ORM\Mapping as ORM;
-
+use App\Repository\ClientRepository;
 /**
- * Client
- *
- * @ORM\Table(name="client", indexes={@ORM\Index(name="fk_client", columns={"id_personne"}), @ORM\Index(name="indexIdPersonne", columns={"id_personne"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\ClientRepository")
  */
-class Client
+
+#[ORM\Entity(repositoryClass: ClientRepository::class)]
+
+class Client extends Personne
 {
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="genre", type="string", length=50, nullable=false)
-     */
-    private $genre;
+    #[ORM\Column(name: "genre", type: "string", length: 30, nullable: false)]
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="age", type="integer", nullable=false)
-     */
-    private $age;
+    private ?string $genre='';
 
-    /**
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="Personne")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_personne", referencedColumnName="id_personne")
-     * })
-     */
-    private $idPersonne;
+    #[ORM\Column(name: "age", type: "integer", nullable: false)]
+    private ?int $age=0;
+    
+    #[ORM\OneToOne( inversedBy: "lesclient")]
+    private ?Personne $idPersonne;
+    public function getIdPersonne(): ?int
+    {
+        return $this->idPersonne;
+    }
+
+    public function setIdPersonne(?Personne $idPersonne): static
+    {
+        $this->idPersonne = $idPersonne;
+        return $this;
+    }
+
 
     public function getGenre(): ?string
     {
@@ -62,7 +65,7 @@ class Client
     }
 
 
-    public function getIdPersonne(): ?int
+    public function getIdPersonne(): ?Personne
     {
         return $this->idPersonne;
     }
