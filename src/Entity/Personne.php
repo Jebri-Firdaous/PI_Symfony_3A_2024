@@ -107,6 +107,29 @@ class Personne
 
         return $this;
     }
+    #[ORM\OneToOne(mappedBy: "personne")]
+    private ?Client $client;
 
+    public function getClient(): ?Client
+    {
+        return $this->client;
+    }
+
+    public function setClient(?Client $client): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($client === null && $this->client !== null) {
+            $this->client->setPersonne(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($client !== null && $client->getPersonne() !== $this) {
+            $client->setPersonne($this);
+        }
+
+        $this->client = $client;
+
+        return $this;
+    }
 
 }

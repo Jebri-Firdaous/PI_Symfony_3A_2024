@@ -4,6 +4,8 @@ namespace App\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\RendezVousRepository;
+use DateTimeInterface;
+
 /**
  * @ORM\Entity(repositoryClass="App\Repository\RendezVousRepository")
  */
@@ -17,7 +19,7 @@ class RendezVous
     private $refRendezVous;
 
     #[ORM\Column]
-    private ?DateTime $dateRendezVous;
+    private ?DateTimeInterface $dateRendezVous;
 
     /**
      * @var \Medecin
@@ -27,11 +29,13 @@ class RendezVous
      *   @ORM\JoinColumn(name="id_medecin", referencedColumnName="id_medecin")
      * })
      */
-    #[ORM\ManyToOne(inversedBy: 'lesRendezVousMedecins')]
+    #[ORM\ManyToOne(targetEntity: Medecin::class)]
+    #[ORM\JoinColumn(name: 'id_medecin', referencedColumnName: 'id_medecin')]
     private ?Medecin $idMedecin;
 
 
-    #[ORM\ManyToOne(inversedBy: 'lesRendezVousClients')]
+    #[ORM\ManyToOne(targetEntity: client::class)]
+    #[ORM\JoinColumn(name: 'id_personne', referencedColumnName: 'id_personne')]
     private ?Client $idPersonne;
 
     public function getRefRendezVous(): ?int

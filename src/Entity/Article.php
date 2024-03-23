@@ -2,67 +2,36 @@
 
 namespace App\Entity;
 
+use repository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ArticleRepository;
 
-/**
- * Article
- *
- * @ORM\Table(name="article")
- * @ORM\Entity
- */
+#[ORM\Entity(repositoryClass: ArticleRepository::class)]
 class Article
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id_article", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $idArticle;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $idArticle;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="nom_article", type="string", length=30, nullable=false)
-     */
-    private $nomArticle;
+    #[ORM\Column(length: 30)]
+    private ?string $nomArticle;
 
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="prix_article", type="float", precision=10, scale=0, nullable=false)
-     */
-    private $prixArticle;
+    #[ORM\Column]
+    private ?float $prixArticle;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="quantite_article", type="integer", nullable=false)
-     */
-    private $quantiteArticle;
+    #[ORM\Column]
+    private ?int $quantiteArticle ;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="type_article", type="string", length=255, nullable=true, options={"default"="NULL"})
-     */
-    private $typeArticle = 'NULL';
+    #[ORM\Column(length: 255)]
+    private ?string $typeArticle = null;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="description_article", type="text", length=65535, nullable=true, options={"default"="NULL"})
-     */
-    private $descriptionArticle = 'NULL';
+    #[ORM\Column(length: 255)]
+    private $descriptionArticle = null;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="photo_article", type="string", length=255, nullable=true, options={"default"="NULL"})
-     */
-    private $photoArticle = 'NULL';
+    #[ORM\Column(length: 255)]
+    private $photoArticle = null;
 
     public function getIdArticle(): ?int
     {

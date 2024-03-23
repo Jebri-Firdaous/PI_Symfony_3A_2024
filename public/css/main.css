@@ -16,6 +16,11 @@
   --heading-font: "Raleway", sans-serif;
   --nav-font: "Poppins", sans-serif;
 }
+.label-blue {
+  font-weight: bold;
+  color: darkblue;
+  
+}
 
 /* Global Colors */
 :root {

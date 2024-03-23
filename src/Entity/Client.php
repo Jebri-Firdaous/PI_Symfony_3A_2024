@@ -27,15 +27,17 @@ class Client extends Personne
     private ?int $age=0;
     
     #[ORM\OneToOne( inversedBy: "lesclient")]
-    private ?Personne $idPersonne;
+    #[ORM\JoinColumn(name: "id_personne", referencedColumnName: "id_personne")]
+    private ?Personne $id_personne;
+
     public function getIdPersonne(): ?int
     {
-        return $this->idPersonne;
+        return $this->id_personne;
     }
 
     public function setIdPersonne(?Personne $idPersonne): static
     {
-        $this->idPersonne = $idPersonne;
+        $this->id_personne = $idPersonne;
         return $this;
     }
 
