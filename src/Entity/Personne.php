@@ -105,7 +105,7 @@ class Personne
     {
         $this->imagePersonne = $imagePersonne;
 
-        return $this;
+        return $this ;
     }
 
 
