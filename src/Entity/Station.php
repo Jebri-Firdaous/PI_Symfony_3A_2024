@@ -1,46 +1,28 @@
 <?php
 
 namespace App\Entity;
-
+use repository;
 use Doctrine\ORM\Mapping as ORM;
-
+use App\repository\StationRepository;
 /**
- * Station
- *
- * @ORM\Table(name="station")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\StationRepository")
  */
+#[ORM\Entity(repositoryClass: StationRepository::class)]
 class Station
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id_station", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $idStation;
+  #[ORM\Id]
+  #[ORM\GeneratedValue]
+  #[ORM\Column]
+    private ?int $idStation = null ;
+    #[ORM\Column(length:30)]
+  
+    private?string $nomStation = null ;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="nom_station", type="string", length=30, nullable=false)
-     */
-    private $nomStation;
+    #[ORM\Column(length:30)]
+    private ?string $adressStation = null ;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="adress_station", type="string", length=30, nullable=false)
-     */
-    private $adressStation;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="type", type="string", length=50, nullable=false)
-     */
-    private $type;
+    #[ORM\Column(length:50)]
+    private ?string $type = null;
 
     public function getIdStation(): ?int
     {

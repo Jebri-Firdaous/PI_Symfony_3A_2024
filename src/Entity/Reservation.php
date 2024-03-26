@@ -1,75 +1,62 @@
 <?php
 
 namespace App\Entity;
+use App\Entity\Hotel;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Client;
-
+use App\Repository\ReservationRepository;
 /**
- * Reservation
- *
- * @ORM\Table(name="reservation", indexes={@ORM\Index(name="id_hotel", columns={"id_hotel"}), @ORM\Index(name="reservation_ibfk_2", columns={"id_personne"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\ReservationRepository")
  */
+#[ORM\Entity(repositoryClass: ReservationRepository::class)]
+
 class Reservation
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="ref_reservation", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $refReservation;
+   
 
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="duree_reservation", type="float", precision=10, scale=0, nullable=false)
-     */
-    private $dureeReservation;
+     #[ORM\Id]
+     #[ORM\GeneratedValue]
+     #[ORM\Column]
 
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="prix_reservation", type="float", precision=10, scale=0, nullable=false)
-     */
-    private $prixReservation;
+    private ?int $refReservation = null;
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="date_reservation", type="date", nullable=false)
-     */
-    private $dateReservation;
+   
+    #[ORM\Column]
+    private ?float  $dureeReservation = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="type_chambre", type="string", length=0, nullable=false)
-     */
-    private $typeChambre;
+   
 
-    /**
-     * @var \Client
-     *
-     * @ORM\ManyToOne(targetEntity="Client")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_personne", referencedColumnName="id_personne")
-     * })
-     */
-    private $idPersonne;
+     #[ORM\Column]
+   
+    private ?float  $prixReservation = null ;
 
-    /**
-     * @var \Hotel
-     *
-     * @ORM\ManyToOne(targetEntity="Hotel")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_hotel", referencedColumnName="id_hotel")
-     * })
-     */
-    private $idHotel;
+  
+    
+
+    #[ORM\Column]
+     private ?\DateTime $dateReservation = null;
+
+ 
+    #[ORM\Column(length: 20)]
+    private ?string $typeChambre = null ;
+
+   
+
+ 
+
+     #[ORM\ManyToOne( inversedBy: "client")]
+     private ?Client $idPersonne;
+   
+   
+
+  
+    #[ORM\ManyToOne(inversedBy: 'lesReservations')]
+    private ?Hotel $idHotel=null;
+
+  
+
 
     public function getRefReservation(): ?int
     {
@@ -128,6 +115,7 @@ class Reservation
     {
         return $this->idPersonne;
     }
+    
 
     public function setIdPersonne(?Client $idPersonne): static
     {
@@ -135,7 +123,7 @@ class Reservation
 
         return $this;
     }
-
+   
     public function getIdHotel(): ?Hotel
     {
         return $this->idHotel;
@@ -147,6 +135,9 @@ class Reservation
 
         return $this;
     }
+
+
+  
 
 
 }

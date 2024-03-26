@@ -1,10 +1,17 @@
 <?php
 
 namespace App\Entity;
+
 use App\Entity\Personne;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\AdminRepository;
+
+
+
+
+
+
 /**
  * @ORM\Entity(repositoryClass="App\Repository\AdminRepository")
  */
