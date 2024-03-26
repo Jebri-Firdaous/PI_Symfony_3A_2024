@@ -9,23 +9,13 @@ use App\Repository\ClientRepository;
  * @ORM\Entity(repositoryClass=ClientRepository::class)
  */
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
-
 class Client extends Personne
 {
-    #[ORM\Column( length: 30)]
+    #[ORM\Column(length: 30, nullable: true)]
     private ?string $genre = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: 'integer', nullable: true)]
     private ?int $age = null;
-   
-
-    public function __construct(string $nom_personne=null, string $prenom_personne=null, int $numero_telephone=null, string $mail_personne=null, string  $mdp_personne=null, string  $image_personne=null, ?int $age=null, ?string $genre=null)
-    {
-        parent::__construct($nom_personne, $prenom_personne, $numero_telephone, $mail_personne, $mdp_personne, $image_personne);
-        $this->age = $age;
-        $this->genre = $genre;
-    }
-    
 
     public function getGenre(): ?string
     {
@@ -35,7 +25,6 @@ class Client extends Personne
     public function setGenre(?string $genre): static
     {
         $this->genre = $genre;
-
         return $this;
     }
 
@@ -47,9 +36,6 @@ class Client extends Personne
     public function setAge(?int $age): static
     {
         $this->age = $age;
-
         return $this;
     }
-  
-  
 }

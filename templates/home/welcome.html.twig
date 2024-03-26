@@ -20,7 +20,7 @@
  
 {% block css %}
   <!-- Vendor CSS Files -->
-  <link href="{{asset('vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+  <link href="{{ asset('vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
   <link href="{{ asset ('vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
   <link href="{{ asset ('vendor/aos/aos.css') }}" rel="stylesheet">
   <link href="{{ asset ('vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
@@ -41,11 +41,9 @@
 </head>
 <body id="hero">
 
-<div class="hero-container">
-    <a href="{{ path('app_welcome') }}" class="hero-logo" data-aos="zoom-in"><img src="{{ asset('img/hero-logo.png') }}" alt=""></a>
-  
-<button class="btn-centered" onclick="ToLogin()">Démarrer</button>
-</div>
+<button class="btn-centered" onclick="window.location.href='{{ path('app_acceuil') }}'">Démarre</button>
+
+
 
 {% block js %}
   <!-- Vendor JS Files -->

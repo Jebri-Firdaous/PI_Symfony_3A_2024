@@ -7,31 +7,36 @@ use App\Repository\PersonneRepository;
  * @ORM\Entity(repositoryClass="App\Repository\PersonneRepository")
  */
 #[ORM\Entity(repositoryClass: PersonneRepository::class)]
+/**
+ * @ORM\MappedSuperclass
+ */
+#[ORM\MappedSuperclass]
 class Personne
 {   #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $idPersonne=null;
+    private ?int $id_personne=null;
+ 
+
+    #[ORM\Column(length: 30, nullable: true)]
+    private ?string $nom_personne = null;
+
 
     #[ORM\Column(length: 30)]
-    private ?string $nomPersonne=null;
-
-    #[ORM\Column(length: 30)]
-    private ?string $prenomPersonne = null;
+    private ?string $prenom_personne = null;
 
     #[ORM\Column]
-    private ?int $numeroTelephone= 0;
+    private ?int $numero_telephone= null;
 
     #[ORM\Column( length: 50)]
-    private ?string $mailPersonne = null;
+    private ?string $mail_personne = null;
 
     #[ORM\Column( length: 50)]
-    private ?string $mdpPersonne=null;
+    private ?string $mdp_personne=null;
 
     #[ORM\Column(length: 255)]
-    private ?string $imagePersonne=null;
-    
-    public function __construct( string $nom_personne=null, string $prenom_personne=null, int $numero_telephone=null, string $mail_personne=null, string  $mdp_personne=null, string  $image_personne=null) {
+    private ?string $image_personne=null;
+    public function __construct( ?string $nom_personne=null, ?string $prenom_personne=null, ?int $numero_telephone=null, ?string $mail_personne=null, ?string  $mdp_personne=null, ?string  $image_personne=null) {
         $this->nom_personne = $nom_personne;
         $this->prenom_personne=$prenom_personne;
         $this->numero_telephone=$numero_telephone;
@@ -43,79 +48,79 @@ class Personne
 
     public function getIdPersonne(): ?int
     {
-        return $this->idPersonne;
+        return $this->id_personne;
     }
 
     public function getNomPersonne(): ?string
     {
-        return $this->nomPersonne;
+        return $this->nom_personne;
     }
 
-    public function setNomPersonne(string $nomPersonne): static
+    public function setNomPersonne(string $nom_personne): static
     {
-        $this->nomPersonne = $nomPersonne;
+        $this->nom_personne = $nom_personne;
 
         return $this;
     }
 
     public function getPrenomPersonne(): ?string
     {
-        return $this->prenomPersonne;
+        return $this->prenom_personne;
     }
 
-    public function setPrenomPersonne(string $prenomPersonne): static
+    public function setPrenomPersonne(string $prenom_personne): static
     {
-        $this->prenomPersonne = $prenomPersonne;
+        $this->prenom_personne = $prenom_personne;
 
         return $this;
     }
 
     public function getNumeroTelephone(): ?int
     {
-        return $this->numeroTelephone;
+        return $this->numero_telephone;
     }
 
-    public function setNumeroTelephone(int $numeroTelephone): static
+    public function setNumeroTelephone(int $numero_telephone): static
     {
-        $this->numeroTelephone = $numeroTelephone;
+        $this->numero_telephone = $numero_telephone;
 
         return $this;
     }
 
     public function getMailPersonne(): ?string
     {
-        return $this->mailPersonne;
+        return $this->mail_personne;
     }
 
-    public function setMailPersonne(string $mailPersonne): static
+    public function setMailPersonne(string $mail_personne): static
     {
-        $this->mailPersonne = $mailPersonne;
+        $this->mail_personne = $mail_personne;
 
         return $this;
     }
 
     public function getMdpPersonne(): ?string
     {
-        return $this->mdpPersonne;
+        return $this->mdp_personne;
     }
 
-    public function setMdpPersonne(string $mdpPersonne): static
+    public function setMdpPersonne(string $mdp_personne): static
     {
-        $this->mdpPersonne = $mdpPersonne;
+        $this->mdp_personne = $mdp_personne;
 
         return $this;
     }
 
     public function getImagePersonne(): ?string
     {
-        return $this->imagePersonne;
+        return $this->image_personne;
     }
 
-    public function setImagePersonne(string $imagePersonne): static
+    public function setImagePersonne(string $image_personne): static
     {
-        $this->imagePersonne = $imagePersonne;
+        $this->image_personne = $image_personne;
 
-        return $this ;
+        return $this;
     }
 
 

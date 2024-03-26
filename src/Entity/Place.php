@@ -14,19 +14,35 @@ use App\Entity\Parking;
  */
 class Place
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $refPlace;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="ref_place", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $refPlace;
 
-    #[ORM\Column]
-    private ?int $numPlace;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="num_place", type="integer", nullable=false)
+     */
+    private $numPlace;
 
-    #[ORM\Column(length: 30)]
-    private ?string $typePlace;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="type_place", type="string", length=255, nullable=false)
+     */
+    private $typePlace;
 
-    #[ORM\Column(length: 30)]
-    private ?string $etat;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="etat", type="string", length=30, nullable=false)
+     */
+    private $etat;
 
     /**
      * @var \Parking

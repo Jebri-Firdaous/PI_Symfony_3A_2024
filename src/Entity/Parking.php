@@ -12,38 +12,63 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Parking
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $idParking;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id_parking", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $idParking;
 
-    
-    #[ORM\Column(length: 30)]
-    private ?string $nomParking;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nom_parking", type="string", length=30, nullable=false)
+     */
+    private $nomParking;
 
-    
-    #[ORM\Column(length: 100)]
-    private ?string $addressParking;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="address_parking", type="string", length=100, nullable=false)
+     */
+    private $addressParking;
 
-    
-    #[ORM\Column]
-    private ?float $latitude;
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="latitude", type="float", precision=10, scale=0, nullable=false)
+     */
+    private $latitude;
 
-    
-    #[ORM\Column]
-    private ?float $longitude;
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="longitude", type="float", precision=10, scale=0, nullable=false)
+     */
+    private $longitude;
 
-    
-    #[ORM\Column]
-    private ?int $nombrePlaceMax;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="nombre_place_max", type="integer", nullable=false)
+     */
+    private $nombrePlaceMax;
 
-    
-    #[ORM\Column]
-    private ?int $nombrePlaceOcc;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="nombre_place_occ", type="integer", nullable=false)
+     */
+    private $nombrePlaceOcc;
 
-    
-    #[ORM\Column(length: 50)]
-    private ?string $etatParking;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="etat_parking", type="string", length=50, nullable=false)
+     */
+    private $etatParking;
 
     public function getIdParking(): ?int
     {

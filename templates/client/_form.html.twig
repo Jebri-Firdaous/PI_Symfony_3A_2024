@@ -1,4 +1,34 @@
+<div style="display: flex; justify-content: center;">
+
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+    {{ form_row(form.nom_personne, {'attr': {'class': 'form-control', 'placeholder': 'Entrer votre nom'}}) }}
+    {{ form_errors(form.nom_personne) }}
+    
+    {{ form_row(form.prenom_personne, {'attr': {'class': 'form-control', 'placeholder': 'Entrer votre prenom'}}) }}
+    {{ form_errors(form.prenom_personne) }}
+
+    {{ form_row(form.genre, {'attr': {'class': 'form-control'}}) }}
+    {{ form_errors(form.genre) }}
+
+{{ form_row(form.age, {'attr': {'class': 'form-control', 'placeholder': 'Entrer votre age', 'min': 10,'max': 99}}) }}
+    {{ form_errors(form.age) }}
+    
+
+        
+      {{ form_row(form.numero_telephone, {'attr': {'class': 'form-control', 'placeholder': 'Entrer votre numero de telephone'}}) }}
+    {{ form_errors(form.numero_telephone) }}
+
+    {{ form_row(form.mail_personne, {'attr': {'class': 'form-control', 'placeholder': 'Entrer votre adresse mail'}}) }}
+    {{ form_errors(form.mail_personne) }}
+
+    {{ form_row(form.mdp_personne, {'attr': {'class': 'form-control', 'placeholder': 'Choisissez le mot de passe'}}) }}
+    {{ form_errors(form.mdp_personne) }}
+
+
+        
+    {{ form_row(form.image_personne, {'attr': {'class': 'form-control', 'placeholder': 'url de votre image'}}) }}
+    {{ form_errors(form.image_personne) }}
+
+    <button type="submit" class="btn">{{ button_label|default("S'inscrire") }}</button>
 {{ form_end(form) }}
+</div>

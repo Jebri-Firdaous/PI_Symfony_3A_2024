@@ -17,21 +17,16 @@ class RendezVous
     private $refRendezVous;
 
     #[ORM\Column]
-    private ?DateTime $dateRendezVous;
+    private ?\DateTime $dateRendezVous;
 
-    /**
-     * @var \Medecin
-     *
-     * @ORM\ManyToOne(targetEntity="Medecin")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_medecin", referencedColumnName="id_medecin")
-     * })
-     */
-    #[ORM\ManyToOne(inversedBy: 'lesRendezVousMedecins')]
+
+    #[ORM\ManyToOne(targetEntity: Medecin::class)]
+    #[ORM\JoinColumn(name: 'id_medecin', referencedColumnName: 'id_medecin')]
     private ?Medecin $idMedecin;
 
 
-    #[ORM\ManyToOne(inversedBy: 'lesRendezVousClients')]
+    #[ORM\ManyToOne(targetEntity: client::class)]
+    #[ORM\JoinColumn(name: 'id_personne', referencedColumnName: 'id_personne')]
     private ?Client $idPersonne;
 
     public function getRefRendezVous(): ?int

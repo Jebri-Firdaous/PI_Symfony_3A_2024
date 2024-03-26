@@ -46,13 +46,15 @@ class Reservation
 
  
 
-     #[ORM\ManyToOne( inversedBy: "client")]
-     private ?Client $idPersonne;
+    #[ORM\ManyToOne(targetEntity: client::class)]
+    #[ORM\JoinColumn(name: 'id_personne', referencedColumnName: 'id_personne')]
+    private ?Client $idPersonne;
    
    
 
   
-    #[ORM\ManyToOne(inversedBy: 'lesReservations')]
+    #[ORM\ManyToOne(targetEntity: Hotel::class)]
+    #[ORM\JoinColumn(name: 'id_hotel', referencedColumnName: 'id_hotel')]
     private ?Hotel $idHotel=null;
 
   

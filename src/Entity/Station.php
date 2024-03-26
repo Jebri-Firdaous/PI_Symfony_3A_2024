@@ -1,22 +1,24 @@
 <?php
 
 namespace App\Entity;
-use repository;
+use Repository;
 use Doctrine\ORM\Mapping as ORM;
-use App\repository\StationRepository;
+use App\Repository\StationRepository;
+
+
 /**
- * @ORM\Entity(repositoryClass="App\Repository\StationRepository")
+ * @ORM\Entity(repositoryClass=StationRepository::class)
  */
 #[ORM\Entity(repositoryClass: StationRepository::class)]
 class Station
 {
   #[ORM\Id]
   #[ORM\GeneratedValue]
-  #[ORM\Column]
+  #[ORM\Column()]
     private ?int $idStation = null ;
+
     #[ORM\Column(length:30)]
-  
-    private?string $nomStation = null ;
+    private ?string $nomStation = null ;
 
     #[ORM\Column(length:30)]
     private ?string $adressStation = null ;
