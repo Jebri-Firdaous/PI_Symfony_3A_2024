@@ -30,6 +30,16 @@ class Personne
 
     #[ORM\Column(length: 255)]
     private ?string $imagePersonne=null;
+    
+    public function __construct( string $nom_personne=null, string $prenom_personne=null, int $numero_telephone=null, string $mail_personne=null, string  $mdp_personne=null, string  $image_personne=null) {
+        $this->nom_personne = $nom_personne;
+        $this->prenom_personne=$prenom_personne;
+        $this->numero_telephone=$numero_telephone;
+        $this->mail_personne=$mail_personne;
+        $this->mdp_personne=$mdp_personne;
+        $this->image_personne= $image_personne;
+    }
+    
 
     public function getIdPersonne(): ?int
     {

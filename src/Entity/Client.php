@@ -2,50 +2,37 @@
 
 namespace App\Entity;
 
-
-
-use Doctrine\DBAL\Types\Types;
-
-  
-  
-  
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ClientRepository;
-/**
- * @ORM\Entity(repositoryClass="App\Repository\ClientRepository")
- */
 
+/**
+ * @ORM\Entity(repositoryClass=ClientRepository::class)
+ */
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
 
 class Client extends Personne
 {
-    #[ORM\Column(name: "genre", type: "string", length: 30, nullable: false)]
+    #[ORM\Column( length: 30)]
+    private ?string $genre = null;
 
-    private ?string $genre='';
+    #[ORM\Column]
+    private ?int $age = null;
+   
 
-    #[ORM\Column(name: "age", type: "integer", nullable: false)]
-    private ?int $age=0;
+    public function __construct(string $nom_personne=null, string $prenom_personne=null, int $numero_telephone=null, string $mail_personne=null, string  $mdp_personne=null, string  $image_personne=null, ?int $age=null, ?string $genre=null)
+    {
+        parent::__construct($nom_personne, $prenom_personne, $numero_telephone, $mail_personne, $mdp_personne, $image_personne);
+        $this->age = $age;
+        $this->genre = $genre;
+    }
     
-    #[ORM\OneToOne( inversedBy: "lesclient")]
-    private ?Personne $idPersonne;
-    public function getIdPersonne(): ?int
-    {
-        return $this->idPersonne;
-    }
-
-    public function setIdPersonne(?Personne $idPersonne): static
-    {
-        $this->idPersonne = $idPersonne;
-        return $this;
-    }
-
 
     public function getGenre(): ?string
     {
         return $this->genre;
     }
 
-    public function setGenre(string $genre): static
+    public function setGenre(?string $genre): static
     {
         $this->genre = $genre;
 
@@ -57,12 +44,12 @@ class Client extends Personne
         return $this->age;
     }
 
-    public function setAge(int $age): static
+    public function setAge(?int $age): static
     {
         $this->age = $age;
 
         return $this;
     }
-
-
+  
+  
 }
