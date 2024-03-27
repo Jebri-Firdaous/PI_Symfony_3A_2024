@@ -4,11 +4,11 @@ namespace App\Entity;
 use repository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-
 use App\Entity\Station; 
 use App\Entity\Client;
 use DateTime;
 use App\Repository\billetRepository ;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\billetRepository")
@@ -22,6 +22,9 @@ class Billet
     private ?int $refVoyage;
 
     #[ORM\Column(length: 30)]
+    #[Assert\Length(min:3, minMessage:"Destination doit contenir au minimum 3 caractères !")]
+    #[Assert\NotBlank(message:"La destination est obligatoire")] 
+
     private ?string $destinationVoyage;
 
     #[ORM\Column]

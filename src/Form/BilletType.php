@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Form;
-
 use App\Entity\Billet;
 use App\Entity\Client;
 use App\Entity\Station;
@@ -10,6 +9,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Bridge\Doctrine\Form\Type\NumberType;
+
 
 class BilletType extends AbstractType
 {
@@ -25,7 +26,6 @@ class BilletType extends AbstractType
                 },
                 'placeholder' => 'Choisir une station',
             ]);
-        
     }
 
     public function configureOptions(OptionsResolver $resolver): void

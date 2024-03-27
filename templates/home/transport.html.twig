@@ -1,32 +1,129 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Hello HomeController!{% endblock %}
+
 {% block section6 %}
-<div class="container"> <!-- Div contenant pour centrer le formulaire -->
-    <div class="row justify-content-center"> <!-- Pour centrer horizontalement -->
-        <div class="col-md-6"> <!-- Colonne de taille moyenne, ajustez selon vos besoins -->
-            {{ form_start(f, {'attr': {'class': 'form'}}) }}
-            <div class="form-group">
-                {{ form_label(f.destinationVoyage, 'Destination du voyage', {'label_attr': {'class': 'vendor/bootstrap/css/control-label label-blue'}}) }}
-                {{ form_widget(f.destinationVoyage, {'attr': {'class': 'vendor/bootstrap/css/form-control col-sm-4'}}) }}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="form-wrapper"> <!-- Ajout du wrapper pour le formulaire -->
+                <h2 style="text-align: center;">Réservez votre Billet</h2> <!-- Ajout du titre du formulaire à l'intérieur du wrapper -->
+                {{ form_start(f, {'attr': {'class': 'form', 'novalidate': 'novalidate'}}) }}
+                <div class="form-group">
+                    {{ form_label(f.destinationVoyage, 'Destination du voyage', {'label_attr': {'class': 'vendor/bootstrap/css/control-label label-blue'}}) }}
+                    <br> <!-- Ajout d'un saut de ligne -->
+                    {{ form_widget(f.destinationVoyage, {'attr': {'class': 'vendor/bootstrap/css/form-control col-sm-4'}}) }}
+                    {{ form_errors(f.destinationVoyage)}}
+                </div>
+                <div class="form-group">
+                    {{ form_label(f.dateDepart, 'Date de départ', {'label_attr': {'class': 'control-label label-blue'}}) }}
+                    <br> <!-- Ajout d'un saut de ligne -->
+                    {{ form_widget(f.dateDepart, {'attr': {'class': 'vendor/bootstrap/css/form-control col-sm-4'}}) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(f.station, 'Station', {'label_attr': {'class': 'control-label label-blue'}}) }}
+                    <br> <!-- Ajout d'un saut de ligne -->
+                    {{ form_widget(f.station, {'attr': {'class': 'vendor/bootstrap/css/form-control col-sm-4'}}) }}
+                </div>
+                <button type="submit" class="btn btn-primary mt-5">Enregistrer</button>
+                {{ form_end(f) }}
             </div>
-            <div class="form-group">
-                {{ form_label(f.dateDepart, 'Date de départ', {'label_attr': {'class': 'control-label label-blue'}}) }}
-                {{ form_widget(f.dateDepart, {'attr': {'class': 'vendor/bootstrap/css/form-control col-sm-4'}}) }}
+        </div>
+    </div>
+</div>
+<!-- Modal de suppression -->
+<div class="modal" tabindex="-1" role="dialog" id="deleteModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmation de suppression</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-            <div class="form-group">
-                {{ form_label(f.station, 'Station', {'label_attr': {'class': 'control-label label-blue'}}) }}
-                {{ form_widget(f.station, {'attr': {'class': 'vendor/bootstrap/css/form-control col-sm-4'}}) }}
+            <div class="modal-body">
+                Êtes-vous sûr de vouloir supprimer ce billet ? Cette action est irréversible.
             </div>
-            <button type="submit" class="btn btn-primary">Enregistrer</button>
-            {{ form_end(f) }}
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="annuler">Annuler</button>
+                <a href="#" class="btn btn-danger" id="confirmDelete">Supprimer</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container pt-5">
+    <div class="row justify-content-center">
+        <div class="col-12 text-center">
+            <h1 class="pb-4">Choose <i class='uil uil-bus color-yellow'></i> ticket</h1>
+            <div class="d-flex justify-content-between">
+                {% for billet in list %}
+                <div class="ticket-option">
+                    <input class="checkbox-ticket" type="radio" name="ticket" id="ticket-{{ loop.index }}">
+                    <label for="ticket-{{ loop.index }}">
+                        <span class="top-dots">
+                            <span class="section dots"></span>
+                        </span>
+                        <span class="duration">{{ billet.duree }}</span>
+                        <span class="price mt-2 pb-4 mb-3"><sup>$</sup>{{ billet.prix }}</span>
+                        <span class="section dots"></span>
+                        <span class="section pt-4"><i class='uil uil-clock-two mt-3'></i></span>
+                        <span class="time mt-2">{{ billet.dateDepart|date('Y-m-d H:i:s') }}</span>
+                        <span class="bottom-dots"><span class="section dots"></span></span>
+                    </label>
+                      <div class="mt-3">
+                        <a href="{{ path('edit_billet',{id: billet.refVoyage}) }}" class="modifier btn btn-primary btn-sm mr-2">Modifier</a>
+                        <a href="#" class="supprimer btn btn-danger btn-sm" onclick="$('#deleteModal').modal('show'); $('#confirmDelete').attr('href', '{{ path('delete_billet', {id: billet.refVoyage}) }}'); return false;">Supprimer</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
         </div>
     </div>
 </div>
 
 
+{# <!-- Tableau des billets -->
+<table border="3">
+    <thead>
+        <tr>
+            <th style="border-bottom: 3px solid black;border-right: 3px solid black; ">Destination</th>
+            <th style="border-bottom: 3px solid black;border-right: 3px solid black;">Date de départ</th>
+            <th style="border-bottom: 3px solid black;border-right: 3px solid black;">Prix</th>
+            <th style="border-bottom: 3px solid black;border-right: 3px solid black;">Durée</th>
+            <th style="border-bottom: 3px solid black;border-right: 3px solid black;">Station</th>
+            <th style="border-bottom: 3px solid black;border-right: 3px solid black;">Actions</th> <!-- Nouvelle colonne pour les actions -->
+        </tr>
+    </thead>
+    <tbody>
+        {% for billet in list %}
+            <tr style="border-bottom: 3px solid black;">
+                <td style="border-right: 3px solid black;">{{ billet.destinationVoyage }}</td>
+                <td style="border-right: 3px solid black;">{{ billet.dateDepart|date('Y-m-d H:i:s') }}</td>
+                <td style="border-right: 3px solid black;">{{ billet.prix }}</td>
+                <td style="border-right: 3px solid black;">{{ billet.duree }}</td>
+                <td style="border-right:3px solid black;">{{ billet.station.nomStation }} - {{ billet.station.adressStation }} - {{ billet.station.type }}</td>
+                <td style="border-right: 3px solid;">
+                    <a href="{{ path('edit_billet',{id: billet.refVoyage}) }}" class="modifier">Modifier</a> <!-- Bouton Modifier -->
+                    <br> <!-- Ajout d'un saut de ligne -->
+                    <a href="#" class="supprimer" onclick="$('#deleteModal').modal('show'); $('#confirmDelete').attr('href', '{{ path('delete_billet', {id: billet.refVoyage}) }}'); return false;">Supprimer</a> <!-- Bouton Supprimer -->
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table> #}
 
-{% endblock %}
-{% block body %}
-<h1>.</h1>
+<!-- Script JavaScript -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    // Script JavaScript pour la confirmation de suppression
+    $(document).ready(function () {
+        $('#confirmDelete').on('click', function () {
+            $('#deleteModal').modal('hide');
+        });
+
+        $('#deleteModal').on('click', '#annuler', function () {
+            $('#deleteModal').modal('hide');
+        });
+    });
+</script>
 {% endblock %}
