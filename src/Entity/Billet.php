@@ -19,25 +19,33 @@ class Billet
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $refVoyage = null;
+     /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
+    private ?int $refVoyage;
 
-    #[ORM\Column(length:30)]
-    private ?string $destinationVoyage = null;
+    #[ORM\Column(length: 30)]
+    private ?string $destinationVoyage;
 
     #[ORM\Column]
-    private ?DateTime $dateDepart = null ;
+    private ?\DateTimeInterface $dateDepart;
 
-    #[ORM\Column(length:50)]
-    private $prix;
+    #[ORM\Column(length: 50)]
+    private ?string $prix;
 
-    #[ORM\Column(length:40)]
-    private $duree;
+    #[ORM\Column(length: 40)]
+    private ?string $duree;
 
-#[ORM\ManyToOne(inversedBy:'LesBilletsdeChaqueStation')]
+    #[ORM\ManyToOne(targetEntity: Station::class)]
+    #[ORM\JoinColumn(name: 'station', referencedColumnName: 'id_station')]
     private ?Station $station;
 
-    #[ORM\ManyToOne(inversedBy: 'lesClients')]
+    #[ORM\ManyToOne(targetEntity: client::class)]
+    #[ORM\JoinColumn(name: 'id_personne', referencedColumnName: 'id_personne')]
     private ?Client $idPersonne;
+
 
     public function getRefVoyage(): ?int
     {

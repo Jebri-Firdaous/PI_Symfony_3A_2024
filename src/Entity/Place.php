@@ -6,12 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Client;
 use App\Entity\Parking;
 
-/**
- * Place
- *
- * @ORM\Table(name="place", indexes={@ORM\Index(name="fk_user", columns={"id_user"}), @ORM\Index(name="fk_parking", columns={"id_parking"})})
- * @ORM\Entity
- */
+use App\Repository\PlaceRepository;
+
+#[ORM\Entity(repositoryClass: PlaceRepository::class)]
 class Place
 {
     #[ORM\Id]
@@ -28,25 +25,11 @@ class Place
     #[ORM\Column(length: 30)]
     private ?string $etat;
 
-    /**
-     * @var \Parking
-     *
-     * @ORM\ManyToOne(targetEntity="Parking")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_parking", referencedColumnName="id_parking")
-     * })
-     */
-    private $idParking;
+    #[ORM\ManyToOne(inversedBy: 'places', targetEntity: Parking::class)]
+    private ?Parking $idParking;
 
-    /**
-     * @var \Client
-     *
-     * @ORM\ManyToOne(targetEntity="Client")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_user", referencedColumnName="id_personne")
-     * })
-     */
-    private $idUser;
+    #[ORM\OneToOne(mappedBy: 'idPersonne', targetEntity: Client::class)]
+    private ?Client $idUser;
 
     public function getRefPlace(): ?int
     {
