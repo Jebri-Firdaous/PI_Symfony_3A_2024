@@ -26,7 +26,8 @@ class Commande
     #[ORM\Column]
     private ?DateTime $delaisCommande;
 
-    #[ORM\ManyToOne(inversedBy: 'lesCommandesClients')]
+    #[ORM\ManyToOne(targetEntity: client::class)]
+    #[ORM\JoinColumn(name: 'id_personne', referencedColumnName: 'id_personne')]
     private ?Client $idPersonne;
 
     public function getIdCommande(): ?int
@@ -70,7 +71,7 @@ class Commande
         return $this;
     }
 
-    public function getIdPersonne(): ?int
+    public function getIdPersonne(): ?Client
     {
         return $this->idPersonne;
     }

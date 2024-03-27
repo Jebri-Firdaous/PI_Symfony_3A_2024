@@ -28,6 +28,7 @@
 
   <!-- Main CSS File -->
   <link href="{{ asset ('css/main.css') }}" rel="stylesheet">
+  
 
   <!-- =======================================================
   * Template Name: Mentor
@@ -36,24 +37,33 @@
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
    {% endblock %}
-      {% endblock %}
+{% endblock %}
   ======================================================== -->
 </head>
+
+
+
 <body>
-{% block body %}{% endblock %}
 {% block header %}
   <header id="header" class="header d-flex align-items-center sticky-top">
     <div class="container-fluid container-xl position-relative d-flex align-items-center">
 
-      <a href="index.html" class="logo d-flex align-items-center me-auto">
+      <a href="{{ path ('app_acceuil')}}" class="logo d-flex align-items-center me-auto">
         <!-- Uncomment the line below if you also wish to use an image logo -->
-        <!-- <img src="{{ asset ('img/logo.png') }}" alt=""> -->
+         <img src="{{ asset ('img/logo.png') }}" alt=""> 
         <h1 class="">Mentor</h1>
       </a>
       <nav id="navmenu" class="navmenu">
         <ul>
-          <li><a href="index.html" class="active">Acceuil</a></li>
-          <li><a href="about.html">Santé</a></li>
+          <li><a href="{{ path ('app_acceuil')}}" class="active">Acceuil</a></li>
+
+          <li class="dropdown has-dropdown" ><a href="#">Santé</a>
+            <ul>
+                  <li><a href="{{ path ('app_medecin_getAll')}}">Les Medecins</a></li>
+                  <li><a href="#">Les Rendez-Vous</a></li>
+            </ul>
+          </li>
+
           <li><a href="courses.html">Shopping</a></li>
           <li><a href="{{ path ('app_transport')}}">Transport</a></li>
           <li><a href="events.html">Parking</a></li>
@@ -66,6 +76,9 @@
     </div>
   </header>
     {% endblock %}
+
+{% block body %}
+{% endblock %}
 
   <main class="main">
 {% block section %}
@@ -92,14 +105,16 @@
 {% block section7 %}
 {% endblock %}
   </main>
+
+
 {% block footer %}
   <footer id="footer" class="footer position-relative">
 
     <div class="container footer-top">
       <div class="row gy-4">
         <div class="col-lg-4 col-md-6 footer-about">
-          <a href="index.html" class="logo d-flex align-items-center">
-            <span class="">Mentor</span>
+          <a href="{{path ('app_acceuil')}}" class="logo d-flex align-items-center">
+            <span class="">e_city</span>
           </a>
           <div class="footer-contact pt-3">
             <p>A108 Adam Street</p>
@@ -163,6 +178,8 @@
 
   </footer>
 {%endblock %}
+
+
   <!-- Scroll Top -->
   <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
@@ -180,6 +197,7 @@
   <!-- Main JS File -->
   <script src="{{ asset ('js/main.js') }}"></script>
 {% endblock %}
+
 </body>
 
 </html>

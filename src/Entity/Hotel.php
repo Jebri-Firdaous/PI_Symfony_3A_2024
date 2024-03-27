@@ -17,7 +17,11 @@ class Hotel
      #[ORM\Id]
      #[ORM\GeneratedValue]
      #[ORM\Column]
-
+     /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
     private ?int  $idHotel = null;
 
 

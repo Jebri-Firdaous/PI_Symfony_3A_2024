@@ -22,4 +22,11 @@ class AcceuilController extends AbstractController
             'controller_name' => 'AcceuilController',
         ]);
     }
+    #[Route('/sante', name: 'app_sante')]
+    public function santeHome(): Response
+    {
+        return $this->render('home/sante.html.twig', [
+            'controller_name' => 'AcceuilController',
+        ]);
+    }
 }

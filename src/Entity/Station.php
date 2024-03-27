@@ -13,6 +13,11 @@ class Station
   #[ORM\Id]
   #[ORM\GeneratedValue]
   #[ORM\Column]
+   /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
     private ?int $idStation = null ;
     #[ORM\Column(length:30)]
   

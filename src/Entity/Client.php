@@ -65,6 +65,4 @@ class Client extends Personne
     }
 
 
-
-
 }

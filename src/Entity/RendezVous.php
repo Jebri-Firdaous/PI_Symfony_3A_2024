@@ -4,6 +4,9 @@ namespace App\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\RendezVousRepository;
+use DateTime;
+
+
 /**
  * @ORM\Entity(repositoryClass="App\Repository\RendezVousRepository")
  */
@@ -14,24 +17,23 @@ class RendezVous
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+     /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
     private $refRendezVous;
 
     #[ORM\Column]
     private ?DateTime $dateRendezVous;
-
-    /**
-     * @var \Medecin
-     *
-     * @ORM\ManyToOne(targetEntity="Medecin")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_medecin", referencedColumnName="id_medecin")
-     * })
-     */
-    #[ORM\ManyToOne(inversedBy: 'lesRendezVousMedecins')]
+    
+    #[ORM\ManyToOne(targetEntity: Medecin::class)]
+    #[ORM\JoinColumn(name: 'id_medecin', referencedColumnName: 'id_medecin')]
     private ?Medecin $idMedecin;
 
 
-    #[ORM\ManyToOne(inversedBy: 'lesRendezVousClients')]
+    #[ORM\ManyToOne(targetEntity: client::class)]
+    #[ORM\JoinColumn(name: 'id_personne', referencedColumnName: 'id_personne')]
     private ?Client $idPersonne;
 
     public function getRefRendezVous(): ?int
