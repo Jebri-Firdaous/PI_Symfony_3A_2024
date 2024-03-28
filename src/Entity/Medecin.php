@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Entity;
-use repository;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\MedecinRepository;
 /**
@@ -12,11 +11,11 @@ class Medecin
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: 'integer')]
     private ?int $idMedecin = null;
 
     #[ORM\Column(length: 30)]
-    private ?string $nomMedecin;
+    private ?string $nomMedecin ;
 
     #[ORM\Column(length: 30)]
     private ?string $prenomMedecinMedecin;

@@ -40,7 +40,6 @@
   ======================================================== -->
 </head>
 <body>
-{% block body %}{% endblock %}
 {% block header %}
   <header id="header" class="header d-flex align-items-center sticky-top">
     <div class="container-fluid container-xl position-relative d-flex align-items-center">
@@ -52,13 +51,15 @@
       </a>
       <nav id="navmenu" class="navmenu">
         <ul>
+          {% block menu %}
           <li><a href="index.html" class="active">Acceuil</a></li>
           <li><a href="about.html">Santé</a></li>
           <li><a href="courses.html">Shopping</a></li>
           <li><a href="{{ path ('app_transport')}}">Transport</a></li>
-          <li><a href="events.html">Parking</a></li>
+          <li><a href="{{ path ('app_parking')}}">Parking</a></li>
           <li><a href="pricing.html">Tourisme</a></li>
           <li><a href="contact.html">Contact</a></li>
+          {% endblock %}
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
@@ -66,6 +67,7 @@
     </div>
   </header>
     {% endblock %}
+{% block body %}{% endblock %}
 
   <main class="main">
 {% block section %}

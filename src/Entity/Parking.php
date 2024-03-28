@@ -3,13 +3,14 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
+use App\Repository\ParkingRepository;
 /**
- * Parking
- *
- * @ORM\Table(name="parking")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\ParkingRepository")
  */
+#[ORM\Entity(repositoryClass: ParkingRepository::class)]
 class Parking
 {
     #[ORM\Id]
@@ -44,6 +45,14 @@ class Parking
     
     #[ORM\Column(length: 50)]
     private ?string $etatParking;
+
+    #[ORM\OneToMany(mappedBy: 'idParking', targetEntity: Place::class)]
+    private Collection $places;
+
+    public function __construct()
+    {
+        $this->places = new ArrayCollection();
+    }
 
     public function getIdParking(): ?int
     {
@@ -130,6 +139,36 @@ class Parking
     public function setEtatParking(string $etatParking): static
     {
         $this->etatParking = $etatParking;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Place>
+     */
+    public function getPlaces(): Collection
+    {
+        return $this->places;
+    }
+
+    public function addPlace(Place $place): static
+    {
+        if (!$this->places->contains($place)) {
+            $this->places->add($place);
+            $place->setIdParking($this);
+        }
+
+        return $this;
+    }
+
+    public function removePlace(Place $place): static
+    {
+        if ($this->places->removeElement($place)) {
+            // set the owning side to null (unless already changed)
+            if ($place->getIdParking() === $this) {
+                $place->setIdParking(null);
+            }
+        }
 
         return $this;
     }
