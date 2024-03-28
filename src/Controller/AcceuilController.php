@@ -22,4 +22,11 @@ class AcceuilController extends AbstractController
             'controller_name' => 'AcceuilController',
         ]);
     }
+    #[Route('/parking', name: 'app_parking')]
+    public function parkingHome(): Response
+    {
+        return $this->render('parking/index.html.twig', [
+            'controller_name' => 'AcceuilController',
+        ]);
+    }
 }
