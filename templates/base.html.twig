@@ -43,28 +43,28 @@
 {% block body %}{% endblock %}
 {% block header %}
   <header id="header" class="header d-flex align-items-center sticky-top">
-    <div class="container-fluid container-xl position-relative d-flex align-items-center">
+  <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-center"> <!-- Modifier la classe justify-content-center -->
 
-      <a href="index.html" class="logo d-flex align-items-center me-auto">
-        <!-- Uncomment the line below if you also wish to use an image logo -->
-        <!-- <img src="{{ asset ('img/logo.png') }}" alt=""> -->
-        <h1 class="">Mentor</h1>
-      </a>
-      <nav id="navmenu" class="navmenu">
-        <ul>
-          <li><a href="index.html" class="active">Acceuil</a></li>
-          <li><a href="about.html">Santé</a></li>
-          <li><a href="courses.html">Shopping</a></li>
-          <li><a href="{{ path ('app_transport')}}">Transport</a></li>
-          <li><a href="events.html">Parking</a></li>
-          <li><a href="pricing.html">Tourisme</a></li>
-          <li><a href="contact.html">Contact</a></li>
-        </ul>
-        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
-      </nav>
-      <a class="btn-getstarted" href="courses.html">Get Started</a>
-    </div>
-  </header>
+    <a href="index.html" class="logo d-flex align-items-center me-auto">
+      <img src="{{ asset ('img/logo1.png') }}" alt="Logo">
+    </a>
+
+    <nav id="navmenu" class="navmenu d-flex justify-content-center">
+      <ul>
+        <li><a href="{{ path ('app_acceuil')}}">Acceuil</a></li>
+        <li><a href="about.html">Santé</a></li>
+        <li><a href="{{ path ('app_article_index')}}">Shopping</a></li>
+        <li><a href="{{ path ('app_transport')}}">Transport</a></li>
+        <li><a href="events.html">Parking</a></li>
+        <li><a href="pricing.html">Tourisme</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+    </nav>
+    <a class="btn-getstarted" href="courses.html">Get Started</a>
+  </div>
+</header>
+
     {% endblock %}
 
   <main class="main">
@@ -99,12 +99,12 @@
       <div class="row gy-4">
         <div class="col-lg-4 col-md-6 footer-about">
           <a href="index.html" class="logo d-flex align-items-center">
-            <span class="">Mentor</span>
+            <span class="">E-city</span>
           </a>
           <div class="footer-contact pt-3">
-            <p>A108 Adam Street</p>
-            <p>New York, NY 535022</p>
-            <p class="mt-3"><strong>Phone:</strong> <span>+1 5589 55488 55</span></p>
+            <p>Esprit</p>
+            <p>Arianah soghra</p>
+            <p class="mt-3"><strong>Numéro de télephone:</strong> <span>+216 25252525</span></p>
             <p><strong>Email:</strong> <span>info@example.com</span></p>
           </div>
           <div class="social-links d-flex mt-4">

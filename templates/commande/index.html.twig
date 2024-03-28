@@ -1,20 +1,39 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello CommandeController!{% endblock %}
+{% block title %}Commande index{% endblock %}
 
-{% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+{% block section %}
+    <h1>Commande index</h1>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>IdCommande</th>
+                <th>NombreArticle</th>
+                <th>PrixTotale</th>
+                <th>DelaisCommande</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for commande in commandes %}
+            <tr>
+                <td>{{ commande.idCommande }}</td>
+                <td>{{ commande.nombreArticle }}</td>
+                <td>{{ commande.prixTotale }}</td>
+                <td>{{ commande.delaisCommande ? commande.delaisCommande|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_commande_show', {'idCommande': commande.idCommande}) }}">show</a>
+                    <a href="{{ path('app_commande_edit', {'idCommande': commande.idCommande}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/Users/lenovo/Desktop/pidev/pidev_symfony/src/Controller/CommandeController.php'|file_link(0) }}">src/Controller/CommandeController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/Users/lenovo/Desktop/pidev/pidev_symfony/templates/commande/index.html.twig'|file_link(0) }}">templates/commande/index.html.twig</a></code></li>
-    </ul>
-</div>
+    <a href="{{ path('app_commande_new') }}">Create new</a>
 {% endblock %}

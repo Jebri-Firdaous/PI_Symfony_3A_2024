@@ -11,12 +11,16 @@ use App\Repository\CommandeArticleRepository;
 #[ORM\Entity(repositoryClass: CommandeArticleRepository::class)]
 class CommandeArticle
 {
-    #[ORM\OneToOne(inversedBy: 'lesCommandes')]
+    #[ORM\Id]
+    #[ORM\ManyToOne(targetEntity: Commande::class)]
+    #[ORM\JoinColumn(name: 'id_commande', referencedColumnName: 'id_commande')]
     private ?Commande $idCommande;
 
-    #[ORM\ManyToMany(inversedBy: 'lesArticles')]
+    #[ORM\Id]
+    #[ORM\ManyToOne(targetEntity: Article::class, cascade: ["persist"])]
+    #[ORM\JoinColumn(name: 'id_article', referencedColumnName: 'id_article')]
     private ?Article $idArticle;
-
+    
     public function getIdCommande(): ?Commande
     {
         return $this->idCommande;
@@ -41,5 +45,6 @@ class CommandeArticle
         return $this;
     }
 
+    
 
 }
