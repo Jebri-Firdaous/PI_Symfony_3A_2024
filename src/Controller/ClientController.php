@@ -14,6 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/client')]
 class ClientController extends AbstractController
 {
+
     #[Route('/', name: 'app_client_index', methods: ['GET'])]
     public function index(ClientRepository $clientRepository): Response
     {
@@ -43,13 +44,18 @@ class ClientController extends AbstractController
     }
 
     #[Route('/{idPersonne}', name: 'app_client_show', methods: ['GET'])]
-    public function show(Client $client): Response
+    public function show(int $idPersonne): Response
     {
+        $client = $this->getDoctrine()->getRepository(Client::class)->find($idPersonne);
+    
+        if (!$client) {
+            throw $this->createNotFoundException('Client not found');
+        }
+    
         return $this->render('client/show.html.twig', [
             'client' => $client,
         ]);
     }
-
     #[Route('/{idPersonne}/edit', name: 'app_client_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Client $client, EntityManagerInterface $entityManager): Response
     {

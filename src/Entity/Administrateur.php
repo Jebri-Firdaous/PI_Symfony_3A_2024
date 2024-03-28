@@ -24,13 +24,12 @@ class Administrateur extends Personne
     #[ORM\Column(name: "role", type: "string", length: 30, nullable: false)]
 
     private ?string $role = null;
+/**
+     * @ORM\OneToOne(targetEntity="Personne")
+     * @ORM\JoinColumn(name="id_personne", referencedColumnName="id_personne")
+     */
+    private $personne;
 
-
-    public function __construct(string $nom_personne=null, string $prenom_personne=null, int $numero_telephone=null, string $mail_personne=null, string  $mdp_personne=null, string  $image_personne=null, ?string $role=null)
-    {
-        parent::__construct($nom_personne, $prenom_personne, $numero_telephone, $mail_personne, $mdp_personne, $image_personne);
-        $this->role= $role;
-    }
 
     public function getRole(): ?string
     {
@@ -40,6 +39,17 @@ class Administrateur extends Personne
     public function setRole(string $role): static
     {
         $this->role = $role;
+
+        return $this;
+    }
+    public function getPersonne()
+    {
+        return $this->personne;
+    }
+
+    public function setPersonne($personne): self
+    {
+        $this->personne = $personne;
 
         return $this;
     }

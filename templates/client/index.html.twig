@@ -8,13 +8,13 @@
     <table class="table">
         <thead>
             <tr>
-                <th>IdPersonne</th>
-                <th>NomPersonne</th>
-                <th>PrenomPersonne</th>
-                <th>NumeroTelephone</th>
-                <th>MailPersonne</th>
-                <th>MdpPersonne</th>
-                <th>ImagePersonne</th>
+                <th>Id_personne</th>
+                <th>Nom_personne</th>
+                <th>Prenom_personne</th>
+                <th>Numero_telephone</th>
+                <th>Mail_personne</th>
+                <th>Mdp_personne</th>
+                <th>Image_personne</th>
                 <th>Genre</th>
                 <th>Age</th>
                 <th>actions</th>
@@ -23,18 +23,18 @@
         <tbody>
         {% for client in clients %}
             <tr>
-                <td>{{ client.idPersonne }}</td>
-                <td>{{ client.nomPersonne }}</td>
-                <td>{{ client.prenomPersonne }}</td>
-                <td>{{ client.numeroTelephone }}</td>
-                <td>{{ client.mailPersonne }}</td>
-                <td>{{ client.mdpPersonne }}</td>
-                <td>{{ client.imagePersonne }}</td>
+                <td>{{ client.id_personne }}</td>
+                <td>{{ client.nom_personne }}</td>
+                <td>{{ client.prenom_personne }}</td>
+                <td>{{ client.numero_telephone }}</td>
+                <td>{{ client.mail_personne }}</td>
+                <td>{{ client.mdp_personne }}</td>
+                <td>{{ client.image_personne }}</td>
                 <td>{{ client.genre }}</td>
                 <td>{{ client.age }}</td>
                 <td>
-                    <a href="{{ path('app_client_show', {'idPersonne': client.idPersonne}) }}">show</a>
-                    <a href="{{ path('app_client_edit', {'idPersonne': client.idPersonne}) }}">edit</a>
+                    <a href="{{ path('app_client_show', {'id_personne': client.id_personne}) }}">show</a>
+                    <a href="{{ path('app_client_edit', {'id_personne': client.id_personne}) }}">edit</a>
                 </td>
             </tr>
         {% else %}

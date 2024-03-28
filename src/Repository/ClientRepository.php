@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Repository;
+use Symfony\Component\HttpFoundation\Response; // Add this line
 
 use App\Entity\Client;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -20,6 +21,21 @@ class ClientRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Client::class);
     }
+    public function show(int $id, ClientRepository $clientRepository): Response
+{
+    $client = $clientRepository->find($id);
+    if (!$client) {
+        throw $this->createNotFoundException('Client not found');
+    }
+
+    return $this->render('client/show.html.twig', [
+        'client' => $client,
+    ]);
+}
+public function findClientById(int $id_personne): ?Client
+{
+    return $this->findOneBy(['id_personne' => $id_personne]);
+}
 
 //    /**
 //     * @return Client[] Returns an array of Client objects
