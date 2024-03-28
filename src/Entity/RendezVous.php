@@ -9,6 +9,7 @@ use DateTime;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\RendezVousRepository")
+ * @ORM\Table(name="`rendez-vous`")
  */
 
 #[ORM\Entity(repositoryClass: RendezVousRepository::class)]
@@ -32,7 +33,7 @@ class RendezVous
     private ?Medecin $idMedecin;
 
 
-    #[ORM\ManyToOne(targetEntity: client::class)]
+    #[ORM\ManyToOne(targetEntity: Client::class)]
     #[ORM\JoinColumn(name: 'id_personne', referencedColumnName: 'id_personne')]
     private ?Client $idPersonne;
 

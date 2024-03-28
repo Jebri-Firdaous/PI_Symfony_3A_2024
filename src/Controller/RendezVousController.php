@@ -52,7 +52,7 @@ class RendezVousController extends AbstractController
 
         ]);
     }
-    #[Route('/rendez/vous', name: 'app_rendez_vous')]
+    #[Route('/allRv', name: 'app_rendezVous_getAll')]
     public function showAllRendezVousBySession(): Response
     {
         return $this->render('rendez_vous/showRV.html.twig', [
