@@ -11,13 +11,14 @@ use App\Repository\CommandeArticleRepository;
 #[ORM\Entity(repositoryClass: CommandeArticleRepository::class)]
 class CommandeArticle
 {
+    
     #[ORM\Id]
     #[ORM\ManyToOne(targetEntity: Commande::class)]
     #[ORM\JoinColumn(name: 'id_commande', referencedColumnName: 'id_commande')]
     private ?Commande $idCommande;
 
     #[ORM\Id]
-    #[ORM\ManyToOne(targetEntity: Article::class, cascade: ["persist"])]
+    #[ORM\ManyToOne(targetEntity: Article::class)]
     #[ORM\JoinColumn(name: 'id_article', referencedColumnName: 'id_article')]
     private ?Article $idArticle;
     

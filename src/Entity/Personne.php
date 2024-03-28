@@ -10,9 +10,11 @@ use App\Repository\PersonneRepository;
 class Personne
 {   #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $idPersonne=null;
 
+    #[ORM\Column(name: "id_personne")]
+
+    private ?int $idPersonne=null;
+    
     #[ORM\Column(length: 30)]
     private ?string $nomPersonne=null;
 

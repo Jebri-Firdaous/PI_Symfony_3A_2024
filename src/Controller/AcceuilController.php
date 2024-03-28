@@ -11,21 +11,28 @@ class AcceuilController extends AbstractController
     #[Route('/home', name: 'app_acceuil')]
     public function index(): Response
     {
-        return $this->render('home/index.html.twig', [
-            'controller_name' => 'AcceuilController',
-        ]);
-    }
-    #[Route('/homeBack', name: 'app_acceuil_back')]
-    public function indexback(): Response
-    {
-        return $this->render('home/index2.html.twig', [
+        return $this->render('Front/index.html.twig', [
             'controller_name' => 'AcceuilController',
         ]);
     }
     #[Route('/transport', name: 'app_transport')]
     public function transportHome(): Response
     {
-        return $this->render('home/transport.html.twig', [
+        return $this->render('Front/transport.html.twig', [
+            'controller_name' => 'AcceuilController',
+        ]);
+    }
+    #[Route('/parking', name: 'app_parking')]
+    public function parkingHome(): Response
+    {
+        return $this->render('Front/index.html.twig', [
+            'controller_name' => 'AcceuilController',
+        ]);
+    }
+    #[Route('/sante', name: 'app_sante')]
+    public function santeHome(): Response
+    {
+        return $this->render('home/sante.html.twig', [
             'controller_name' => 'AcceuilController',
         ]);
     }

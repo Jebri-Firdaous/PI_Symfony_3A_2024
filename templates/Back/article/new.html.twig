@@ -1,0 +1,47 @@
+{% extends 'Back/base.html.twig' %}
+
+{% block title %}Nouvel Article{% endblock %}
+
+{% block main %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <h1 class="text-center mb-4">Créer un nouvel article</h1>
+                <div class="card">
+                    <div class="card-body">
+                        {{ form_start(form, {'attr': {'class': 'article-form'}}) }}
+                            <div class="form-group">
+                                {{ form_label(form.nomArticle, 'Nom de l\'article', {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(form.nomArticle, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form_label(form.prixArticle, 'Prix de l\'article', {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(form.prixArticle, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form_label(form.quantiteArticle, 'Quantité de l\'article', {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(form.quantiteArticle, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form_label(form.typeArticle, 'Type de l\'article', {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(form.typeArticle, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form_label(form.descriptionArticle, 'Description de l\'article', {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(form.descriptionArticle, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                            <div class="form-group">
+                                {% if form.photoArticle.vars.value %}
+                                    <img src="{{ asset(form.photoArticle.vars.value) }}" alt="Image" style="max-width: 200px; max-height: 200px;">
+                                {% endif %}
+                                {{ form_widget(form.photoArticle, {'attr': {'class': 'form-control-file'}}) }}
+                            </div>
+                            {{ form_row(form.save, {'label': 'Ajouter Article', 'attr': {'class': 'btn btn-primary btn-block'}}) }}
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+                <a href="{{ path('app_article_index') }}" class="btn btn-secondary btn-block mt-3">Retour à la liste</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

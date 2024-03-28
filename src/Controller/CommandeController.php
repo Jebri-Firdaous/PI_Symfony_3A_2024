@@ -17,7 +17,7 @@ class CommandeController extends AbstractController
     #[Route('/', name: 'app_commande_index', methods: ['GET'])]
     public function index(CommandeRepository $commandeRepository): Response
     {
-        return $this->render('commande/index.html.twig', [
+        return $this->render('Front/commande/index.html.twig', [
             'commandes' => $commandeRepository->findAll(),
         ]);
     }
@@ -36,7 +36,7 @@ class CommandeController extends AbstractController
             return $this->redirectToRoute('app_commande_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('commande/new.html.twig', [
+        return $this->renderForm('Front/commande/new.html.twig', [
             'commande' => $commande,
             'form' => $form,
         ]);
@@ -45,7 +45,7 @@ class CommandeController extends AbstractController
     #[Route('/{idCommande}', name: 'app_commande_show', methods: ['GET'])]
     public function show(Commande $commande): Response // Utilisez l'entité Commande comme paramètre
     {
-        return $this->render('commande/show.html.twig', [
+        return $this->render('Front/commande/show.html.twig', [
             'commande' => $commande,
         ]);
     }
@@ -62,7 +62,7 @@ class CommandeController extends AbstractController
             return $this->redirectToRoute('app_commande_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('commande/edit.html.twig', [
+        return $this->renderForm('Front/commande/edit.html.twig', [
             'commande' => $commande,
             'form' => $form,
         ]);

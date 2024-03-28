@@ -3,72 +3,56 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
+use App\Repository\ParkingRepository;
 /**
- * Parking
- *
- * @ORM\Table(name="parking")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\ParkingRepository")
  */
+#[ORM\Entity(repositoryClass: ParkingRepository::class)]
 class Parking
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id_parking", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $idParking;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $idParking;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="nom_parking", type="string", length=30, nullable=false)
-     */
-    private $nomParking;
+    
+    #[ORM\Column(length: 30)]
+    private ?string $nomParking;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="address_parking", type="string", length=100, nullable=false)
-     */
-    private $addressParking;
+    
+    #[ORM\Column(length: 100)]
+    private ?string $addressParking;
 
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="latitude", type="float", precision=10, scale=0, nullable=false)
-     */
-    private $latitude;
+    
+    #[ORM\Column]
+    private ?float $latitude;
 
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="longitude", type="float", precision=10, scale=0, nullable=false)
-     */
-    private $longitude;
+    
+    #[ORM\Column]
+    private ?float $longitude;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="nombre_place_max", type="integer", nullable=false)
-     */
-    private $nombrePlaceMax;
+    
+    #[ORM\Column]
+    private ?int $nombrePlaceMax;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="nombre_place_occ", type="integer", nullable=false)
-     */
-    private $nombrePlaceOcc;
+    
+    #[ORM\Column]
+    private ?int $nombrePlaceOcc;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="etat_parking", type="string", length=50, nullable=false)
-     */
-    private $etatParking;
+    
+    #[ORM\Column(length: 50)]
+    private ?string $etatParking;
+
+    #[ORM\OneToMany(mappedBy: 'idParking', targetEntity: Place::class)]
+    private Collection $places;
+
+    public function __construct()
+    {
+        $this->places = new ArrayCollection();
+    }
 
     public function getIdParking(): ?int
     {
@@ -155,6 +139,36 @@ class Parking
     public function setEtatParking(string $etatParking): static
     {
         $this->etatParking = $etatParking;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Place>
+     */
+    public function getPlaces(): Collection
+    {
+        return $this->places;
+    }
+
+    public function addPlace(Place $place): static
+    {
+        if (!$this->places->contains($place)) {
+            $this->places->add($place);
+            $place->setIdParking($this);
+        }
+
+        return $this;
+    }
+
+    public function removePlace(Place $place): static
+    {
+        if ($this->places->removeElement($place)) {
+            // set the owning side to null (unless already changed)
+            if ($place->getIdParking() === $this) {
+                $place->setIdParking(null);
+            }
+        }
 
         return $this;
     }

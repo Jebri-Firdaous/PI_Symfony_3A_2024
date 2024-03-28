@@ -9,6 +9,7 @@ use DateTime;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\RendezVousRepository")
+ * @ORM\Table(name="`rendez-vous`")
  */
 
 #[ORM\Entity(repositoryClass: RendezVousRepository::class)]
@@ -17,6 +18,11 @@ class RendezVous
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+     /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
     private $refRendezVous;
 
     #[ORM\Column]

@@ -17,8 +17,16 @@ use App\Repository\ClientRepository;
 
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
 
-class Client extends Personne
+class Client 
 {
+    
+    #[ORM\ManyToOne(targetEntity: Personne::class)]
+    #[ORM\JoinColumn(name: 'id_personne', referencedColumnName: 'id_personne')]
+    #[ORM\Column(name: "id_personne")]
+    #[ORM\Id]
+    private ?int $id_personne=null;
+
+
     #[ORM\Column(name: "genre", type: "string", length: 30, nullable: false)]
 
     private ?string $genre='';
@@ -26,16 +34,16 @@ class Client extends Personne
     #[ORM\Column(name: "age", type: "integer", nullable: false)]
     private ?int $age=0;
     
-    #[ORM\OneToOne( inversedBy: "lesclient")]
-    private ?Personne $idPersonne;
+    
+
     public function getIdPersonne(): ?int
     {
-        return $this->idPersonne;
+        return $this->id_personne;
     }
 
-    public function setIdPersonne(?Personne $idPersonne): static
+    public function setIdPersonne(int $id_personne): static
     {
-        $this->idPersonne = $idPersonne;
+        $this->id_personne = $id_personne;
         return $this;
     }
 

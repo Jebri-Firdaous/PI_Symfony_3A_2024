@@ -55,7 +55,7 @@ class ArticleController extends AbstractController
         $cart = $session->get('cart', []);
 
         // Afficher le contenu du panier
-        return $this->render('article/cart.html.twig', [
+        return $this->render('Front/article/cart.html.twig', [
             'cart' => $cart,
         ]);
     }
@@ -180,7 +180,7 @@ public function placeOrder(SessionInterface $session, EntityManagerInterface $en
     #[Route('/', name: 'app_article_index', methods: ['GET'])]
     public function index(ArticleRepository $articleRepository): Response
     {
-        return $this->render('article/index.html.twig', [
+        return $this->render('Front/article/index.html.twig', [
             'articles' => $articleRepository->findAll(),
         ]);
     }
@@ -215,7 +215,7 @@ public function new(Request $request): Response
         return $this->redirectToRoute('app_article_index');
     }
 
-    return $this->render('article/new.html.twig', [
+    return $this->render('Back/article/new.html.twig', [
         'form' => $form->createView(),
     ]);
 
@@ -224,7 +224,7 @@ public function new(Request $request): Response
     #[Route('/{idArticle}', name: 'app_article_show', methods: ['GET'])]
     public function show(Article $article): Response
     {
-        return $this->render('article/show.html.twig', [
+        return $this->render('Front/article/show.html.twig', [
             'article' => $article,
         ]);
     }
@@ -241,7 +241,7 @@ public function new(Request $request): Response
             return $this->redirectToRoute('app_article_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('article/edit.html.twig', [
+        return $this->renderForm('Front/article/edit.html.twig', [
             'article' => $article,
             'form' => $form,
         ]);

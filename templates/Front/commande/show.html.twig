@@ -1,0 +1,34 @@
+{% extends 'Front/base.html.twig' %}
+
+{% block title %}Commande{% endblock %}
+
+{% block section %}
+    <h1>Commande</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>IdCommande</th>
+                <td>{{ commande.idCommande }}</td>
+            </tr>
+            <tr>
+                <th>NombreArticle</th>
+                <td>{{ commande.nombreArticle }}</td>
+            </tr>
+            <tr>
+                <th>PrixTotale</th>
+                <td>{{ commande.prixTotale }}</td>
+            </tr>
+            <tr>
+                <th>DelaisCommande</th>
+                <td>{{ commande.delaisCommande ? commande.delaisCommande|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_commande_index') }}">back to list</a>
+
+    <a href="{{ path('app_commande_edit', {'idCommande': commande.idCommande}) }}">edit</a>
+
+    {{ include('Front/commande/_delete_form.html.twig') }}
+{% endblock %}
