@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Client;
+use App\Entity\Personne;
 use App\Entity\RendezVous;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,13 +25,44 @@ class RendezVousController extends AbstractController
             'controller_name' => 'RendezVousController',
         ]);
     }
+
+    #[Route('/rv', name: 'rv')]
+    public function test(ManagerRegistry $doctrine): Response
+    {
+        $personne = new Personne();
+        $personne->setNomPersonne('karim');
+        $personne->setPrenomPersonne('karim');
+        $personne->setMailPersonne('karim');
+        $personne->setMdpPersonne('karim');
+        $personne->setImagePersonne('karim');
+
+
+        $client = new Client();
+        $client->setAge(20);
+        $id_personne = $personne->getIdPersonne();
+
+        // relates this product to the category
+        $client->setIdPersonne($id_personne);
+
+        $entityManager = $doctrine->getManager();
+        $entityManager->persist($personne);
+        
+        $entityManager->persist($client);
+        $entityManager->flush();
+
+        return new Response(
+            'Saved new product with id: '.$client->getIdPersonne()
+            .' and new category with id: '.$personne->getNomPersonne()
+        );
+    }
     #[Route('/addRendezVous', name: 'app_rendezVous_add')]
     public function addRendezVous(Request $request, ManagerRegistry $doctrine, ClientRepository $clientRepository): Response
     {
         $entityManager = $doctrine->getManager();
         // creates a doctor object and initializes some data for this example
         $rendezVous = new RendezVous();
-        // $client = $clientRepository->find(58);
+        // $client = $clientRepository->findClientById(58);
+        // dump($client);
         // $rendezVous->setIdPersonne($client);
         $entityManager->persist($rendezVous);
         $form = $this->createForm(RendezVousType::class, $rendezVous); 
