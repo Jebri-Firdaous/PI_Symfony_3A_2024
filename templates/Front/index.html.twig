@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'Front/base.html.twig' %}
 
 {% block title %}Hello HomeController!{% endblock %}
    {% block section3 %}
@@ -153,7 +153,7 @@
           <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="100">
             <div class="features-item">
               <i class="bi bi-eye" style="color: #ffbb2c;"></i>
-              <h3><a href="" class="stretched-link">Lorem Ipsum</a></h3>
+              <h3><a href="{{ path ('app_parking')}}" class="stretched-link">Lorem Ipsum</a></h3>
             </div>
           </div><!-- End Feature Item -->
 
@@ -408,7 +408,18 @@
     </section><!-- /Trainers Index Section -->
 {% endblock %}
 
+<<<<<<< HEAD:templates/home/index.html.twig
+=======
+{% block menu %}
+  <li><a href="{{ path ('app_acceuil')}}" class="active">Acceuil</a></li>
+  <li><a href="{{ path ('app_acceuil')}}">Santé</a></li>
+  <li><a href="{{ path ('app_acceuil')}}">Shopping</a></li>
+  <li><a href="{{ path ('app_transport')}}">Transport</a></li>
+  <li><a href="{{ path ('app_parking')}}">Parking</a></li>
+  <li><a href="{{ path ('app_acceuil')}}">Tourisme</a></li>
+  <li><a href="{{ path ('app_acceuil')}}">Contact</a></li>
+{% endblock %}
+>>>>>>> 16e923bf60261769c27e3920e5ac16d70f80f7e5:templates/Front/index.html.twig
 {% block body %}
-<h1>HHHHHHHHHHH</h1>
 {% endblock %}
 

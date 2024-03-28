@@ -6,63 +6,30 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Client;
 use App\Entity\Parking;
 
-/**
- * Place
- *
- * @ORM\Table(name="place", indexes={@ORM\Index(name="fk_user", columns={"id_user"}), @ORM\Index(name="fk_parking", columns={"id_parking"})})
- * @ORM\Entity
- */
+use App\Repository\PlaceRepository;
+
+#[ORM\Entity(repositoryClass: PlaceRepository::class)]
 class Place
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="ref_place", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $refPlace;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $refPlace;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="num_place", type="integer", nullable=false)
-     */
-    private $numPlace;
+    #[ORM\Column]
+    private ?int $numPlace;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="type_place", type="string", length=255, nullable=false)
-     */
-    private $typePlace;
+    #[ORM\Column(length: 30)]
+    private ?string $typePlace;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="etat", type="string", length=30, nullable=false)
-     */
-    private $etat;
+    #[ORM\Column(length: 30)]
+    private ?string $etat;
 
-    /**
-     * @var \Parking
-     *
-     * @ORM\ManyToOne(targetEntity="Parking")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_parking", referencedColumnName="id_parking")
-     * })
-     */
-    private $idParking;
+    #[ORM\ManyToOne(inversedBy: 'places', targetEntity: Parking::class)]
+    private ?Parking $idParking;
 
-    /**
-     * @var \Client
-     *
-     * @ORM\ManyToOne(targetEntity="Client")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_user", referencedColumnName="id_personne")
-     * })
-     */
-    private $idUser;
+    #[ORM\OneToOne(mappedBy: 'idPersonne', targetEntity: Client::class)]
+    private ?Client $idUser;
 
     public function getRefPlace(): ?int
     {
