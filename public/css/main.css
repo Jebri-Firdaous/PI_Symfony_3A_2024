@@ -1968,3 +1968,16 @@ section,
 .starter-section {
   /* Add your styles here */
 }
+
+
+/* styles.css */
+.btn-delete {
+  color: red; /* Définir la couleur du texte en rouge */
+  /* Ajoutez d'autres styles selon vos besoins */
+}
+
+.date-picker {
+  width: 300px; /* Ajustez la largeur selon vos préférences */
+}
+
+

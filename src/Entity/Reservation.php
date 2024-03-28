@@ -7,6 +7,9 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Client;
 use App\Repository\ReservationRepository;
+
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ReservationRepository")
  */
@@ -39,25 +42,57 @@ class Reservation
      private ?\DateTime $dateReservation = null;
 
  
-    #[ORM\Column(length: 20)]
+     #[ORM\Column]
     private ?string $typeChambre = null ;
 
    
 
  
 
-     #[ORM\ManyToOne( inversedBy: "client")]
-     private ?Client $idPersonne;
+    #[ORM\ManyToOne(targetEntity: client::class)]
+    #[ORM\JoinColumn(name: 'id_personne', referencedColumnName: 'id_personne')]
+    private ?Client $idPersonne=null;
    
+    
    
 
   
-    #[ORM\ManyToOne(inversedBy: 'lesReservations')]
-    private ?Hotel $idHotel=null;
-
   
 
+    #[ORM\ManyToOne(targetEntity: Hotel::class)]
+    #[ORM\JoinColumn(name: 'id_hotel', referencedColumnName: 'id_hotel')]
+    private ?Hotel $idHotel = null;
+  
+  
 
+   /* private $hotels;
+
+    public function __construct()
+    {
+        $this->hotels = new ArrayCollection();
+    }
+
+    public function getHotels(): Collection
+    {
+        return $this->hotels;
+    }
+
+    public function addHotel(Hotel $hotel): self
+    {
+        if (!$this->hotels->contains($hotel)) {
+            $this->hotels[] = $hotel;
+        }
+
+        return $this;
+    }
+
+    public function removeHotel(Hotel $hotel): self
+    {
+        $this->hotels->removeElement($hotel);
+
+        return $this;
+    }
+*/
     public function getRefReservation(): ?int
     {
         return $this->refReservation;

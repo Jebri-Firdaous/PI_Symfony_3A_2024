@@ -21,6 +21,18 @@ class HotelRepository extends ServiceEntityRepository
         parent::__construct($registry, Hotel::class);
     }
 
+    public function findAllHotelNames(): array
+    {
+        $hotels = $this->findAll();
+        $hotelNames = [];
+
+        foreach ($hotels as $hotel) {
+            $hotelNames[] = $hotel->getNomHotel();
+        }
+
+        return $hotelNames;
+    }
+
 //    /**
 //     * @return Hotel[] Returns an array of Hotel objects
 //     */

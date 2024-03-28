@@ -2,53 +2,44 @@
 
 namespace App\Entity;
 
-use App\Entity\Personne;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\AdminRepository;
 
-
-
-
-
-
 /**
- * @ORM\Entity(repositoryClass="App\Repository\AdminRepository")
+ * @ORM\Entity(repositoryClass=AdminRepository::class)
  */
-
 #[ORM\Entity(repositoryClass: AdminRepository::class)]
-
 
 class Administrateur extends Personne
 {
-    #[ORM\Column(name: "role", type: "string", length: 30, nullable: false)]
-
-    private ?string $role = '';
+    #[ORM\Column(length: 30)]
+    private ?string $role = null;
 
     #[ORM\OneToOne( inversedBy: "administrateur")]
-    private ?Personne $idPersonne;
+    #[ORM\JoinColumn(name: 'id_personne', referencedColumnName: 'id_personne')]
+    private ?Personne $personne = null;
 
     public function getRole(): ?string
     {
         return $this->role;
     }
 
-    public function setRole(string $role): static
+    public function setRole(?string $role): static
     {
         $this->role = $role;
 
         return $this;
     }
-    public function getIdPersonne(): ?int
+
+    public function getPersonne(): ?Personne
     {
-        return $this->idPersonne;
+        return $this->personne;
     }
 
-    public function setIdPersonne(?Personne $idPersonne): static
+    public function setPersonne(?Personne $personne): static
     {
-        $this->idPersonne = $idPersonne;
+        $this->personne = $personne;
+
         return $this;
     }
-
-
 }

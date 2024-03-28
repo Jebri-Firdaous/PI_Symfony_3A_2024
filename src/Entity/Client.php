@@ -2,50 +2,32 @@
 
 namespace App\Entity;
 
-
-
-use Doctrine\DBAL\Types\Types;
-
-  
-  
-  
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ClientRepository;
-/**
- * @ORM\Entity(repositoryClass="App\Repository\ClientRepository")
- */
 
+/**
+ * @ORM\Entity(repositoryClass=ClientRepository::class)
+ */
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
 
 class Client extends Personne
 {
-    #[ORM\Column(name: "genre", type: "string", length: 30, nullable: false)]
+    #[ORM\Column( length: 30)]
+    private ?string $genre = null;
 
-    private ?string $genre='';
+    #[ORM\Column]
+    private ?int $age = null;
 
-    #[ORM\Column(name: "age", type: "integer", nullable: false)]
-    private ?int $age=0;
-    
     #[ORM\OneToOne( inversedBy: "lesclient")]
-    private ?Personne $idPersonne;
-    public function getIdPersonne(): ?int
-    {
-        return $this->idPersonne;
-    }
-
-    public function setIdPersonne(?Personne $idPersonne): static
-    {
-        $this->idPersonne = $idPersonne;
-        return $this;
-    }
-
+    #[ORM\JoinColumn(name: 'id_personne', referencedColumnName: 'id_personne')]
+    private ?Personne $personne = null;
 
     public function getGenre(): ?string
     {
         return $this->genre;
     }
 
-    public function setGenre(string $genre): static
+    public function setGenre(?string $genre): static
     {
         $this->genre = $genre;
 
@@ -57,12 +39,22 @@ class Client extends Personne
         return $this->age;
     }
 
-    public function setAge(int $age): static
+    public function setAge(?int $age): static
     {
         $this->age = $age;
 
         return $this;
     }
 
+    public function getPersonne(): ?Personne
+    {
+        return $this->personne;
+    }
 
+    public function setPersonne(?Personne $personne): static
+    {
+        $this->personne = $personne;
+
+        return $this;
+    }
 }
