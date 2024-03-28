@@ -1,13 +1,13 @@
-{% extends 'base.html.twig' %}
+{% extends 'Front/base.html.twig' %}
 
 {% block title %}Edit Client{% endblock %}
 {% block section %}
 
-    {{ include('client/_form.html.twig', {'button_label': 'Update'}) }}
+    {{ include('Front/client/_form.html.twig', {'button_label': 'Update'}) }}
 
     <a href="{{ path('app_client_index') }}">back to list</a>
 
-    {{ include('client/_delete_form.html.twig') }}
+    {{ include('Front/client/_delete_form.html.twig') }}
 {% endblock %}
 {% block body %}
 

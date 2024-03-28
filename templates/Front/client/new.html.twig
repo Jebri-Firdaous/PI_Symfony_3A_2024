@@ -1,10 +1,10 @@
-{% extends 'base.html.twig' %}
+{% extends 'Front/base.html.twig' %}
 
 {% block title %}New Client{% endblock %}
 {% block section %}
 
 
-    {{ include('client/_form.html.twig') }}
+    {{ include('Front/client/_form.html.twig') }}
 
     <a href="{{ path('app_client_index') }}">back to list</a>
 {% endblock %}

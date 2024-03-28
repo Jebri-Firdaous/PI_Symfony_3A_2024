@@ -13,13 +13,15 @@ class WelcomeController extends AbstractController
     {
         return $this->render('Welcome_Page.html.twig', [
             'controller_name' => 'WelcomeController',
+
         ]);
     }
     #[Route('/home', name: 'app_acceuil')]
     public function home(): Response
     {
-        return $this->render('home/index.html.twig', [
+        return $this->render('Front/index.html.twig', [
             'controller_name' => 'WelcomeController',
+
         ]);
     }
 

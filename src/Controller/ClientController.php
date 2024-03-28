@@ -11,14 +11,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/client')]
+#[Route('Front/client')]
 class ClientController extends AbstractController
 {
 
     #[Route('/', name: 'app_client_index', methods: ['GET'])]
     public function index(ClientRepository $clientRepository): Response
     {
-        return $this->render('client/index.html.twig', [
+        return $this->render('Front/client/index.html.twig', [
             'clients' => $clientRepository->findAll(),
         ]);
     }
@@ -37,7 +37,7 @@ class ClientController extends AbstractController
             return $this->redirectToRoute('app_client_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('client/new.html.twig', [
+        return $this->renderForm('Front/client/new.html.twig', [
             'client' => $client,
             'form' => $form,
         ]);
@@ -52,7 +52,7 @@ class ClientController extends AbstractController
             throw $this->createNotFoundException('Client not found');
         }
     
-        return $this->render('client/show.html.twig', [
+        return $this->render('Front/client/show.html.twig', [
             'client' => $client,
         ]);
     }
@@ -68,7 +68,7 @@ class ClientController extends AbstractController
             return $this->redirectToRoute('app_client_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('client/edit.html.twig', [
+        return $this->renderForm('Front/client/edit.html.twig', [
             'client' => $client,
             'form' => $form,
         ]);
