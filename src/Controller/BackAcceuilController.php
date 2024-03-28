@@ -6,13 +6,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ParkingController extends AbstractController
+class BackAcceuilController extends AbstractController
 {
-    #[Route('/parking', name: 'app_parking')]
+    #[Route('/back/acceuil', name: 'app_back_acceuil')]
     public function index(): Response
     {
-        return $this->render('Front/parking.html.twig', [
-            'controller_name' => 'ParkingController',
+        return $this->render('Back/index.html.twig', [
+            'controller_name' => 'BackAcceuilController',
         ]);
     }
 }
