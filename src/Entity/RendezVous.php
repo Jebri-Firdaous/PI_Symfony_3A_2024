@@ -17,12 +17,7 @@ class RendezVous
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
-     /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Column(name: "ref_rendez_vous")]
     private $refRendezVous;
 
     #[ORM\Column]
@@ -33,8 +28,10 @@ class RendezVous
     private ?Medecin $idMedecin;
 
 
-    #[ORM\ManyToOne(inversedBy: 'lesRendezVousClients')]
-    private ?Client $idPersonne;
+    // #[ORM\ManyToOne(inversedBy: 'lesRendezVousClients')]
+    // #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: "LesRendezVous")]
+    // #[ORM\JoinColumn(name: 'id_personne', referencedColumnName: 'id_personne')]
+    private Client $id_personne;
 
     public function getRefRendezVous(): ?int
     {
@@ -65,14 +62,14 @@ class RendezVous
         return $this;
     }
 
-    public function getIdPersonne(): ?Client
+    public function getClient(): ?Client
     {
-        return $this->idPersonne;
+        return $this->id_personne;
     }
 
     public function setIdPersonne(?Client $idPersonne): static
     {
-        $this->idPersonne = $idPersonne;
+        $this->id_personne = $idPersonne;
 
         return $this;
     }

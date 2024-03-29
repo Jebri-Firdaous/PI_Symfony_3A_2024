@@ -65,7 +65,7 @@ class RendezVousType extends AbstractType
                     "Urology" => "Urology"
                 ],
             ])
-            ->add('id_personne',HiddenType::class)
+            // ->add('id_personne',HiddenType::class)
             ->add('save', SubmitType::class)
         ;
     }

@@ -18,7 +18,7 @@ class MedecinController extends AbstractController
     #[Route('/medecin', name: 'app_medecin_add')]
     public function addDoctor(): Response
     {
-        return $this->render('medecin/addDoctor.html.twig', [
+        return $this->render('Back/medecin/addDoctor.html.twig', [
             'controller_name' => 'MedecinController',
         ]);
     }
@@ -45,7 +45,7 @@ class MedecinController extends AbstractController
             return $this->redirectToRoute('app_medecin_getAll');
         }
         // rendering the form
-        return $this->render('medecin/addDoctor.html.twig', [
+        return $this->render('Back/medecin/addDoctor.html.twig', [
             'form' => $form->createView(),
         ]);
              
@@ -57,7 +57,7 @@ class MedecinController extends AbstractController
         $doctors = $medecinRepository->findAll();
         
 
-        return $this->render('medecin/showDoctors.html.twig', [
+        return $this->render('Back/medecin/showDoctors.html.twig', [
             'controller_name' => 'MedecinController',
             'doctors'  => $doctors,
         ]);
@@ -88,7 +88,7 @@ class MedecinController extends AbstractController
             return $this->redirectToRoute('app_medecin_getAll');
         }
         
-        return $this->render('medecin/editDoctor.html.twig', [
+        return $this->render('Back/medecin/editDoctor.html.twig', [
             'doctor' => $doctor,
             'form' => $form->createView(),
         ]);

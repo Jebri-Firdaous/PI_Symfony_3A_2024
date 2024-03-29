@@ -21,11 +21,6 @@ class ClientRepository extends ServiceEntityRepository
         parent::__construct($registry, Client::class);
     }
 
-    // public function findClientById(int $id, ManagerRegistry $doctrine):  array
-    // {
-        
-    // }
-
 //    /**
 //     * @return Client[] Returns an array of Client objects
 //     */

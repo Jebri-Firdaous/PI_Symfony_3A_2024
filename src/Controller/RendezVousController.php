@@ -30,29 +30,43 @@ class RendezVousController extends AbstractController
     public function test(ManagerRegistry $doctrine): Response
     {
         $personne = new Personne();
-        $personne->setNomPersonne('karim');
-        $personne->setPrenomPersonne('karim');
-        $personne->setMailPersonne('karim');
-        $personne->setMdpPersonne('karim');
-        $personne->setImagePersonne('karim');
-
+        $personne->setNomPersonne('df');
+        $personne->setPrenomPersonne('badfhira');
+        $personne->setMailPersonne('kajofm');
+        $personne->setMdpPersonne('kafdrfim');
+        $personne->setImagePersonne('kardfim');
+        $personne->setNumeroTelephone(4576);
 
         $client = new Client();
         $client->setAge(20);
-        $id_personne = $personne->getIdPersonne();
+        $client->setGenre("H");
+        $client->setPersonne($personne);
+        dump($personne);
 
         // relates this product to the category
-        $client->setIdPersonne($id_personne);
+        // $client->setIdPersonne($personne);
 
         $entityManager = $doctrine->getManager();
+
         $entityManager->persist($personne);
-        
+        // $entityManager->flush();
         $entityManager->persist($client);
         $entityManager->flush();
 
         return new Response(
-            'Saved new product with id: '.$client->getIdPersonne()
-            .' and new category with id: '.$personne->getNomPersonne()
+            'Saved new client with id: ' . $client->getPersonne()->getNomPersonne() . $client->getPersonne()->getId() 
+            .' and new personne with id: '.$personne->getId()
+        );
+    }
+    #[Route('/testFetch', name: 'fetchtest')]
+    public function testFetch(ManagerRegistry $doctrine): Response
+    {
+        $client = $doctrine->getRepository(Client::class)->find(58);
+    
+
+        return new Response(
+            'fetch old client ' . $client->getPersonne()->getNomPersonne() . $client->getPersonne()->getId() 
+            // .' and new personne with id: '.$personne->getId()
         );
     }
     #[Route('/addRendezVous', name: 'app_rendezVous_add')]
@@ -61,8 +75,14 @@ class RendezVousController extends AbstractController
         $entityManager = $doctrine->getManager();
         // creates a doctor object and initializes some data for this example
         $rendezVous = new RendezVous();
-        // $client = $clientRepository->findClientById(58);
+
+        $personne = $doctrine->getRepository(Personne::class)->find(58);
+        dump($personne);
+
+        $client = $clientRepository->findOneByIdJoinedToPersonne($personne);
         // dump($client);
+
+        
         // $rendezVous->setIdPersonne($client);
         $entityManager->persist($rendezVous);
         $form = $this->createForm(RendezVousType::class, $rendezVous); 
@@ -79,16 +99,18 @@ class RendezVousController extends AbstractController
             return $this->redirectToRoute('app_rendezVous_getAll');
         }
 
-        return $this->render('rendez_vous/addRendezVous.html.twig', [
+        return $this->render('Front/rendez_vous/addRendezVous.html.twig', [
             'controller_name' => 'RendezVousController',
             'form' => $form->createView(),
 
         ]);
     }
+
+
     #[Route('/allRv', name: 'app_rendezVous_getAll')]
     public function showAllRendezVousBySession(): Response
     {
-        return $this->render('rendez_vous/showRV.html.twig', [
+        return $this->render('Front/rendez_vous/showRV.html.twig', [
             'controller_name' => 'RendezVousController',
         ]);
     }

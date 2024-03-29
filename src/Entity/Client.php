@@ -2,51 +2,44 @@
 
 namespace App\Entity;
 
-
-
-use Doctrine\DBAL\Types\Types;
-
-  
-  
-  
-use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ClientRepository;
-/**
- * @ORM\Entity(repositoryClass="App\Repository\ClientRepository")
- */
+use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
-
-class Client 
+class Client
 {
-    
-    #[ORM\ManyToOne(targetEntity: Personne::class)]
-    #[ORM\JoinColumn(name: 'id_personne', referencedColumnName: 'id_personne')]
-    #[ORM\Column(name: "id_personne")]
+    // #[ORM\Id]
+    // #[ORM\GeneratedValue]
+    // #[ORM\Column]
+    // private ?int $id = null;
+
     #[ORM\Id]
-    private ?int $id_personne=null;
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(name: 'id_personne', referencedColumnName: 'id_personne', nullable: true)]
+    private ?Personne $personne = null;
 
+    #[ORM\Column(length: 30)]
+    private ?string $genre = null;
 
-    #[ORM\Column(name: "genre", type: "string", length: 30, nullable: false)]
+    #[ORM\Column]
+    private ?int $age = null;
 
-    private ?string $genre='';
+    // public function getId(): ?int
+    // {
+    //     return $this->id;
+    // }
 
-    #[ORM\Column(name: "age", type: "integer", nullable: false)]
-    private ?int $age=0;
-    
-    
-
-    public function getIdPersonne(): ?int
+    public function getPersonne(): ?Personne
     {
-        return $this->id_personne;
+        return $this->personne;
     }
 
-    public function setIdPersonne(int $id_personne): static
+    public function setPersonne(Personne $personne): static
     {
-        $this->id_personne = $id_personne;
+        $this->personne = $personne;
+
         return $this;
     }
-
 
     public function getGenre(): ?string
     {
@@ -71,6 +64,4 @@ class Client
 
         return $this;
     }
-
-
 }
