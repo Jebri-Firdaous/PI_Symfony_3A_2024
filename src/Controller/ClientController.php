@@ -14,6 +14,14 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('Front/client')]
 class ClientController extends AbstractController
 {
+  private $entityManager;
+    private $clientRepository;
+
+    public function __construct(EntityManagerInterface $entityManager, ClientRepository $clientRepository)
+    {
+        $this->entityManager = $entityManager;
+        $this->clientRepository = $clientRepository;
+    }
 
     #[Route('/', name: 'app_client_index', methods: ['GET'])]
     public function index(ClientRepository $clientRepository): Response

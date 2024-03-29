@@ -16,4 +16,6 @@ services:
     # Service definition for the ClientController
     App\Controller\ClientController:
         arguments:
-            $client: '@App\Entity\Client'
+            $entityManager: '@doctrine.orm.entity_manager'
+            $clientRepository: '@App\Repository\ClientRepository'
+

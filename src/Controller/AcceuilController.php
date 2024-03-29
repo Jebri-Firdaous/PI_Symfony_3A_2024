@@ -32,4 +32,45 @@ class AcceuilController extends AbstractController
 
         ]);
     }
+    #[Route('/sante', name: 'app_sante')]
+    public function santetHome(): Response
+    {
+        return $this->render('Front/sante.html.twig', [
+            'controller_name' => 'AcceuilController',
+
+        ]);
+    }
+    #[Route('/shopping', name: 'app_shopping')]
+    public function shoppinghome(): Response
+    {
+        return $this->render('Front/shopping.html.twig', [
+            'controller_name' => 'AcceuilController',
+
+        ]);
+    }
+    #[Route('/parking', name: 'app_parking')]
+    public function parkinghome(): Response
+    {
+        return $this->render('Front/parking.html.twig', [
+            'controller_name' => 'AcceuilController',
+
+        ]);
+    }
+    #[Route('/tourism', name: 'app_tourism')]
+    public function tourismhome(): Response
+    {
+        return $this->render('Front/tourism.html.twig', [
+            'controller_name' => 'AcceuilController',
+
+        ]);
+    }
+    #[Route('/contact', name: 'app_contact')]
+    public function contacthome(): Response
+    {
+        return $this->render('Front/contact.html.twig', [
+            'controller_name' => 'AcceuilController',
+
+        ]);
+    }
+
 }

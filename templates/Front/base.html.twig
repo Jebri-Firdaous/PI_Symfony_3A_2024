@@ -40,8 +40,10 @@
   ======================================================== -->
 </head>
 <body>
+
 {% block body %}{% endblock %}
 {% block header %}
+{% set currentRoute = app.request.attributes.get('_route') %}
   <header id="header" class="header d-flex align-items-center sticky-top">
     <div class="container-fluid container-xl position-relative d-flex align-items-center">
 
@@ -50,18 +52,18 @@
         <!-- <img src="{{ asset ('img/logo.png') }}" alt=""> -->
         <h1 class="">E-CITY</h1>
       </a>
- <nav id="navmenu" class="navmenu">
-        <ul>
-          <li><a href="{{ path ('app_acceuil')}}" class="active">Acceuil</a></li>
-          <li><a href="about.html">Santé</a></li>
-          <li><a href="courses.html">Shopping</a></li>
-          <li><a href="{{ path ('app_transport')}}">Transport</a></li>
-          <li><a href="events.html">Parking</a></li>
-          <li><a href="pricing.html">Tourisme</a></li>
-          <li><a href="contact.html">Contact</a></li>
-        </ul>
-        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
-      </nav>
+<nav id="navmenu" class="navmenu">
+    <ul>
+        <li><a href="{{ path ('app_acceuil')}}" {% if currentRoute == 'app_acceuil' %}class="active"{% endif %}>Accueil</a></li>
+        <li><a href="{{ path ('app_sante')}}" {% if currentRoute == 'app_sante' %}class="active"{% endif %}>Santé</a></li>
+        <li><a href="{{ path ('app_shopping')}}" {% if currentRoute == 'app_shopping' %}class="active"{% endif %}>Shopping</a></li>
+        <li><a href="{{ path ('app_transport')}}" {% if currentRoute == 'app_transport' %}class="active"{% endif %}>Transport</a></li>
+        <li><a href="{{ path ('app_parking')}}" {% if currentRoute == 'app_parking' %}class="active"{% endif %}>Parking</a></li>
+        <li><a href="{{ path ('app_tourism')}}" {% if currentRoute == 'app_tourism' %}class="active"{% endif %}>Tourisme</a></li>
+        <li><a href="{{ path ('app_contact')}}" {% if currentRoute == 'app_contact' %}class="active"{% endif %}>Contact</a></li>
+    </ul>
+    <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+</nav>
      <a class="btn-getstarted" href="{{ path ('app_client_new')}}">S'inscrire</a>
     </div>
   </header>
@@ -102,8 +104,8 @@
             <span class="">Mentor</span>
           </a>
           <div class="footer-contact pt-3">
-            <p>Ariana cité Ghazela</p>
-            <p>Tunis, TN 535022</p>
+            <p>Pôle Technologique, Rue André Ampère</p>
+            <p>Ariana 2083, Tunisia</p>
             <p class="mt-3"><strong>Fix:</strong> <span>+216 71 234 567</span></p>
             <p><strong>Email:</strong> <span>ecity.tunis2000@gmail.com</span></p>
           </div>

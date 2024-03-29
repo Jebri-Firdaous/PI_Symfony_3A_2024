@@ -5,71 +5,62 @@
 * Author: BootstrapMade.com
 * License: https://bootstrapmade.com/license/
 */
+/*Form*/
+/* Style pour le formulaire */
+.form-container {
+  width: 400px;
+  margin: 0 auto;
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Style pour les champs de formulaire */
+.form-control {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+.form-group label {
+  font-weight: bold; /* Appliquer le style "bold" aux labels */
+}
+
+/* Style pour le bouton */
+.btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Style pour les erreurs de formulaire */
+.error-message {
+  color: red;
+  margin-top: -10px;
+  margin-bottom: 10px;
+}
+
+
+
+/* Ajoutez d'autres styles selon vos besoins */
+
 
 /*--------------------------------------------------------------
 # Font & Color Variables
 # Help: https://bootstrapmade.com/color-system/
 --------------------------------------------------------------*/
 /* Fonts */
-.form-container {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  max-width: 400px; /* Ajoutez une largeur maximale pour le formulaire */
-  margin: 0 auto; /* Centrer le formulaire horizontalement */
-}
-
-.form-group {
-  margin-bottom: 20px; /* Ajouter un espacement entre chaque champ */
-}
-
-.form-control {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #57C0DD; /* Utilisation de la couleur spécifiée */
-  border-radius: 5px;
-  box-sizing: border-box;
-}
-
-.btn {
-  width: 100%;
-  padding: 10px;
-  background-color: #57C0DD; /* Utilisation de la couleur spécifiée */
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-.form-container label {
-  font-weight: bold; /* Applique le style en gras aux labels */
-}
-
-/* Ajoutez d'autres styles selon vos besoins */
-
-
-.card {
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  width: 800px; /* Largeur fixe du formulaire */
-  margin: 0 auto; /* Centre le formulaire horizontalement */
-  margin-bottom: 40px; /* Ajustez la marge inférieure selon vos besoins */
-
-}
-/* Style pour le formulaire */
-
-/* Centrer le bouton dans la division du formulaire */
-.btn-center {
-  display: inline-block; /* Permet au bouton de ne pas prendre toute la largeur */
-  margin: 0 auto; /* Centre horizontalement le bouton */
-}
-
-
 :root {
   --default-font: "Open Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --heading-font: "Raleway", sans-serif;
   --nav-font: "Poppins", sans-serif;
-  }
+}
 
 /* Global Colors */
 :root {
@@ -93,10 +84,14 @@
   --nav-dropdown-hover-color: #57C0DD;
   --nav-dropdown-background-color: #ffffff;
 }
+
 /* Smooth scroll */
 :root {
   scroll-behavior: smooth;
 }
+/*--------------------------------------------------------------
+# Hero Section
+--------------------------------------------------------------*/
 .btn-centered {
   position: fixed; /* Utilisation de position fixe pour maintenir la position même en zoomant */
   top: 50%; /* Placer le bouton à 50% de la hauteur de la fenêtre */
@@ -116,7 +111,87 @@
   background-color: #7cc576; /* Couleur de fond au survol */
     color: bl; /* Couleur du texte au survol */
 }
+#hero {
+  width: 100%;
+  height: 100%;
+  background: url("../img/background.png")  no-repeat;
+  background-size: cover; /* Cover the entire container */
+  background-attachment: fixed; /* Fixed position */
+  position: relative;
+}
 
+#hero .hero-container {
+  position: absolute;
+  bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  padding: 0 15px;
+}
+
+#hero .hero-logo {
+  margin-bottom: 30px;
+}
+
+#hero h1 {
+  margin: 0 0 30px 0;
+  font-size: 48px;
+  font-weight: 500;
+  line-height: 56px;
+  color: #fff;
+}
+
+#hero h2 {
+  color: #aeaeae;
+  margin-bottom: 30px;
+  font-size: 14px;
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+#hero .btn-get-started {
+  position: absolute; top: 422px; left: 557px;
+  font-family: "Montserrat", sans-serif;
+  text-transform: uppercase;
+  font-weight: 400;
+  font-size: 18px;
+  letter-spacing: 1px;
+  display: inline-block;
+  padding: 14px 30px;
+  border-radius: 3px;
+  margin: 10px;
+  color: black;
+  background:  #B0E847;
+}
+
+#hero .btn-get-started:hover {
+  transition: 0.5s;
+  background: #fff;
+  color: #7cc576;
+}
+
+@media (min-width: 1024px) {
+  #hero {
+    background-attachment: fixed;
+  }
+}
+
+@media (max-width: 768px) {
+  #hero h1 {
+    font-size: 28px;
+    line-height: 36px;
+  }
+
+  #hero h2 {
+    line-height: 22px;
+  }
+}
 /*--------------------------------------------------------------
 # General
 --------------------------------------------------------------*/
@@ -359,6 +434,10 @@ h6 {
   .navmenu .megamenu ul li .active,
   .navmenu .megamenu ul li .active:hover {
     color: var(--nav-dropdown-hover-color);
+  }
+  .navmenu ul li a.active
+  {
+    color: var(  --nav-hover-color   );
   }
 
   .navmenu .megamenu:hover>ul {
@@ -765,8 +844,6 @@ h6 {
   color: var(--default-color);
   background-color: var(--background-color);
   position: relative;
-  margin-bottom: 40px; /* Ajustez la marge inférieure selon vos besoins */
-
 }
 
 .page-title .heading {
@@ -947,14 +1024,7 @@ section,
     font-size: 18px;
   }
 }
-#hero {
-  width: 100%;
-  height: 100%;
-  background: url("../img/background.png")  no-repeat;
-  background-size: cover; /* Cover the entire container */
-  background-attachment: fixed; /* Fixed position */
-  position: relative;
-}
+
 /*--------------------------------------------------------------
 # About Section
 --------------------------------------------------------------*/
@@ -1633,14 +1703,7 @@ section,
   color: var(--accent-color);
 }
 
-.tabs .nav-link.active {
-  color: var(--accent-color);
-  border-color: var(--accent-color);
-}
 
-.tabs .tab-pane.active {
-  animation: fadeIn 0.5s ease-out;
-}
 
 .tabs .details h3 {
   font-size: 26px;
@@ -1662,10 +1725,7 @@ section,
     padding: 15px;
   }
 
-  .tabs .nav-link.active {
-    color: var(--accent-color);
-    background: var(--accent-color);
-  }
+
 }
 
 /*--------------------------------------------------------------
