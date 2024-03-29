@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Administrateur;
 use App\Entity\Client;
 use App\Entity\Personne;
 use App\Entity\RendezVous;
@@ -26,7 +27,7 @@ class RendezVousController extends AbstractController
         ]);
     }
 
-    #[Route('/rv', name: 'rv')]
+    #[Route('/testsaving', name: 'rv')]
     public function test(ManagerRegistry $doctrine): Response
     {
         $personne = new Personne();
@@ -37,10 +38,9 @@ class RendezVousController extends AbstractController
         $personne->setImagePersonne('kardfim');
         $personne->setNumeroTelephone(4576);
 
-        $client = new Client();
-        $client->setAge(20);
-        $client->setGenre("H");
-        $client->setPersonne($personne);
+        $administrateur = new Administrateur();
+        $administrateur->setRole("gestion Medecin");
+        $administrateur->setPersonne($personne);
         dump($personne);
 
         // relates this product to the category
@@ -50,22 +50,36 @@ class RendezVousController extends AbstractController
 
         $entityManager->persist($personne);
         // $entityManager->flush();
-        $entityManager->persist($client);
+        $entityManager->persist($administrateur);
         $entityManager->flush();
 
         return new Response(
-            'Saved new client with id: ' . $client->getPersonne()->getNomPersonne() . $client->getPersonne()->getId() 
+            'Saved new admin with id: ' . $administrateur->getPersonne()->getNomPersonne() . $administrateur->getPersonne()->getId() 
             .' and new personne with id: '.$personne->getId()
         );
     }
-    #[Route('/testFetch', name: 'fetchtest')]
-    public function testFetch(ManagerRegistry $doctrine): Response
+
+    #[Route('/testFetchClient', name: 'fetclmhtest')]
+    public function testFetchClient(ManagerRegistry $doctrine): Response
     {
-        $client = $doctrine->getRepository(Client::class)->find(58);
+        $client = $doctrine->getRepository(Client::class)->find(56);
     
 
         return new Response(
-            'fetch old client ' . $client->getPersonne()->getNomPersonne() . $client->getPersonne()->getId() 
+            'fetch old client ' . $client->getPersonne()->getNomPersonne() . $client->getPersonne()->getId() . "genre" . $client->getGenre()
+            // .' and new personne with id: '.$personne->getId()
+        );
+
+    }
+    #[Route('/testFetchAdmin', name: 'fetchtest')]
+    public function testFetch(ManagerRegistry $doctrine): Response
+    {
+        $administrateur = $doctrine->getRepository(Administrateur::class)->find(55);
+    
+
+        return new Response(
+            'fetch old admin ' . $administrateur->getPersonne()->getNomPersonne() . $administrateur->getPersonne()->getId() 
+            . $administrateur->getRole()
             // .' and new personne with id: '.$personne->getId()
         );
     }
