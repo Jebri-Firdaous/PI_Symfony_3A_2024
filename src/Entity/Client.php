@@ -9,26 +9,38 @@ use App\Repository\ClientRepository;
  * @ORM\Entity(repositoryClass=ClientRepository::class)
  */
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
-class Client extends Personne
+class Client
 {
-    /**
- * @ORM\ManyToOne(targetEntity="App\Entity\Personne")
- * @ORM\JoinColumn(name="id_personne", referencedColumnName="id_personne")
- */
-private $personne;
-    #[ORM\Column(length: 30, nullable: true)]
+    // #[ORM\Id]
+    // #[ORM\GeneratedValue]
+    // #[ORM\Column]
+    // private ?int $id = null;
+
+    #[ORM\Id]
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(name: 'id_personne', referencedColumnName: 'id_personne', nullable: true)]
+    private ?Personne $personne = null;
+
+    #[ORM\Column(length: 30)]
     private ?string $genre = null;
 
-    #[ORM\Column(type: 'integer', nullable: true)]
+    #[ORM\Column]
     private ?int $age = null;
+
+    // public function getId(): ?int
+    // {
+    //     return $this->id;
+    // }
+
     public function getPersonne(): ?Personne
     {
         return $this->personne;
     }
 
-    public function setPersonne(?Personne $personne): static
+    public function setPersonne(Personne $personne): static
     {
         $this->personne = $personne;
+
         return $this;
     }
 
@@ -37,9 +49,10 @@ private $personne;
         return $this->genre;
     }
 
-    public function setGenre(?string $genre): static
+    public function setGenre(string $genre): static
     {
         $this->genre = $genre;
+
         return $this;
     }
 
@@ -48,9 +61,10 @@ private $personne;
         return $this->age;
     }
 
-    public function setAge(?int $age): static
+    public function setAge(int $age): static
     {
         $this->age = $age;
+
         return $this;
     }
 }

@@ -9,32 +9,31 @@ use App\Repository\PersonneRepository;
  */
 #[ORM\Entity(repositoryClass: PersonneRepository::class)]
 class Personne
-{   #[ORM\Id]
+{
+    #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id_personne=null;
- 
+    private ?int $id_personne = null;
 
-    #[ORM\Column(length: 30, nullable: true)]
+    #[ORM\Column(length: 30)]
     private ?string $nom_personne = null;
-
 
     #[ORM\Column(length: 30)]
     private ?string $prenom_personne = null;
 
     #[ORM\Column]
-    private ?int $numero_telephone= null;
+    private ?int $numero_telephone = null;
 
-    #[ORM\Column( length: 50)]
+    #[ORM\Column(length: 50)]
     private ?string $mail_personne = null;
 
-    #[ORM\Column( length: 50)]
-    private ?string $mdp_personne=null;
+    #[ORM\Column(length: 50)]
+    private ?string $mdp_personne = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $image_personne=null;
+    private ?string $image_personne = null;
 
-    public function getIdPersonne(): ?int
+    public function getId(): ?int
     {
         return $this->id_personne;
     }
@@ -110,6 +109,4 @@ class Personne
 
         return $this;
     }
-
-
 }

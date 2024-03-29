@@ -16,42 +16,49 @@ use App\Repository\AdminRepository;
  * @ORM\Entity(repositoryClass="App\Repository\AdminRepository")
  */
 
-#[ORM\Entity(repositoryClass: AdminRepository::class)]
-
-
-class Administrateur extends Personne
-{
-    #[ORM\Column(name: "role", type: "string", length: 30, nullable: false)]
-
-    private ?string $role = null;
-/**
-     * @ORM\OneToOne(targetEntity="Personne")
-     * @ORM\JoinColumn(name="id_personne", referencedColumnName="id_personne")
-     */
-    private $personne;
-
-
-    public function getRole(): ?string
-    {
-        return $this->role;
-    }
-
-    public function setRole(string $role): static
-    {
-        $this->role = $role;
-
-        return $this;
-    }
-    public function getPersonne()
-    {
-        return $this->personne;
-    }
-
-    public function setPersonne($personne): self
-    {
-        $this->personne = $personne;
-
-        return $this;
-    }
-
+ #[ORM\Entity(repositoryClass: AdminRepository::class)]
+ class Administrateur
+ {
+     // #[ORM\Id]
+     // #[ORM\GeneratedValue]
+     // #[ORM\Column]
+     // private ?int $id = null;
+ 
+     #[ORM\Id]
+     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+     #[ORM\JoinColumn(name: 'id_personne', referencedColumnName: 'id_personne', nullable: true)]
+     private ?Personne $personne = null;
+ 
+     #[ORM\Column(length: 30)]
+     private ?string $role = null;
+ 
+     // public function getId(): ?int
+     // {
+     //     return $this->id;
+     // }
+ 
+     public function getPersonne(): ?Personne
+     {
+         return $this->personne;
+     }
+ 
+     public function setPersonne(Personne $personne): static
+     {
+         $this->personne = $personne;
+ 
+         return $this;
+     }
+ 
+     public function getRole(): ?string
+     {
+         return $this->role;
+     }
+ 
+     public function setRole(string $role): static
+     {
+         $this->role = $role;
+ 
+         return $this;
+     }
+ 
 }
