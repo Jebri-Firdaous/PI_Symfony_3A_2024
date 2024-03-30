@@ -29,6 +29,10 @@ class Medecin
     #[ORM\Column(length: 50)]
     private ?string $specialiteMedecin;
 
+    #[ORM\OneToMany(targetEntity: RendezVous::class, mappedBy: "id_medecin")]
+    private $rendezVous;
+
+
     public function getIdMedecin(): ?int
     {
         return $this->idMedecin;

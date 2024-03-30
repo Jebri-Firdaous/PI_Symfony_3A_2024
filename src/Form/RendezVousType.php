@@ -2,17 +2,33 @@
 
 namespace App\Form;
 
+use App\Entity\Medecin;
 use App\Entity\RendezVous;
+use App\Repository\MedecinRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\ChoiceList\Loader\CallbackChoiceLoader;
+
+ 
 
 
 class RendezVousType extends AbstractType
 {
+    private $medecinRepository;
+
+    public function __construct(MedecinRepository $medecinRepository)
+    {
+        $this->medecinRepository = $medecinRepository;
+    }
+
+
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -39,32 +55,38 @@ class RendezVousType extends AbstractType
                     "Urology" => "Urology"
                 ],
             ])
-            ->add('idMedecin',null, ['label' => 'Nom Medecin',])
+            ->add('idMedecin', EntityType::class, [
+                'class' => Medecin::class,
+                'choice_label' => 'nomMedecin', // Assuming 'nom' is the property you want to display in the choice list
+                'label' => 'Nom Medecin',
+                'placeholder' => 'Choisissez un médecin', // Optional: Adds a placeholder option to the select
+            ])
+            
             ->add('dateRendezVous')
             
-            ->add('specialiteMedecin', ChoiceType::class ,  [
-                'required' => false,
-                'mapped' => false,
-                'label' => 'Spécialité',
-                'attr' => [
-                    'style' => 'width: 300px'
-                ],
-                'choices'  => [
-                    "Anesthesiology" => "Anesthesiology",
-                    "Cardiology" => "Cardiology",
-                    "Dermatology" => "Dermatology",
-                    "Endocrinology" => "Endocrinology",
-                    "Gastroenterology" => "Gastroenterology",
-                    "Neurology" => "Neurology",
-                    "Obstetrics" => "Obstetrics",
-                    "Ophthalmology" => "Ophthalmology",
-                    "Orthopedics" => "Orthopedics",
-                    "Pediatrics" => "Pediatrics",
-                    "Psychiatry" => "Psychiatry",
-                    "Radiology" => "Radiology",
-                    "Urology" => "Urology"
-                ],
-            ])
+            // // ->add('specialiteMedecin', ChoiceType::class ,  [
+            // //     'required' => false,
+            // //     'mapped' => false,
+            // //     'label' => 'Spécialité',
+            // //     'attr' => [
+            // //         'style' => 'width: 300px'
+            // //     ],
+            // //     'choices'  => [
+            // //         "Anesthesiology" => "Anesthesiology",
+            // //         "Cardiology" => "Cardiology",
+            // //         "Dermatology" => "Dermatology",
+            // //         "Endocrinology" => "Endocrinology",
+            // //         "Gastroenterology" => "Gastroenterology",
+            // //         "Neurology" => "Neurology",
+            // //         "Obstetrics" => "Obstetrics",
+            // //         "Ophthalmology" => "Ophthalmology",
+            // //         "Orthopedics" => "Orthopedics",
+            // //         "Pediatrics" => "Pediatrics",
+            // //         "Psychiatry" => "Psychiatry",
+            // //         "Radiology" => "Radiology",
+            // //         "Urology" => "Urology"
+            // //     ],
+            // ])
             // ->add('id_personne',HiddenType::class)
             ->add('save', SubmitType::class)
         ;
@@ -74,6 +96,7 @@ class RendezVousType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => RendezVous::class,
+            'medecinRepository' => null,
         ]);
     }
 }

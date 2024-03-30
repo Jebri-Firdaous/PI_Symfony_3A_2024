@@ -13,9 +13,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Form\RendezVousType;
 use App\Repository\ClientRepository as ClientRepository;
-
-
-
+use App\Repository\MedecinRepository;
+use App\Repository\RendezVousRepository;
 
 class RendezVousController extends AbstractController
 {
@@ -84,22 +83,23 @@ class RendezVousController extends AbstractController
         );
     }
     #[Route('/addRendezVous', name: 'app_rendezVous_add')]
-    public function addRendezVous(Request $request, ManagerRegistry $doctrine, ClientRepository $clientRepository): Response
+    public function addRendezVous(Request $request, ManagerRegistry $doctrine, ClientRepository $clientRepository, MedecinRepository $medecinRepository): Response
     {
         $entityManager = $doctrine->getManager();
         // creates a doctor object and initializes some data for this example
         $rendezVous = new RendezVous();
 
-        $personne = $doctrine->getRepository(Personne::class)->find(58);
+        $personne = $doctrine->getRepository(Personne::class)->find(55);
         dump($personne);
 
-        $client = $clientRepository->findOneByIdJoinedToPersonne($personne);
-        // dump($client);
+        $client = $clientRepository->find($personne);
+        dump($client);
+        $rendezVous->setIdPersonne($client);
 
         
         // $rendezVous->setIdPersonne($client);
         $entityManager->persist($rendezVous);
-        $form = $this->createForm(RendezVousType::class, $rendezVous); 
+        $form = $this->createForm(RendezVousType::class, $rendezVous, ['medecinRepository' => $medecinRepository]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid())
         {
@@ -119,13 +119,38 @@ class RendezVousController extends AbstractController
 
         ]);
     }
-
-
-    #[Route('/allRv', name: 'app_rendezVous_getAll')]
-    public function showAllRendezVousBySession(): Response
+    #[Route('/deleteRV/{id}', name: 'app_rendezVous_delete')]
+    public function deleteRendezVous(Request $request, ManagerRegistry $doctrine, RendezVousRepository $rendezVousRepository, int $id): Response
     {
+        $entityManager = $doctrine->getManager();
+        // creates a doctor object and initializes some data for this example
+        dump($id);
+
+        $rendezVous = $rendezVousRepository->find($id);
+        dump($rendezVous);
+
+        
+        // $rendezVous->setIdPersonne($client);
+        $entityManager->remove($rendezVous);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_rendezVous_getAll');
+
+      
+    }
+
+
+    #[Route('/Rvbyclient', name: 'app_rendezVous_getAll')]
+    public function showAllRendezVousBySession(RendezVousRepository $rendezVousRepository,MedecinRepository $medecinRepository ,ClientRepository $clientRepository): Response
+    {
+        $client = $clientRepository->find(55);
+        dump($client);
+        $lesRendezVousByClient =  $client->getLesRendezVous();
+        dump($lesRendezVousByClient);
+
         return $this->render('Front/rendez_vous/showRV.html.twig', [
             'controller_name' => 'RendezVousController',
+            'lesRVdeClient' => $lesRendezVousByClient,
         ]);
     }
 }
