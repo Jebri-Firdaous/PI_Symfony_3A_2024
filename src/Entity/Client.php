@@ -2,12 +2,9 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ClientRepository;
+use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=ClientRepository::class)
- */
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
 class Client
 {
@@ -16,8 +13,8 @@ class Client
     // #[ORM\Column]
     // private ?int $id = null;
 
-    #[ORM\Id]
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+ #[ORM\Id]
+    #[ORM\OneToOne(targetEntity: Personne::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(name: 'id_personne', referencedColumnName: 'id_personne', nullable: true)]
     private ?Personne $personne = null;
 

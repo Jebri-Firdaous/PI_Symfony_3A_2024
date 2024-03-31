@@ -1,12 +1,10 @@
 <?php
+
 namespace App\Entity;
-use repository;
-use Doctrine\ORM\Mapping as ORM;
+
 use App\Repository\PersonneRepository;
-/**
- * @ORM\Entity(repositoryClass=PersonneRepository::class)
- * @ORM\MappedSuperclass
- */
+use Doctrine\ORM\Mapping as ORM;
+
 #[ORM\Entity(repositoryClass: PersonneRepository::class)]
 class Personne
 {

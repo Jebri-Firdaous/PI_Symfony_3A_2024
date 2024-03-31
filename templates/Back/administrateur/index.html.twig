@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+
+<title>Administrateur index</title>
+
+{% block body %}
+    <h1>Administrateur index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Role</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for administrateur in administrateurs %}
+            <tr>
+                <td>{{ administrateur.role }}</td>
+                <td>
+                    <a href="{{ path('app_administrateur_show', {'personne': administrateur.personne}) }}">show</a>
+                    <a href="{{ path('app_administrateur_edit', {'personne': administrateur.personne}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="2">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_administrateur_new') }}">Create new</a>
+{% endblock %}

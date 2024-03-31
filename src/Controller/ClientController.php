@@ -3,13 +3,16 @@
 namespace App\Controller;
 
 use App\Entity\Client;
+use App\Entity\Personne;
 use App\Form\ClientType;
-use App\Repository\ClientRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Request;
+use Doctrine\Persistence\ManagerRegistry;
+use App\Repository\ClientRepository as ClientRepository;
+
 
 #[Route('Front/client')]
 class ClientController extends AbstractController
@@ -30,27 +33,104 @@ class ClientController extends AbstractController
             'clients' => $clientRepository->findAll(),
         ]);
     }
-
     #[Route('/new', name: 'app_client_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, ManagerRegistry $doctrine, EntityManagerInterface $entityManager): Response
     {
-        $client = new Client();
-        $form = $this->createForm(ClientType::class, $client);
+        $form = $this->createForm(ClientType::class);
         $form->handleRequest($request);
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
+            // Récupérer les données du formulaire
+            $formData = $form->getData();
+            
+            $personne = new Personne();
+            $personne->setNomPersonne("fj");
+            $personne->setPrenomPersonne("jj");
+            $personne->setNumeroTelephone("24500297");
+            $personne->setMailPersonne("mail@gmail.com");
+            $personne->setMdpPersonne("Azertiop");
+            $personne->setImagePersonne("img");
+    
+            $client = new Client();
+            $client->setAge("25");
+            $client->setGenre("Femme");
+            $client->setPersonne($personne);
+            dump($personne);
+    
+            $entityManager->persist($personne);
             $entityManager->persist($client);
             $entityManager->flush();
-
-            return $this->redirectToRoute('app_client_index', [], Response::HTTP_SEE_OTHER);
+    
+            return new Response(
+                'Saved new admin with id: ' . $client->getPersonne()->getNomPersonne() . $client->getPersonne()->getId() 
+                .' and new personne with id: '.$personne->getId()
+            );
         }
-
-        return $this->renderForm('Front/client/new.html.twig', [
-            'client' => $client,
-            'form' => $form,
+    
+        // Si le formulaire n'est pas soumis ou n'est pas valide, afficher le formulaire
+        return $this->render('Front/client/new.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
 
+    #[Route('/testsaving', name: 'rv')]
+public function test(ManagerRegistry $doctrine): Response
+{
+    $personne = new Personne();
+    $personne->setNomPersonne('df');
+    $personne->setPrenomPersonne('badfhira');
+    $personne->setMailPersonne('kajofm');
+    $personne->setMdpPersonne('kafdrfim');
+    $personne->setImagePersonne('kardfim');
+    $personne->setNumeroTelephone(4576);
+
+    $client = new client();
+    $client->setAge(25);
+    $client->setGenre(25);
+
+    $client->setPersonne($personne);
+    dump($personne);
+
+    // relates this product to the category
+    // $client->setIdPersonne($personne);
+
+    $entityManager = $doctrine->getManager();
+
+    $entityManager->persist($personne);
+    // $entityManager->flush();
+    $entityManager->persist($client);
+    $entityManager->flush();
+
+    return new Response(
+        'Saved new admin with id: ' . $client->getPersonne()->getNomPersonne() . $client->getPersonne()->getId() 
+        .' and new personne with id: '.$personne->getId()
+    );
+}
+
+#[Route('/testFetchClient', name: 'fetclmhtest')]
+public function testFetchClient(ManagerRegistry $doctrine): Response
+{
+    $client = $doctrine->getRepository(Client::class)->find(56);
+
+
+    return new Response(
+        'fetch old client ' . $client->getPersonne()->getNomPersonne() . $client->getPersonne()->getId() . "genre" . $client->getGenre()
+        // .' and new personne with id: '.$personne->getId()
+    );
+
+}
+#[Route('/testFetchAdmin', name: 'fetchtest')]
+public function testFetch(ManagerRegistry $doctrine): Response
+{
+    $client = $doctrine->getRepository(client::class)->find(55);
+
+
+    return new Response(
+        'fetch old admin ' . $client->getPersonne()->getNomPersonne() . $client->getPersonne()->getId() 
+        . $client->getRole()
+        // .' and new personne with id: '.$personne->getId()
+    );
+}
     #[Route('/{idPersonne}', name: 'app_client_show', methods: ['GET'])]
     public function show(int $idPersonne): Response
     {
@@ -85,7 +165,7 @@ class ClientController extends AbstractController
     #[Route('/{idPersonne}', name: 'app_client_delete', methods: ['POST'])]
     public function delete(Request $request, Client $client, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$client->getIdPersonne(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$client->getPersonne(), $request->request->get('_token'))) {
             $entityManager->remove($client);
             $entityManager->flush();
         }
