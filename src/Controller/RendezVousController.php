@@ -82,7 +82,7 @@ class RendezVousController extends AbstractController
             // .' and new personne with id: '.$personne->getId()
         );
     }
-    #[Route('/addRendezVous', name: 'app_rendezVous_add')]
+    #[Route('/addRendezVousFront', name: 'front_rendezVous_add')]
     public function addRendezVous(Request $request, ManagerRegistry $doctrine, ClientRepository $clientRepository, MedecinRepository $medecinRepository): Response
     {
         $entityManager = $doctrine->getManager();
@@ -110,7 +110,7 @@ class RendezVousController extends AbstractController
             // TODO ... perform some action, such as saving the task to the database
             $entityManager->flush();
             // return $this->redirectToRoute('app_medecin_getAll');
-            return $this->redirectToRoute('app_rendezVous_getAll');
+            return $this->redirectToRoute('front_rendezVous_getAll');
         }
 
         return $this->render('Front/rendez_vous/addRendezVous.html.twig', [
@@ -119,7 +119,20 @@ class RendezVousController extends AbstractController
 
         ]);
     }
-    #[Route('/deleteRV/{id}', name: 'app_rendezVous_delete')]
+    #[Route('/Rvbyclient', name: 'front_rendezVous_getAll')]
+    public function showAllRendezVousBySession(RendezVousRepository $rendezVousRepository,MedecinRepository $medecinRepository ,ClientRepository $clientRepository): Response
+    {
+        $client = $clientRepository->find(55);
+        dump($client);
+        $lesRendezVousByClient =  $client->getLesRendezVous();
+        dump($lesRendezVousByClient);
+
+        return $this->render('Front/rendez_vous/showRV.html.twig', [
+            'controller_name' => 'RendezVousController',
+            'lesRVdeClient' => $lesRendezVousByClient,
+        ]);
+    }
+    #[Route('/deleteRVFront/{id}', name: 'front_rendezVous_delete')]
     public function deleteRendezVous(Request $request, ManagerRegistry $doctrine, RendezVousRepository $rendezVousRepository, int $id): Response
     {
         $entityManager = $doctrine->getManager();
@@ -134,23 +147,44 @@ class RendezVousController extends AbstractController
         $entityManager->remove($rendezVous);
         $entityManager->flush();
 
-        return $this->redirectToRoute('app_rendezVous_getAll');
+        return $this->redirectToRoute('front_rendezVous_getAll');
+
+      
+    }
+    #[Route('/editRVFront/{id}', name: 'front_rendezVous_edit')]
+    public function editRendezVousbyclient(Request $request, ManagerRegistry $doctrine, RendezVous $rendezVous ,RendezVousRepository $rendezVousRepository, int $id): Response
+    {
+        $form = $this->createForm(RendezVousType::class, $rendezVous);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $doctrine->getManager();
+            // $entityManager->persist($product), but it isn't necessary: 
+            // Doctrine is already "watching" your object for changes.
+            $entityManager->flush();
+            $this->addFlash('success', 'post.updated_successfully');
+
+            return $this->redirectToRoute('front_rendezVous_getAll');
+        }
+        
+        return $this->render('Front/rendez_vous/editRendezVous.html.twig', [
+            'rendezvous' => $rendezVous,
+            'form' => $form->createView(),
+        ]);
 
       
     }
 
 
-    #[Route('/Rvbyclient', name: 'app_rendezVous_getAll')]
-    public function showAllRendezVousBySession(RendezVousRepository $rendezVousRepository,MedecinRepository $medecinRepository ,ClientRepository $clientRepository): Response
+    
+    #[Route('/allRVExist', name: 'back_rendezVous_getAll')]
+    public function showAllRendezVousForAdmin(RendezVousRepository $rendezVousRepository,MedecinRepository $medecinRepository ,ClientRepository $clientRepository): Response
     {
-        $client = $clientRepository->find(55);
-        dump($client);
-        $lesRendezVousByClient =  $client->getLesRendezVous();
-        dump($lesRendezVousByClient);
+        $allRVInDB = $rendezVousRepository->findAll();
+        dump($allRVInDB);
 
-        return $this->render('Front/rendez_vous/showRV.html.twig', [
+        return $this->render('Back/rendezVous/showAllRvInDB.html.twig', [
             'controller_name' => 'RendezVousController',
-            'lesRVdeClient' => $lesRendezVousByClient,
+            'lesRVdeClient' => $allRVInDB,
         ]);
     }
 }
