@@ -12,6 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Form\RendezVousType;
+use App\Form\RendezVousBackType;
 use App\Repository\ClientRepository as ClientRepository;
 use App\Repository\MedecinRepository;
 use App\Repository\RendezVousRepository;
@@ -148,9 +149,9 @@ class RendezVousController extends AbstractController
         $entityManager->flush();
 
         return $this->redirectToRoute('front_rendezVous_getAll');
-
-      
     }
+
+
     #[Route('/editRVFront/{id}', name: 'front_rendezVous_edit')]
     public function editRendezVousbyclient(Request $request, ManagerRegistry $doctrine, RendezVous $rendezVous ,RendezVousRepository $rendezVousRepository, int $id): Response
     {
@@ -186,5 +187,81 @@ class RendezVousController extends AbstractController
             'controller_name' => 'RendezVousController',
             'lesRVdeClient' => $allRVInDB,
         ]);
+    }
+    #[Route('/addRendezVousBack', name: 'back_rendezVous_add')]
+    public function addRendezVousBack(Request $request, ManagerRegistry $doctrine, ClientRepository $clientRepository, MedecinRepository $medecinRepository): Response
+    {
+        $entityManager = $doctrine->getManager();
+        // creates a doctor object and initializes some data for this example
+        $rendezVous = new RendezVous();
+
+        // $personne = $doctrine->getRepository(Personne::class)->find(55);
+        // dump($personne);
+
+        // $client = $clientRepository->find($personne);
+        // dump($client);
+        // $rendezVous->setIdPersonne($client);
+
+        
+        // $rendezVous->setIdPersonne($client);
+        $entityManager->persist($rendezVous);
+        $form = $this->createForm(RendezVousBackType::class, $rendezVous, ['medecinRepository' => $medecinRepository], ['clientRepository' => $clientRepository]);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            // $form->get('id_personne')->setData(34); // Set id_personne to 34
+            // holds the submitted values
+            // but, the original `$task` variable has also been updated
+            $rendezVous = $form->getData();
+            // TODO ... perform some action, such as saving the task to the database
+            $entityManager->flush();
+            // return $this->redirectToRoute('app_medecin_getAll');
+            return $this->redirectToRoute('back_rendezVous_getAll');
+        }
+
+        return $this->render('Back/rendezVous/addRendezVousBack.html.twig', [
+            'controller_name' => 'RendezVousController',
+            'form' => $form->createView(),
+
+        ]);
+    }
+    #[Route('/editRVBack/{id}', name: 'back_rendezVous_edit')]
+    public function editRendezVousBack(Request $request, ManagerRegistry $doctrine, RendezVous $rendezVous ,RendezVousRepository $rendezVousRepository, int $id): Response
+    {
+        $form = $this->createForm(RendezVousBackType::class, $rendezVous);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $doctrine->getManager();
+            // $entityManager->persist($product), but it isn't necessary: 
+            // Doctrine is already "watching" your object for changes.
+            $entityManager->flush();
+            $this->addFlash('success', 'post.updated_successfully');
+
+            return $this->redirectToRoute('back_rendezVous_getAll');
+        }
+        
+        return $this->render('Back/rendezVous/editRendezVousBack.html.twig', [
+            'rendezvous' => $rendezVous,
+            'form' => $form->createView(),
+        ]);
+
+      
+    }
+    #[Route('/deleteRVBack/{id}', name: 'back_rendezVous_delete')]
+    public function deleteRendezVousfromAdmin(Request $request, ManagerRegistry $doctrine, RendezVousRepository $rendezVousRepository, int $id): Response
+    {
+        $entityManager = $doctrine->getManager();
+        // creates a doctor object and initializes some data for this example
+        dump($id);
+
+        $rendezVous = $rendezVousRepository->find($id);
+        dump($rendezVous);
+
+        
+        // $rendezVous->setIdPersonne($client);
+        $entityManager->remove($rendezVous);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('back_rendezVous_getAll');
     }
 }

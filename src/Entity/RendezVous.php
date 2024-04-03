@@ -30,7 +30,8 @@ class RendezVous
 
     #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: "lesRendezVous")]
     #[ORM\JoinColumn(name: 'id_personne', referencedColumnName: 'id_personne')]
-    private Client $id_personne;
+    public Client $id_personne;
+    // private Client $id_personne;
 
     public function getRefRendezVous(): ?int
     {
