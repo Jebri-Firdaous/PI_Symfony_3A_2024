@@ -28,6 +28,8 @@ class Billet
     private ?string $destinationVoyage;
 
     #[ORM\Column]
+    #[Assert\GreaterThan('today',message:"date non valide")]
+
     private ?\DateTime $dateDepart;
 
     #[ORM\Column(length: 50)]

@@ -1,0 +1,80 @@
+{% extends 'baseBack.html.twig' %}
+{% block main %}
+<div class="example-wrapper">
+    <h2 style="text-align: center;">Ajouter Billet</h2>
+    {{ form_start(f, {'attr': {'class': 'form', 'novalidate': 'novalidate'}}) }}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                {{ form_label(f.destinationVoyage) }}
+                {{ form_widget(f.destinationVoyage, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(f.destinationVoyage) }}
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                {{ form_label(f.dateDepart) }}
+                {{ form_widget(f.dateDepart, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(f.dateDepart) }}
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                {{ form_label(f.prix) }}
+                {{ form_widget(f.prix, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(f.prix) }}
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                {{ form_label(f.duree) }}
+                {{ form_widget(f.duree, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(f.duree) }}
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                {{ form_label(f.station) }}
+                {{ form_widget(f.station, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(f.station) }}
+            </div>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary mt-3">Confirmer</button>
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">{{ message }}</div>
+    {% endfor %}
+    {{ form_end(f) }}
+</div>
+
+<div style="margin-top: 20px;"> <!-- Ajustez la marge supérieure selon vos besoins -->
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Destination Voyage</th>
+                <th>Date Départ</th>
+                <th>Prix</th>
+                <th>Durée</th>
+                <th>Station</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for billet in list %}
+                <tr>
+                    <td>{{ billet.destinationVoyage }}</td>
+                    <td>{{ billet.dateDepart|date('Y-m-d') }}</td>
+                    <td>{{ billet.prix }}</td>
+                    <td>{{ billet.duree }}</td>
+                    <td>{{ billet.station.nomStation }}</td>
+                      <td>
+                        <a href="{{ path('edit_billetBack',{id:billet.refVoyage}) }}" class="btn btn-info"><i data-feather="edit"></i></a>
+                        <a href="{{ path('delete_billetBack',{id:billet.refVoyage}) }}" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce billet ?')"><i data-feather="trash-2"></i></a>
+                    </td>
+                  
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

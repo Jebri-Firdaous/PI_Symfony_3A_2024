@@ -10,7 +10,7 @@
 	--dark-blue: #1f2029;
 	--white-gr: #c4c3ca;
 	--yellow: #ffeba7;
-	--yellow-2: #f8ab37;
+	--yellow-2: cornflowerblue;
 }
 
 h1{
@@ -175,7 +175,7 @@ h1{
 	border-radius: 50%;
 	top: 0;
 	transform: translateY(-50%);
-	background-color: var(--dark-blue);
+	background-color: var(--white);
 }
 .dots span:nth-child(1){
 	width: 30px;
@@ -261,16 +261,16 @@ h1{
 	-ms-flex-pack: center;
 	text-align: center;
 	border: none;
-	color: var(--dark-blue);
-    background-color: var(--yellow);
+	color: cornflowerblue;
+    background-color: cornflowerblue;
 }
 .btn:active,
 .btn:focus{
 	box-shadow: none;
 }
 .btn:hover{
-	color: var(--yellow);
-    background-color: #000;
+	color: white;
+    background-color:cornflowerblue;
 	box-shadow: 0 6px 20px 0 rgba(255,235,167,0.25);
 }
 

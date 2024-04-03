@@ -5,12 +5,14 @@ namespace App\Controller;
 use App\Entity\Billet;
 use App\Entity\Station;
 use App\Form\BilletType;
+use App\Form\StationType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\Persistence\ManagerRegistry;
  use App\Repository\billetRepository;
+ use App\Repository\StationRepository;
 
 class AcceuilController extends AbstractController
 {
@@ -21,6 +23,8 @@ class AcceuilController extends AbstractController
             'controller_name' => 'AcceuilController',
         ]);
     }
+  
+    
     #[Route('/transport', name: 'app_transport')]
     public function reserver(Request $req,ManagerRegistry $Manager,billetRepository $repo): Response
     {   $em=$Manager->getManager();
@@ -47,6 +51,7 @@ class AcceuilController extends AbstractController
         ]);
     }}
 
+   
 
 #[Route('/EditBillet/{id}', name: 'edit_billet')] 
 public function editBillet (Request $req,ManagerRegistry $Manager,billetRepository $repo,$id)
@@ -70,7 +75,8 @@ public function editBillet (Request $req,ManagerRegistry $Manager,billetReposito
     ]
 );
 }}
-#[Route('/DeleteAuthor/{id}', name: 'delete_billet')] 
+
+#[Route('/DeleteBillet{id}', name: 'delete_billet')] 
 public function deleteAuthor(ManagerRegistry $Manager,billetRepository $repo,$id):Response
 {
     $em=$Manager->getManager();

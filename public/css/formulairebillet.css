@@ -75,6 +75,9 @@ form button[type="submit"] {
 
     outline: 0;
 }
+.btn-black {
+  color: black;
+}
 
 /*
     Au survol et au focus des champs de saisie de texte,
@@ -92,7 +95,7 @@ form input[type="password"]:hover {
 */
 form button[type="submit"] {
     font-weight: bold;
-    color: #eee;
+    color: black;
     text-transform: uppercase;
 
     background-color: rgb(25,25,112);

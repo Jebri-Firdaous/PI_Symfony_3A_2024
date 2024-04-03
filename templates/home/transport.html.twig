@@ -45,7 +45,7 @@
                 Êtes-vous sûr de vouloir supprimer ce billet ? Cette action est irréversible.
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="annuler">Annuler</button>
+                <button type="button" class="btn btn-secondary btn-black" data-dismiss="modal" id="annuler">Annuler</button>
                 <a href="#" class="btn btn-danger" id="confirmDelete">Supprimer</a>
             </div>
         </div>
@@ -54,7 +54,7 @@
 <div class="container pt-5">
     <div class="row justify-content-center">
         <div class="col-12 text-center">
-            <h1 class="pb-4">Choose <i class='uil uil-bus color-yellow'></i> ticket</h1>
+            <h1 class="pb-4">Vos <i class='uil uil-bus color-yellow'></i> Billets</h1>
             <div class="d-flex justify-content-between">
                 {% for billet in list %}
                 <div class="ticket-option">
@@ -63,16 +63,21 @@
                         <span class="top-dots">
                             <span class="section dots"></span>
                         </span>
-                        <span class="duration">{{ billet.duree }}</span>
-                        <span class="price mt-2 pb-4 mb-3"><sup>$</sup>{{ billet.prix }}</span>
+                           <span class="duration">{{ billet.destinationVoyage }}</span>
+                         <span class="time mt-2">{{ billet.dateDepart|date('Y-m-d H:i:s') }}</span>
+                        <span class="price mt-2 pb-4 mb-3"><sup>DT</sup>{{ billet.prix }}</span>
                         <span class="section dots"></span>
                         <span class="section pt-4"><i class='uil uil-clock-two mt-3'></i></span>
-                        <span class="time mt-2">{{ billet.dateDepart|date('Y-m-d H:i:s') }}</span>
+                        <span class="duration">{{ billet.duree }}</span>
+                         <span class="section dots"></span>
+                        <span class="section pt-4"><i class='uil uil-clock-two mt-3'></i></span>
+                        <span class="duration">{{ billet.station.nomStation }} - {{ billet.station.adressStation }} - {{ billet.station.type }}</span>
+                       
                         <span class="bottom-dots"><span class="section dots"></span></span>
                     </label>
                       <div class="mt-3">
-                        <a href="{{ path('edit_billet',{id: billet.refVoyage}) }}" class="modifier btn btn-primary btn-sm mr-2">Modifier</a>
-                        <a href="#" class="supprimer btn btn-danger btn-sm" onclick="$('#deleteModal').modal('show'); $('#confirmDelete').attr('href', '{{ path('delete_billet', {id: billet.refVoyage}) }}'); return false;">Supprimer</a>
+                        <a href="{{ path('edit_billet',{id: billet.refVoyage}) }}" class="modifier btn btn-btn-secondary btn-sm mr-2">Modifier</a>
+                        <a href="#" class="supprimer btn btn-btn-secondary btn-sm" onclick="$('#deleteModal').modal('show'); $('#confirmDelete').attr('href', '{{ path('delete_billet', {id: billet.refVoyage}) }}'); return false;">Supprimer</a>
                     </div>
                 </div>
                 {% endfor %}
