@@ -12,7 +12,7 @@ use App\Entity\Station;
 use App\Form\StationType;
 use App\Repository\billetRepository;
 use App\Form\BilletbackType;
-
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 class BackAcceuilController extends AbstractController
 {
     #[Route('/back/acceuil', name: 'app_back_acceuil')]
@@ -86,15 +86,29 @@ class BackAcceuilController extends AbstractController
         ]
     );
     }}
-    #[Route('/Deletestation{id}', name: 'delete_station')] 
-public function deletestation(ManagerRegistry $Manager,StationRepository $repo,$id):Response
-{
-    $em=$Manager->getManager();
-    $station=$repo->find($id);
-    $em->remove($station);
-    $em->flush();
-    return $this->redirectToRoute('transport_back');
-}
+    #[Route('/Deletestation{id}', name: 'delete_station')]
+    public function deletestation(ManagerRegistry $Manager, StationRepository $repo, $id): Response
+    {
+        $em = $Manager->getManager();
+        $station = $repo->find($id);
+    
+        if (!$station) {
+            // Handle case when station with given ID is not found
+            throw $this->createNotFoundException('Station not found');
+        }
+    
+        try {
+            $em->remove($station);
+            $em->flush();
+        } catch (ForeignKeyConstraintViolationException $e) {
+            // Handle foreign key constraint violation gracefully
+            // Redirect with an error message or handle it appropriately
+            return $this->redirectToRoute('transport_back', ['error' => 'Cannot delete the station due to related records']);
+        }
+    
+        // Redirect to the desired route after successful deletion
+        return $this->redirectToRoute('transport_back');
+    }
 #[Route('/billetback', name: 'app_billet')]
 public function ajouterbillet(Request $req,ManagerRegistry $Manager,billetRepository $repo): Response
 {   $em=$Manager->getManager();
