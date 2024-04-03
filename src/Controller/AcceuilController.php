@@ -31,7 +31,7 @@ class AcceuilController extends AbstractController
         $list=$repo->findAll();
         $billet=new billet();
         $billet->setPrix('15dt');
-        $billet->setDuree('0');
+        $billet->setDuree('1h');
         $form=$this->createForm(BilletType::class,$billet);
         $form->handleRequest($req);
       

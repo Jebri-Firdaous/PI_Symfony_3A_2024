@@ -29,7 +29,7 @@ class Billet
 
     #[ORM\Column]
     #[Assert\GreaterThan('today',message:"date non valide")]
-
+    #[Assert\NotBlank(message:"La date est obligatoire")] 
     private ?\DateTime $dateDepart;
 
     #[ORM\Column(length: 50)]
@@ -40,6 +40,7 @@ class Billet
 
     #[ORM\ManyToOne(targetEntity: Station::class)]
     #[ORM\JoinColumn(name: 'station', referencedColumnName: 'id_station')]
+    #[Assert\NotBlank(message:"La station est obligatoire")] 
     private ?Station $station;
 
     #[ORM\ManyToOne(targetEntity: client::class)]

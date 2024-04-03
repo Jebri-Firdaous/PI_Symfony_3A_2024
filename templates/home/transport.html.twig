@@ -25,7 +25,7 @@
                     <br> <!-- Ajout d'un saut de ligne -->
                     {{ form_widget(f.station, {'attr': {'class': 'vendor/bootstrap/css/form-control col-sm-4'}}) }}
                 </div>
-                <button type="submit" class="btn btn-primary mt-5">Enregistrer</button>
+                <button type="submit" >Enregistrer</button>
                 {{ form_end(f) }}
             </div>
         </div>
@@ -45,8 +45,8 @@
                 Êtes-vous sûr de vouloir supprimer ce billet ? Cette action est irréversible.
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-black" data-dismiss="modal" id="annuler">Annuler</button>
-                <a href="#" class="btn btn-danger" id="confirmDelete">Supprimer</a>
+                <button type="button" class="btn-black" data-dismiss="modal" id="annuler">Annuler</button>
+                <a href="#" class="btn-black" id="confirmDelete">Supprimer</a>
             </div>
         </div>
     </div>

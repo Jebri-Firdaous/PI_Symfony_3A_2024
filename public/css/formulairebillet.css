@@ -79,6 +79,7 @@ form button[type="submit"] {
   color: black;
 }
 
+
 /*
     Au survol et au focus des champs de saisie de texte,
     nous changeons la couleur d’arrière-plan.
@@ -95,7 +96,7 @@ form input[type="password"]:hover {
 */
 form button[type="submit"] {
     font-weight: bold;
-    color: black;
+    color: white;
     text-transform: uppercase;
 
     background-color: rgb(25,25,112);
@@ -186,7 +187,7 @@ table {
   
   /* Style pour les liens de modification */
   a.modifier {
-    color: blue;
+    color: white;
     text-decoration: none;
   }
   

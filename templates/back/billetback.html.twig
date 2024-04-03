@@ -63,10 +63,10 @@
             {% for billet in list %}
                 <tr>
                     <td>{{ billet.destinationVoyage }}</td>
-                    <td>{{ billet.dateDepart|date('Y-m-d') }}</td>
+                    <td>{{ billet.dateDepart|date('Y-m-d H:i:s') }}</td>
                     <td>{{ billet.prix }}</td>
                     <td>{{ billet.duree }}</td>
-                    <td>{{ billet.station.nomStation }}</td>
+                    <td>{{ billet.station.nomStation }} - {{ billet.station.adressStation }} - {{ billet.station.type }}</td>
                       <td>
                         <a href="{{ path('edit_billetBack',{id:billet.refVoyage}) }}" class="btn btn-info"><i data-feather="edit"></i></a>
                         <a href="{{ path('delete_billetBack',{id:billet.refVoyage}) }}" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce billet ?')"><i data-feather="trash-2"></i></a>
