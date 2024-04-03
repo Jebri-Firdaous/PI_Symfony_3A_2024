@@ -8,6 +8,8 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Client;
 use App\Repository\CommandeRepository;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity(repositoryClass: CommandeRepository::class)]
 class Commande
@@ -29,6 +31,8 @@ class Commande
     #[ORM\ManyToOne(targetEntity: client::class)]
     #[ORM\JoinColumn(name: 'id_personne', referencedColumnName: 'id_personne')]
     private ?Client $idPersonne;
+
+ 
 
     public function getIdCommande(): ?int
     {
@@ -82,6 +86,7 @@ class Commande
 
         return $this;
     }
+    
 
 
 }

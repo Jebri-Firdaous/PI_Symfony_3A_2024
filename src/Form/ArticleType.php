@@ -20,12 +20,19 @@ class ArticleType extends AbstractType
             ->add('quantiteArticle')
             ->add('typeArticle', ChoiceType::class, [
                 'choices' => [
-                    'Type 1' => 'Type 1',
-                    'Type 2' => 'Type 2',
-                    'Type 3' => 'Type 3',
+                    'Electronique' => 'Electronique',
+                    'Vêtements' => 'Vêtements',
+                    'Livres' => 'Livres',
+                    'Appareils ménagers' => 'Appareils ménagers',
+                    'Équipements sportifs' => 'Équipements sportifs',
+                    'Produits de beauté' => 'Produits de beauté',
+                    'Meubles' => 'Meubles',
+                    'Jouets' => 'Jouets',
+                    'Alimentation et boissons' => 'Alimentation et boissons',
+                    'Bijoux' => 'Bijoux',
                 ],
                 'placeholder' => 'Choisir un type',
-            ])
+            ])            
             ->add('descriptionArticle')
             ->add('photoArticle', FileType::class, [
                 'label' => 'Photo (JPEG, PNG, GIF)',

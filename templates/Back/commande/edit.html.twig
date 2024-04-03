@@ -2,12 +2,12 @@
 
 {% block title %}Edit Commande{% endblock %}
 
-{% block section %}
+{% block main %}
     <h1>Edit Commande</h1>
 
-    {{ include('commande/_form.html.twig', {'button_label': 'Update'}) }}
+    {{ include('Back/commande/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('app_commande_index') }}">back to list</a>
+    <a href="{{ path('app_commande_index_back') }}">back to list</a>
 
     {{ include('Back/commande/_delete_form.html.twig') }}
 {% endblock %}

@@ -2,33 +2,45 @@
 
 {% block title %}Commande{% endblock %}
 
-{% block section %}
-    <h1>Commande</h1>
+{% block main %}
+     <div class="container">
+        <h1>Commande #{{ commande.idCommande }}</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>IdCommande</th>
-                <td>{{ commande.idCommande }}</td>
-            </tr>
-            <tr>
-                <th>NombreArticle</th>
-                <td>{{ commande.nombreArticle }}</td>
-            </tr>
-            <tr>
-                <th>PrixTotale</th>
-                <td>{{ commande.prixTotale }}</td>
-            </tr>
-            <tr>
-                <th>DelaisCommande</th>
-                <td>{{ commande.delaisCommande ? commande.delaisCommande|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+        <div class="mb-4">
+            <strong>Nombre d'articles:</strong> {{ commande.nombreArticle }}<br>
+            <strong>Prix total:</strong> {{ commande.prixTotale }}<br>
+            <strong>Délai de commande:</strong> {{ commande.delaisCommande ? commande.delaisCommande|date('Y-m-d H:i:s') : '' }}
+        </div>
 
-    <a href="{{ path('app_commande_index') }}">back to list</a>
+        <h4>Articles dans la commande :</h4>
+        <div class="row">
+        <div class="col-md-12 mb-4">
+            {% for article in articlesParCommande[commande.idCommande] %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="row no-gutters">
+                            <div class="col-md-4">
+                                <img src="{{ asset(article.photoArticle) }}" class="card-img-top article-image" style="width: 100px; height: 100px;" >
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ article.nomArticle }}</h5>
+                                    <p class="card-text">Prix: {{ article.prixArticle }}</p>
+                                    <p class="card-text">Type: {{ article.typeArticle }}</p>
+                                    <p class="card-text">{{ article.descriptionArticle }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
 
-    <a href="{{ path('app_commande_edit', {'idCommande': commande.idCommande}) }}">edit</a>
+        <a href="{{ path('app_commande_index_back') }}" class="btn btn-secondary">Retour à la liste</a>
+    </div>
+  
+
+    <a href="{{ path('app_commande_edit', {'idCommande': commande.idCommande}) }}">Modifier</a>
 
     {{ include('Back/commande/_delete_form.html.twig') }}
 {% endblock %}

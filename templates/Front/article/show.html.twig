@@ -3,44 +3,44 @@
 {% block title %}Article{% endblock %}
 
 {% block section %}
-    <h1>Article</h1>
-
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>IdArticle</th>
-                <td>{{ article.idArticle }}</td>
-            </tr>
-            <tr>
-                <th>NomArticle</th>
-                <td>{{ article.nomArticle }}</td>
-            </tr>
-            <tr>
-                <th>PrixArticle</th>
-                <td>{{ article.prixArticle }}</td>
-            </tr>
-            <tr>
-                <th>QuantiteArticle</th>
-                <td>{{ article.quantiteArticle }}</td>
-            </tr>
-            <tr>
-                <th>TypeArticle</th>
-                <td>{{ article.typeArticle }}</td>
-            </tr>
-            <tr>
-                <th>DescriptionArticle</th>
-                <td>{{ article.descriptionArticle }}</td>
-            </tr>
-            <tr>
-                <th>PhotoArticle</th>
-                <td>{{ article.photoArticle }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_article_index') }}">back to list</a>
-
-    <a href="{{ path('app_article_edit', {'idArticle': article.idArticle}) }}">edit</a>
-
-    {{ include('Front/article/_delete_form.html.twig') }}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <h1 class="text-left mb-4">Article </h1>
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <img src="{{ asset(article.photoArticle) }}" alt="{{ article.nomArticle }}" style="width: 300px; height: 300px;">
+                    </div>
+                    <div class="col-md-8">
+                        <table class="table">
+                            <tbody>
+                               
+                                <tr>
+                                    <th>Nom</th>
+                                    <td>{{ article.nomArticle }}</td>
+                                </tr>
+    
+                                <tr>
+                                    <th>Type</th>
+                                    <td>{{ article.typeArticle }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Description</th>
+                                    <td>{{ article.descriptionArticle }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Prix</th>
+                                    <td>{{ article.prixArticle }} DT</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="text-center">
+                            <a href="{{ path('article_add_to_cart', {'id': article.idArticle}) }}" class="btn btn-primary"><i class="bi bi-cart-plus"></i> Ajouter au panier</a>
+                            <a href="{{ path('app_article_index') }}" >Retour à la liste</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

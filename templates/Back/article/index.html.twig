@@ -1,126 +1,53 @@
 {% extends 'Back/base.html.twig' %}
 
-{% block title %}Boutique{% endblock %}
+{% block title %}Back-office - Gestion des articles{% endblock %}
 
-{% block stylesheets %}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <style>
-        /* Animation pour les photos changeantes */
-        .carousel-item {
-            transition: opacity 1s ease-in-out;
-        }
-        .carousel-item.active {
-            opacity: 1;
-        }
-        .carousel-item:not(.active) {
-            opacity: 0;
-        }
-        .card {
-            width: 200px; /* Définir la largeur des cartes */
-            border-radius: 10px; /* Rendre les coins arrondis */
-            margin-bottom: 20px; /* Ajouter un espace entre les cartes */
-            transition: transform 0.3s ease;
-        }
-        .card:hover {
-            transform: scale(1.05);
-        }
-    </style>
-{% endblock %}
-
-{% block section %}
-    <div class="container d-flex justify-content-between align-items-center">
-     
-        <div class="search-icon" id="searchIcon">
-            <i class="fas fa-search"></i>
-        </div>
-      
-        <div class="attr-nav">
-            <ul>
-                <li>
-                    <a href="{{ path('cart_index') }}">
-                        <i class="bi bi-cart4" style="color: #e80368; font-size: 30px;"></i> 
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-
-  
-<!-- Section d'accueil -->
-<section id="hero" class="hero section">
-
-  <img src="{{ asset('img/AfficherArticle1.png') }}" alt="" data-aos="fade-in">
-
-  <div class="container">
-    <h2 data-aos="fade-up" data-aos-delay="100" class="">E-City,<br> Bienvenue dans notre boutique en ligne !</h2>
-   
-    <div class="d-flex mt-4" data-aos="fade-up" data-aos-delay="300">
-      <a href="courses.html" class="btn-get-started">Acheter</a>
-    </div>
-  </div>
-</section><!-- /Section d'accueil -->
+{% block main %}
+   <h1 style="font-family: Arial, sans-serif; color: black; font-size: 35px;">Liste des articles :</h1>
 
 
-    <div class="row mt-4">
-        {% for i in range(0, 5) %}
-            {% if articles[i] is defined %}
-                <div class="col-md-4 mb-4">
-                    <div class="card">
-                        <!-- Image de l'article -->
-                        <img src="{{ asset(articles[i].photoArticle) }}" class="card-img-top" alt="Image de l'article">
-                        <div class="card-body">
-                            <h5 class="card-title font-weight-bold">{{ articles[i].nomArticle }}</h5>
-                            <p class="card-text">Prix: {{ articles[i].prixArticle }}</p>
-                            <p class="card-text">Quantité: {{ articles[i].quantiteArticle }}</p>
-                            <p class="card-text">Type: {{ articles[i].typeArticle }}</p>
-                            <p class="card-text">{{ articles[i].descriptionArticle }}</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
-                                    <!-- Utilisation d'icônes pour les boutons -->
-                                    <a href="{{ path('app_article_show', {'idArticle': articles[i].idArticle}) }}" class="btn btn-sm btn-outline-secondary"><i class="fas fa-eye"></i> Voir</a>
-                                    <a href="{{ path('app_article_edit', {'idArticle': articles[i].idArticle}) }}" class="btn btn-sm btn-outline-secondary"><i class="fas fa-edit"></i> Modifier</a>
-                                </div>
-                                <div>
-                                    <!-- Ajout d'une icône pour le bouton "Ajouter au panier" -->
-                                    <a href="{{ path('article_add_to_cart', {'id': articles[i].idArticle}) }}"><i class="bi bi-cart4" style="color: #e80368; font-size: 30px;"></i></a>
+    <div class="container">
+        <div class="row">
+            {% for article in articles %}
+                <div class="col-md-12 mb-4">
+                    <div class="card article-card">
+                        <div class="row no-gutters">
+                            <div class="col-md-3">
+                                <img src="{{ asset(article.photoArticle) }}" class="card-img-top article-image" style="width: 200px; height: 200px;" >
+                            </div>
+                            <div class="col-md-9">
+                                <div class="card-body">
+                                    <h5 class="card-title font-weight-bold" style="color: black;">{{ article.nomArticle }}</h5>
+                                    <p class="card-text">Prix: {{ article.prixArticle }}</p>
+                                    <p class="card-text">Quantité: {{ article.quantiteArticle }}</p>
+                                    <p class="card-text">Type: {{ article.typeArticle }}</p>
+                                    <p class="card-text">{{ article.descriptionArticle }}</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="btn-group">
+                                            <a href="{{ path('app_article_show_back', {'idArticle': article.idArticle}) }}" class="btn btn-sm btn-outline-secondary"><i class="fas fa-eye"></i> Voir</a>
+                                            <a href="{{ path('app_article_edit', {'idArticle': article.idArticle}) }}" class="btn btn-sm btn-outline-secondary"><i class="fas fa-edit"></i> Modifier</a>
+                                            {{ include('Back/article/_delete_form.html.twig') }}
+                                        </div>
+                                        <div>
+                            <!-- Ajout d'une icône pour le bouton "Ajouter au panier" -->
+                            <a href="{{ path('article_add_to_cart', {'id': article.idArticle}) }}"><i class="bi bi-cart4" style="color: #e80368; font-size: 30px;"></i> Ajouter au panier</a>
+                        </div>
+                                        <div>
+                                            <a href="{{ path('article_add_to_cart', {'id': article.idArticle}) }}"><i class="bi bi-cart4" style="color: #e80368; font-size: 30px;"></i></a>
+                                        </div>
+                                    </div>
+                                    
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            {% endif %}
-        {% endfor %}
+            {% endfor %}
+        </div>
     </div>
 
-    <!-- Ajouter des points pour faire défiler vers les autres articles -->
-    {% if articles|length > 6 %}
-        <div class="text-center mt-4">
-            <a class="btn btn-link" href="#scrollToMoreArticles">Voir plus d'articles</a>
-        </div>
-    {% endif %}
-
-    <!-- Point de défilement vers les autres articles -->
-    <div id="scrollToMoreArticles"></div>
-
-    <!-- Boucle pour afficher les articles restants -->
-    {% for i in range(6, articles|length - 1) %}
-        {% if articles[i] is defined %}
-            <!-- Afficher les articles restants ici -->
-        {% endif %}
-    {% endfor %}
-
-    <a href="{{ path('app_article_new') }}" class="btn btn-success mt-4">Créer un nouvel article</a>
-{% endblock %}
-
-{% block javascripts %}
-    <script>
-        document.getElementById("searchIcon").addEventListener("click", function() {
-            var searchBar = document.getElementById("searchBar");
-            if (searchBar.style.display === "none") {
-                searchBar.style.display = "flex";
-            } else {
-                searchBar.style.display = "none";
-            }
-        });
-    </script>
+    <!-- Ajouter un bouton pour ajouter un nouvel article -->
+    <div class="text-center mt-4">
+        <a href="{{ path('app_article_new') }}" class="btn btn-success">Ajouter un nouvel article</a>
+    </div>
 {% endblock %}

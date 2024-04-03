@@ -1,0 +1,17 @@
+/* styles.css */
+
+.article-card {
+    width: 100%;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    transition: transform 0.3s ease;
+}
+
+.article-card:hover {
+    transform: scale(1.05);
+}
+
+.article-image {
+    width: 100px; /* Largeur fixe pour la photo */
+    height: auto; /* La hauteur sera ajustée automatiquement en fonction de la largeur */
+}

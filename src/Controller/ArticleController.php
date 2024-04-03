@@ -16,7 +16,9 @@ use App\Entity\CommandeArticle;
 use App\Form\CommandeType;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use DateTime; 
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Form\FormError;
+
 
 
 
@@ -25,6 +27,16 @@ use Symfony\Component\Form\FormError;
 class ArticleController extends AbstractController
 {
     
+    
+    #[Route('/back', name: 'app_article_index_back', methods: ['GET'])]
+public function adminArticles(EntityManagerInterface $entityManager): Response
+{
+    $articles = $entityManager->getRepository(Article::class)->findAll();
+
+    return $this->render('Back/article/index.html.twig', [
+        'articles' => $articles,
+    ]);
+}
     #[Route('/article/{id}/add-to-cart', name: 'article_add_to_cart')]
     public function addToCart(Article $article, SessionInterface $session): Response
     {
@@ -36,6 +48,7 @@ class ArticleController extends AbstractController
                 'id' => $article->getIdArticle(),
                 'nomArticle' => $article->getNomArticle(),
                 'prixArticle' => $article->getPrixArticle(),
+                'photoArticle' => $article->getPhotoArticle(),
                 'quantity' => 1
             ];
         } else {
@@ -48,16 +61,48 @@ class ArticleController extends AbstractController
     }
 
 
+    #[Route('/article/{id}/remove-from-cart', name: 'remove_from_cart')]
+public function removeFromCart(Article $article, SessionInterface $session): Response
+{
+    $cart = $session->get('cart', []);
+    $id = $article->getIdArticle();
+
+    if (isset($cart[$id])) {
+        unset($cart[$id]);
+        $session->set('cart', $cart);
+    }
+
+    return $this->redirectToRoute('cart_index');
+}
+
 
     #[Route('/cart', name: 'cart_index')]
-    public function cart(SessionInterface $session): Response
+    public function cart(SessionInterface $session, ArticleRepository $articleRepository): Response
     {
         $cart = $session->get('cart', []);
+    $cartWithData = [];
+    $total = 0; // Déclaration de la variable 'total'
 
-        // Afficher le contenu du panier
-        return $this->render('Front/article/cart.html.twig', [
-            'cart' => $cart,
-        ]);
+    foreach ($cart as $itemId => $item) {
+        $article = $articleRepository->find($itemId);
+        if ($article) {
+            $photoArticle = method_exists($article, 'getPhotoArticle') ? $article->getPhotoArticle() : null;
+            $cartWithData[] = [
+                'id' => $article->getIdArticle(),
+                'nomArticle' => $article->getNomArticle(),
+                'prixArticle' => $article->getPrixArticle(),
+                'quantity' => $item['quantity'],
+                'photoArticle' => $photoArticle, // Ajout de la clé "photoArticle"
+            ];
+            $total += $item['quantity'] * $article->getPrixArticle(); // Calcul du total
+        }
+    }
+
+         // Afficher le contenu du panier
+    return $this->render('Front/article/cart.html.twig', [
+        'cart' => $cartWithData,
+        'total' => $total, // Passage de la variable 'total' au rendu Twig
+    ]);
     }
 
     #[Route('/cart/checkout', name: 'cart_checkout')]
@@ -202,29 +247,44 @@ public function new(Request $request): Response
                 $this->getParameter('photos_directory'),
                 $fileName
             );
-            // Construire l'URL complète de l'image
-            $photoArticle = $this->getParameter('photos_directory') . '/' . $fileName;
-            $article->setPhotoArticle($photoArticle); // Enregistrez l'URL de l'image dans l'entité
+            
+            // Construire le chemin complet de l'image
+            $photoArticleFullPath = $this->getParameter('photos_directory') . DIRECTORY_SEPARATOR . $fileName;
+            
+    
+            // Enregistrer le chemin complet dans l'entité
+            $article->setPhotoArticle($photoArticleFullPath);
+            
+            // Enregistrer l'article dans la base de données
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($article);
+            $entityManager->flush();
+    
+            return $this->redirectToRoute('app_article_index', [
+                'photoArticleFullPath' => $photoArticleFullPath,
+            ]);
         }
-
-        // Enregistrer l'article dans la base de données
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($article);
-        $entityManager->flush();
-
-        return $this->redirectToRoute('app_article_index');
     }
+    
 
     return $this->render('Back/article/new.html.twig', [
+        
         'form' => $form->createView(),
     ]);
-
 }
+
 
     #[Route('/{idArticle}', name: 'app_article_show', methods: ['GET'])]
     public function show(Article $article): Response
     {
         return $this->render('Front/article/show.html.twig', [
+            'article' => $article,
+        ]);
+    }
+    #[Route('/back/{idArticle}', name: 'app_article_show_back', methods: ['GET'])]
+    public function showback(Article $article): Response
+    {
+        return $this->render('Back/article/show.html.twig', [
             'article' => $article,
         ]);
     }
@@ -234,27 +294,57 @@ public function new(Request $request): Response
     {
         $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
+            $file = $form->get('photoArticle')->getData();
+            if ($file) {
+                $fileName = md5(uniqid()) . '.' . $file->guessExtension();
+                $file->move(
+                    $this->getParameter('photos_directory'),
+                    $fileName
+                );
+                
+                // Construire le chemin complet de l'image
+                $photoArticleFullPath = $this->getParameter('photos_directory') . DIRECTORY_SEPARATOR . $fileName;
+                
+        
+                // Enregistrer le chemin complet dans l'entité
+                $article->setPhotoArticle($photoArticleFullPath);
+            }
+    
+            // Enregistrer les modifications dans la base de données
             $entityManager->flush();
-
-            return $this->redirectToRoute('app_article_index', [], Response::HTTP_SEE_OTHER);
+    
+            // Rediriger vers la page d'index des articles
+            return $this->redirectToRoute('app_article_index_back');
         }
-
-        return $this->renderForm('Front/article/edit.html.twig', [
+    
+        // Rendre le formulaire d'édition de l'article
+        return $this->renderForm('Back/article/edit.html.twig', [
             'article' => $article,
             'form' => $form,
         ]);
     }
-
-    #[Route('/{idArticle}', name: 'app_article_delete', methods: ['POST'])]
-    public function delete(Request $request, Article $article, EntityManagerInterface $entityManager): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$article->getIdArticle(), $request->request->get('_token'))) {
-            $entityManager->remove($article);
-            $entityManager->flush();
+    
+#[Route('/{idArticle}', name: 'app_article_delete', methods: ['POST'])]
+public function delete(Request $request, Article $article, EntityManagerInterface $entityManager): Response
+{
+    if ($this->isCsrfTokenValid('delete'.$article->getIdArticle(), $request->request->get('_token'))) {
+        // Supprimer les références de commande_article liées à cet article
+        $commandeArticles = $entityManager->getRepository(CommandeArticle::class)->findBy(['idArticle' => $article]);
+        foreach ($commandeArticles as $commandeArticle) {
+            $entityManager->remove($commandeArticle);
         }
 
-        return $this->redirectToRoute('app_article_index', [], Response::HTTP_SEE_OTHER);
+        // Supprimer l'article lui-même
+        $entityManager->remove($article);
+        $entityManager->flush();
     }
+
+    return $this->redirectToRoute('app_article_index', [], Response::HTTP_SEE_OTHER);
+}
+
+
+
+
 }

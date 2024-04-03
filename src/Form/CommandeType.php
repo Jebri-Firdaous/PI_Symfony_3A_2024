@@ -23,14 +23,14 @@ class CommandeType extends AbstractType
                 'label' => 'Nombre d\'articles'
             ])
             ->add('prixTotale', MoneyType::class, [
-                'currency' => 'EUR',
+                'currency' => 'DT',
                 'label' => 'Prix total'
             ])
             ->add('delaisCommande', DateTimeType::class, [
                 'label' => 'Date limite de commande',
                 'widget' => 'single_text',
                 'html5' => false,
-                'format' => 'yyyy-MM-dd HH:mm:ss'
+                'format' => 'yyyy-MM-dd'
             ])
              // Ajout du bouton pour soumettre le formulaire
              ->add('save', SubmitType::class, [

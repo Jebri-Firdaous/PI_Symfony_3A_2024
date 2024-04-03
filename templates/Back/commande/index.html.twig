@@ -2,38 +2,52 @@
 
 {% block title %}Commande index{% endblock %}
 
-{% block section %}
-    <h1>Commande index</h1>
+{% block main %}
+    <h1 style="font-family: Arial, sans-serif; color: black; font-size: 35px;">Liste des commandes</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>IdCommande</th>
-                <th>NombreArticle</th>
-                <th>PrixTotale</th>
-                <th>DelaisCommande</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for commande in commandes %}
-            <tr>
-                <td>{{ commande.idCommande }}</td>
-                <td>{{ commande.nombreArticle }}</td>
-                <td>{{ commande.prixTotale }}</td>
-                <td>{{ commande.delaisCommande ? commande.delaisCommande|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('app_commande_show', {'idCommande': commande.idCommande}) }}">show</a>
-                    <a href="{{ path('app_commande_edit', {'idCommande': commande.idCommande}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_commande_new') }}">Create new</a>
+    <div class="container">
+        <div class="row">
+            {% for commande in commandes %}
+                <div class="col-md-12 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Commande #{{ commande.idCommande }}</h5>
+                        </div>
+                        <div class="card-body">
+                            <p>Nombre d'articles: {{ commande.nombreArticle }}</p>
+                            <p>Prix total: {{ commande.prixTotale }}</p>
+                            <p>Délai de commande: {{ commande.delaisCommande ? commande.delaisCommande|date('Y-m-d H:i:s') : '' }}</p>
+                            <hr>
+                            <h6>Articles dans la commande :</h6>
+                            <div class="row">
+                                {% for article in articlesParCommande[commande.idCommande] %}
+                                    <div class="col-md-3">
+                                        <img src="{{ asset(article.photoArticle) }}" class="card-img-top article-image" style="width: 100px; height: 100px;" >
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="card-body">
+                                            <h5 class="card-title font-weight-bold" style="color: black;">{{ article.nomArticle }}</h5>
+                                            <p class="card-text">Prix: {{ article.prixArticle }}</p>
+                                            <p class="card-text">Type: {{ article.typeArticle }}</p>
+                                            <p class="card-text">{{ article.descriptionArticle }}</p>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a href="{{ path('app_commande_show_back', {'idCommande': commande.idCommande}) }}" class="btn btn-primary">Voir détails</a>
+                            <a href="{{ path('app_commande_edit', {'idCommande': commande.idCommande}) }}" class="btn btn-secondary">Modifier</a>
+                            <form method="post" action="{{ path('app_commande_delete', {'idCommande': commande.idCommande}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette commande?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ commande.idCommande) }}">
+                                <button type="submit" class="btn btn-danger">Supprimer</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <p>Aucune commande n'a été trouvée.</p>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}

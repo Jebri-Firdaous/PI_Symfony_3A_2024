@@ -2,33 +2,86 @@
 
 {% block title %}Panier{% endblock %}
 
-{% block section %}
-    <h1>Panier</h1>
+{% block main %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="text-center mb-4">  Mon panier <i class="bi bi-cart4" style="color: #e80368; font-size: 40px;"></i><i class="fas fa-shopping-cart"></i></h1>
+            </div>
+        </div>
 
-    {% if cart is not empty %}
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Article</th>
-                    <th>Quantité</th>
-                    <th>Prix unitaire</th>
-                    <th>Prix total</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in cart %}
-                    <tr>
-                        <td>{{ item.nomArticle }}</td> 
-                        <td>{{ item.quantity }}</td>
-                        <td>{{ item.prixArticle }}</td>
-                        <td>{{ item.quantity * item.prixArticle }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        
-        <a href="{{ path('cart_checkout') }}" class="btn btn-success">Passer commande</a> <!-- Bouton pour passer commande -->
-    {% else %}
-        <p>Votre panier est vide.</p>
-    {% endif %}
+        {% if cart is not empty %}
+            <div class="row">
+                <div class="col-md-12">
+                    <h2 class="text-left mb-4">Articles dans le panier :</h2>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Photo</th>
+                                <th scope="col">Nom</th>
+                                <th scope="col">Quantité</th>
+                                <th scope="col">Prix unitaire</th>
+                                <th scope="col">Prix total</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in cart %}
+                                <tr>
+                                    <td><img src="{{ asset(item.photoArticle) }}" alt="{{ item.nomArticle }}" style="width: 100px; height: 100px;"></td>
+                                    <td>{{ item.nomArticle }}</td> 
+                                    <td>{{ item.quantity }}</td>
+                                    <td><span style="color: red; font-weight: bold;">{{ item.prixArticle }} DT</span></td>
+                                    <td><span style="color: red; font-weight: bold;">{{ item.quantity * item.prixArticle }} DT</span></td>
+                                    <td>
+                                        <a href="{{ path('remove_from_cart', {'id': item.id}) }}" ><i class="bi bi-trash" style="color: black; font-size: 25px;"></i></a>
+                                    </td> <!-- Lien pour supprimer l'article -->
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <h2 class="text-left mb-4">Commande :</h2>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nom de l'article</th>
+                                <th scope="col">Prix (en Dinar tunisien)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in cart %}
+                                <tr>
+                                    <td>{{ item.nomArticle }} </td> 
+                                    <td>{{ item.quantity * item.prixArticle }} DT</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td><strong>Total</strong></td>
+                                <td><strong>{{ total }} DT</strong></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+             <div class="row">
+                <div class="col-md-12 text-center">
+                    <a href="{{ path('cart_checkout') }}" class="btn btn-success">Passer commande</a>
+                </div>
+            </div>
+        {% else %}
+            <div class="row">
+                <div class="col-md-12">
+                    <p class="text-center">Votre panier est vide.</p>
+                </div>
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}
