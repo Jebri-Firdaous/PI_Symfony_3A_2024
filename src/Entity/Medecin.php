@@ -3,6 +3,10 @@
 namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\MedecinRepository;
+use Symfony\Component\Mime\Message;
+use Symfony\Component\Validator\Constraints as Assert;
+use App\Validator as AcmeAssert;
+
 /**
  * @ORM\Entity(repositoryClass="App\Repository\MedecinRepository")
  */
@@ -14,19 +18,40 @@ class Medecin
     #[ORM\Column(type: 'integer')]
     private ?int $idMedecin = null;
 
+    
     #[ORM\Column(length: 30)]
+    #[Assert\NotBlank(
+        message:'Cette valeur ne doit pas être vide'
+    )]
+  
     private ?string $nomMedecin ;
 
     #[ORM\Column(length: 30)]
+    #[Assert\NotBlank(
+        message:'Cette valeur ne doit pas être vide'
+    )]
     private ?string $prenomMedecinMedecin;
 
     #[ORM\Column]
+    #[Assert\NotBlank(
+        message:'Cette valeur ne doit pas être vide'
+    )]
+    #[Assert\Length(
+        exactly:8,
+        exactMessage: 'Le numéro de téléphone doit contenir exactement 8 chiffres.',
+    )]
     private ?int $numeroTelephoneMedecin;
 
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank(
+        message:'Cette valeur ne doit pas être vide'
+    )]
     private ?string $addressMedecin;
 
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank(
+        message:'Cette valeur ne doit pas être vide'
+    )]
     private ?string $specialiteMedecin;
 
     #[ORM\OneToMany(targetEntity: RendezVous::class, mappedBy: "id_medecin")]

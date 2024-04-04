@@ -11,6 +11,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\ChoiceList\Loader\CallbackChoiceLoader;
@@ -60,6 +61,7 @@ class RendezVousType extends AbstractType
                 'choice_label' => 'nomMedecin', // Assuming 'nom' is the property you want to display in the choice list
                 'label' => 'Nom Medecin',
                 'placeholder' => 'Choisissez un médecin', // Optional: Adds a placeholder option to the select
+                
             ])
             
             ->add('dateRendezVous')

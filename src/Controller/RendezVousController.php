@@ -89,10 +89,8 @@ class RendezVousController extends AbstractController
         $entityManager = $doctrine->getManager();
         // creates a doctor object and initializes some data for this example
         $rendezVous = new RendezVous();
-
         $personne = $doctrine->getRepository(Personne::class)->find(55);
         dump($personne);
-
         $client = $clientRepository->find($personne);
         dump($client);
         $rendezVous->setIdPersonne($client);
@@ -205,7 +203,7 @@ class RendezVousController extends AbstractController
         
         // $rendezVous->setIdPersonne($client);
         $entityManager->persist($rendezVous);
-        $form = $this->createForm(RendezVousBackType::class, $rendezVous, ['medecinRepository' => $medecinRepository], ['clientRepository' => $clientRepository]);
+        $form = $this->createForm(RendezVousBackType::class, $rendezVous, ['medecinRepository' => $medecinRepository], ['clientRepository' => $clientRepository],['entityManager' => $entityManager]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid())
         {
@@ -218,6 +216,10 @@ class RendezVousController extends AbstractController
             // return $this->redirectToRoute('app_medecin_getAll');
             return $this->redirectToRoute('back_rendezVous_getAll');
         }
+        // if ($form->isSubmitted() && !$form->isValid()) {
+        //     // Dump all form errors
+        //     dump($form->getErrors(true));
+        // }
 
         return $this->render('Back/rendezVous/addRendezVousBack.html.twig', [
             'controller_name' => 'RendezVousController',

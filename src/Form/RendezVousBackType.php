@@ -62,14 +62,16 @@ class RendezVousBackType extends AbstractType
                     "Radiology" => "Radiology",
                     "Urology" => "Urology"
                 ],
-            ])
-            ->add('idMedecin', EntityType::class, [
-                'class' => Medecin::class,
-                'choice_label' => 'nomMedecin', // Assuming 'nom' is the property you want to display in the choice list
-                'label' => 'Nom Medecin',
-                'placeholder' => 'Choisissez un médecin', // Optional: Adds a placeholder option to the select
-            ])
-            
+                ])
+                
+                ->add('idMedecin', EntityType::class, [
+                    'class' => Medecin::class,
+                    'choice_label' => 'nomMedecin', // Ensure this property exists in your Medecin entity
+                    'label' => 'Nom Medecin',
+                    'placeholder' => 'Choisissez un médecin',
+                ])
+                
+
             ->add('dateRendezVous')
             
             // // ->add('specialiteMedecin', ChoiceType::class ,  [
@@ -106,6 +108,7 @@ class RendezVousBackType extends AbstractType
             'data_class' => RendezVous::class,
             'medecinRepository' => null,
             'clientRepository' => null,
+            'entityManager' => null,
         ]);
     }
 }
