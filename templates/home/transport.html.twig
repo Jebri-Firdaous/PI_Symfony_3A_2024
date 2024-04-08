@@ -3,7 +3,68 @@
 {% block title %}Hello HomeController!{% endblock %}
 
 {% block section6 %}
-<div class="container">
+
+
+ <!-- Page Title -->
+    <div class="page-title" data-aos="fade">
+      <div class="heading">
+        <div class="container">
+          <div class="row d-flex justify-content-center text-center">
+            <div class="col-lg-8">
+              <h1>Réservez Votre Billet</h1>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+      <nav class="breadcrumbs">
+        <div class="container">
+          <ol>
+            <li><a href="index.html.twig">Acceuil</a></li>
+            <li class="current">Transport</li>
+          </ol>
+        </div>
+      </nav>
+    </div><!-- End Page Title -->
+
+   <!-- Courses List Section -->
+ <section id="courses-list" class="section courses-list">
+  <div class="container">
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+      {% for billet in list %}
+      <div class="col" data-aos="zoom-in" data-aos-delay="100">
+        <div class="course-item h-100">
+          <div class="course-content">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <p class="category">{{ billet.destinationVoyage }}</p>
+              <p class="price">{{ billet.prix }} DT</p>
+            </div>
+            <h3><a href="course-details.html">{{ billet.station.nomStation }} - {{ billet.station.adressStation }} - {{ billet.station.type }}</a></h3>
+            <p class="description">{{ billet.dateDepart|date('Y-m-d H:i:s') }}</p>
+            <div class="trainer d-flex justify-content-between align-items-center">
+              <div class="trainer-profile d-flex align-items-center">
+                <a href="" class="trainer-link">Durée : {{ billet.duree }}</a>
+              </div>
+              <div class="trainer-rank d-flex align-items-center">
+                 <a href="#" id="reservation-button"  class="category btn-reserver">Réserver</a>
+                <a href="#" id="cancel-button" class="category btn-annuler" style="display: none;">Annuler</a>
+                <i  id="numberOfReservations" class="bi bi-person user-icon">&nbsp;0</i>
+                &nbsp;&nbsp;
+            
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> <!-- End Course Item-->
+
+      {% endfor %}
+    </div>
+  </div>
+ 
+</section><!-- /Courses List Section -->
+<!-- /Courses List Section -->
+
+{# <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="form-wrapper"> <!-- Ajout du wrapper pour le formulaire -->
@@ -30,7 +91,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> #}
 <!-- Modal de suppression -->
 <div class="modal" tabindex="-1" role="dialog" id="deleteModal">
     <div class="modal-dialog" role="document">
@@ -51,7 +112,7 @@
         </div>
     </div>
 </div>
-<div class="container pt-5">
+{# <div class="container pt-5">
     <div class="row justify-content-center">
         <div class="col-12 text-center">
             <h1 class="pb-4">Vos <i class='uil uil-bus color-yellow'></i> Billets</h1>
@@ -74,17 +135,17 @@
                         <span class="duration">{{ billet.station.nomStation }} - {{ billet.station.adressStation }} - {{ billet.station.type }}</span>
                        
                         <span class="bottom-dots"><span class="section dots"></span></span>
-                    </label>
-                      <div class="mt-3">
+                    </label> #}
+                      {# <div class="mt-3">
                         <a href="{{ path('edit_billet',{id: billet.refVoyage}) }}" class="modifier btn btn-btn-secondary btn-sm mr-2">Modifier</a>
                         <a href="#" class="supprimer btn btn-btn-secondary btn-sm" onclick="$('#deleteModal').modal('show'); $('#confirmDelete').attr('href', '{{ path('delete_billet', {id: billet.refVoyage}) }}'); return false;">Supprimer</a>
-                    </div>
-                </div>
+                    </div> #}
+                {# </div>
                 {% endfor %}
             </div>
         </div>
     </div>
-</div>
+</div> #}
 
 
 {# <!-- Tableau des billets -->
@@ -118,17 +179,89 @@
 </table> #}
 
 <!-- Script JavaScript -->
+
+
+
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    // Script JavaScript pour la confirmation de suppression
-    $(document).ready(function () {
-        $('#confirmDelete').on('click', function () {
-            $('#deleteModal').modal('hide');
-        });
+$('#deleteModal').on('click', '#annuler', function () {
+    $('#deleteModal').modal('hide');
+    // Décrémenter le nombre de réservations
+    var numberOfReservationsElement = $('#numberOfReservations');
+    var currentNumberOfReservationsText = numberOfReservationsElement.text().trim();
+    var currentNumberOfReservations = parseInt(currentNumberOfReservationsText);
+    if (!isNaN(currentNumberOfReservations)) {
+        var newNumberOfReservations = currentNumberOfReservations - 1;
+        numberOfReservationsElement.text(newNumberOfReservations);
+    }
+});
 
-        $('#deleteModal').on('click', '#annuler', function () {
-            $('#deleteModal').modal('hide');
-        });
+    </script>
+<script>
+$(document).ready(function() {
+
+
+    // Gestionnaire d'événements click pour les boutons de réservation
+    $('.btn-reserver').click(function() {
+        // Récupérer le texte actuel du bouton
+        var buttonText = $(this).text().trim();
+
+        // Vérifier le texte actuel du bouton
+        if (buttonText === "Réserver") {
+            // Afficher le bouton Annuler
+            $(this).siblings('.btn-annuler').show();
+            // Ajouter la classe CSS pour le style rouge
+            $(this).addClass("btn-annuler");
+
+            // Incrémenter le nombre de réservations
+            var numberOfReservationsElement = $(this).siblings('.bi-person');
+            var currentNumberOfReservations = parseInt(numberOfReservationsElement.text().trim());
+            if (!isNaN(currentNumberOfReservations)) {
+                var newNumberOfReservations = currentNumberOfReservations + 1;
+                numberOfReservationsElement.text(newNumberOfReservations);
+            }
+        } else {
+            // Si le texte actuel n'est pas "Réserver", le changer en "Réserver"
+            $(this).text("Réserver");
+            // Masquer le bouton Annuler
+            $(this).siblings('.btn-annuler').hide();
+
+            // Décrémenter le nombre de réservations
+            var numberOfReservationsElement = $(this).siblings('.bi-person');
+            var currentNumberOfReservations = parseInt(numberOfReservationsElement.text().trim());
+            if (!isNaN(currentNumberOfReservations) && currentNumberOfReservations > 0) {
+                var newNumberOfReservations = currentNumberOfReservations - 1;
+                numberOfReservationsElement.text(newNumberOfReservations);
+                if (newNumberOfReservations === 0) {
+                    $(this).siblings('.btn-annuler').hide();
+                }
+            }
+        }
+
+        // Mettre à jour les billets réservés dans le stockage local
+   
     });
+
+    // Gestionnaire d'événements click pour le bouton Annuler
+    $('.btn-annuler').click(function() {
+        // Décrémenter le nombre de réservations
+        var numberOfReservationsElement = $(this).siblings('.bi-person');
+        var currentNumberOfReservations = parseInt(numberOfReservationsElement.text().trim());
+        if (!isNaN(currentNumberOfReservations) && currentNumberOfReservations > 0) {
+            var newNumberOfReservations = currentNumberOfReservations - 1;
+            numberOfReservationsElement.text(newNumberOfReservations);
+            if (newNumberOfReservations === 0) {
+                $(this).hide();
+            }
+        }
+
+        // Mettre à jour les billets réservés dans le stockage local
+     
+    });
+
+    // Appeler la fonction pour afficher les billets réservés au chargement de la page
+
+});
 </script>
 {% endblock %}
