@@ -48,7 +48,7 @@ class RendezVous
     #[Assert\NotBlank(
     message:'Medecin ne doit pas être vide'
     )]
-    private ?Medecin $id_medecin=null;
+    public ?Medecin $id_medecin=null;
 
   
 

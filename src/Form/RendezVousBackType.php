@@ -16,6 +16,9 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\ChoiceList\Loader\CallbackChoiceLoader;
 
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+
  
 
 
@@ -62,51 +65,46 @@ class RendezVousBackType extends AbstractType
                     "Radiology" => "Radiology",
                     "Urology" => "Urology"
                 ],
+                'data' => "Anesthesiology"
                 ])
                 
-                ->add('idMedecin', EntityType::class, [
-                    'class' => Medecin::class,
-                    'choice_label' => 'nomMedecin', // Ensure this property exists in your Medecin entity
-                    'label' => 'Nom Medecin',
-                    'placeholder' => 'Choisissez un médecin',
-                ])
+                // ->add('idMedecin', EntityType::class, [
+                //     'class' => Medecin::class,
+                //     'choice_label' => 'nomMedecin', // Ensure this property exists in your Medecin entity
+                //     'label' => 'Nom Medecin',
+                //     'placeholder' => 'Choisissez un médecin',
+                // ])
                 
 
             ->add('dateRendezVous')
-            
-            // // ->add('specialiteMedecin', ChoiceType::class ,  [
-            // //     'required' => false,
-            // //     'mapped' => false,
-            // //     'label' => 'Spécialité',
-            // //     'attr' => [
-            // //         'style' => 'width: 300px'
-            // //     ],
-            // //     'choices'  => [
-            // //         "Anesthesiology" => "Anesthesiology",
-            // //         "Cardiology" => "Cardiology",
-            // //         "Dermatology" => "Dermatology",
-            // //         "Endocrinology" => "Endocrinology",
-            // //         "Gastroenterology" => "Gastroenterology",
-            // //         "Neurology" => "Neurology",
-            // //         "Obstetrics" => "Obstetrics",
-            // //         "Ophthalmology" => "Ophthalmology",
-            // //         "Orthopedics" => "Orthopedics",
-            // //         "Pediatrics" => "Pediatrics",
-            // //         "Psychiatry" => "Psychiatry",
-            // //         "Radiology" => "Radiology",
-            // //         "Urology" => "Urology"
-            // //     ],
-            // ])
-            // ->add('id_personne',HiddenType::class)
             ->add('save', SubmitType::class)
         ;
+
+        $builder->addEventListener(
+            FormEvents::PRE_SUBMIT,
+            function (FormEvent $event) {
+                $form = $event->getForm();
+                $data = $event->getData();
+
+                $specialite = $data['specialiteMedecin'];
+                $medecinsbySpecialite = $this->medecinRepository->findBySpecialite($specialite);
+
+                $form->add('idMedecin', EntityType::class, [
+                    'class' => Medecin::class,
+                    'choice_label' => 'nomMedecin',
+                    'label' => 'Nom Medecin',
+                    'placeholder' => 'Choisissez un médecin',
+                    'choices' => $medecinsbySpecialite,
+                ]);
+            }
+        );
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => RendezVous::class,
-            'medecinRepository' => null,
+            'medecinRepository' => MedecinRepository::class,
             'clientRepository' => null,
             'entityManager' => null,
         ]);

@@ -13,17 +13,39 @@
     <tr>{{form_widget(form.specialiteMedecin)}}</tr>
     <tr>{{form_errors(form.specialiteMedecin)}}</tr>
 
-    <tr>{{form_label(form.idMedecin)}}</tr>
-    <tr>{{form_widget(form.idMedecin)}}</tr>
-    <tr>{{form_errors(form)}}</tr> 
+    {# Check if idMedecin field exists before rendering it #}
+{% if form.idMedecin is defined %}
+    <tr>{{ form_label(form.idMedecin) }}</tr>
+    <tr>{{ form_widget(form.idMedecin) }}</tr>
+    <tr>{{ form_errors(form.idMedecin) }}</tr>
+{% endif %}
 </br>
     <tr>{{form_label(form.dateRendezVous)}}</tr>
     <tr>{{form_widget(form.dateRendezVous)}}</tr>
     <tr>{{form_errors(form.dateRendezVous)}}</tr>
     </table>
 
+
     {{form_widget(form.save)}}
     {{form_end(form)}}
+    <script>
+var $specialiteMedecin = $('#rendezvous_specialiteMedecin');
+$specialiteMedecin.change(function() {
+    var $form = $(this).closest('form');
+    var data = {};
+    data[$specialiteMedecin.attr('name')] = $specialiteMedecin.val();
+    $.ajax({
+        url : $form.attr('action'),
+        type: $form.attr('method'),
+        data : data,
+        complete: function(html) {
+            $('#rendezvous_idMedecin').replaceWith(
+                $(html.responseText).find('#rendezvous_idMedecin')
+            );
+        }
+    });
+});
+</script>
     </div>
     <img src="{{ asset('img/imgGM/rendezVous.png') }}" alt="Image Description" style="width: 500px; height: auto;">
 </div>
