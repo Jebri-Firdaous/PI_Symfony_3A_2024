@@ -1125,6 +1125,10 @@ section,
   margin: 0;
   border-radius: 5px;
 }
+.courses .course-content .dest 
+{
+  font-size: 200px;
+}
 
 .courses .course-content .price {
   margin: 0;

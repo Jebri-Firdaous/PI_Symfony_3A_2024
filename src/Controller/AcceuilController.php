@@ -23,7 +23,13 @@ class AcceuilController extends AbstractController
             'controller_name' => 'AcceuilController',
         ]);
     }
-  
+    #[Route('/listebilletsreserves', name: 'liste_billets_reserves')]
+    public function listebilletsreserves(): Response
+    {
+        return $this->render('home/listebilletreserves.html.twig', [
+            'controller_name' => 'AcceuilController',
+        ]);
+    }
     
     #[Route('/transport', name: 'app_transport')]
     public function reserver(Request $req,ManagerRegistry $Manager,billetRepository $repo): Response

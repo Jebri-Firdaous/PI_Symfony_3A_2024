@@ -26,20 +26,22 @@
         </div>
       </nav>
     </div><!-- End Page Title -->
+<button id="afficherListeBillets" class="category btn-afficher">Afficher la liste des billets réservés</button>
 
    <!-- Courses List Section -->
  <section id="courses-list" class="section courses-list">
   <div class="container">
     <div class="row row-cols-1 row-cols-md-3 g-4">
       {% for billet in list %}
+      
       <div class="col" data-aos="zoom-in" data-aos-delay="100">
         <div class="course-item h-100">
           <div class="course-content">
             <div class="d-flex justify-content-between align-items-center mb-3">
-              <p class="category">{{ billet.destinationVoyage }}</p>
+              <p class="dest">{{ billet.destinationVoyage }}</p>
               <p class="price">{{ billet.prix }} DT</p>
             </div>
-            <h3><a href="course-details.html">{{ billet.station.nomStation }} - {{ billet.station.adressStation }} - {{ billet.station.type }}</a></h3>
+             <h3 data-nom-station="{{ billet.station.nomStation }}" data-adresse-station="{{ billet.station.adressStation }}" data-type-station="{{ billet.station.type }}"></h3>
             <p class="description">{{ billet.dateDepart|date('Y-m-d H:i:s') }}</p>
             <div class="trainer d-flex justify-content-between align-items-center">
               <div class="trainer-profile d-flex align-items-center">
@@ -61,7 +63,24 @@
     </div>
   </div>
  
-</section><!-- /Courses List Section -->
+</section>
+<ul  id="listeBilletsReservesUl">
+   <table border="1" id="listeBilletsReservesTable" >
+    <thead>
+        <tr>
+            <th>Destination</th>
+            <th>Date de départ</th>
+            <th>Prix</th>
+            <th>Durée</th>
+            <th>Station</th>
+            <th>Annuler Votre Réservation</th>
+        </tr>
+    </thead>
+    <tbody id="listeBilletsReserves">
+        <!-- Les billets réservés seront ajoutés dynamiquement ici -->
+    </tbody>
+</table>
+</ul><!-- /Courses List Section -->
 <!-- /Courses List Section -->
 
 {# <div class="container">
@@ -185,21 +204,34 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-$('#deleteModal').on('click', '#annuler', function () {
-    $('#deleteModal').modal('hide');
-    // Décrémenter le nombre de réservations
-    var numberOfReservationsElement = $('#numberOfReservations');
-    var currentNumberOfReservationsText = numberOfReservationsElement.text().trim();
-    var currentNumberOfReservations = parseInt(currentNumberOfReservationsText);
-    if (!isNaN(currentNumberOfReservations)) {
-        var newNumberOfReservations = currentNumberOfReservations - 1;
-        numberOfReservationsElement.text(newNumberOfReservations);
-    }
-});
-
-    </script>
-<script>
 $(document).ready(function() {
+    $('#listeBilletsReservesUl').hide();
+    $('#afficherListeBillets').click(function() {
+     
+        $('#listeBilletsReservesUl').toggle(); // Afficher ou masquer la liste des billets réservés
+    });
+  $('.btn-reserver').click(function() {
+    // Récupérer les détails du billet correspondant
+    var destination = $(this).closest('.course-item').find('.dest').text().trim();
+    var prix = $(this).closest('.course-item').find('.price').text().trim();
+    var dateDepart = $(this).closest('.course-item').find('.description').text().trim();
+    var duree = $(this).closest('.course-item').find('.trainer-link').text().trim();
+  var nomStation = $(this).closest('.course-item').find('h3').attr('data-nom-station');
+    var adresseStation = $(this).closest('.course-item').find('h3').attr('data-adresse-station');
+    var typeStation = $(this).closest('.course-item').find('h3').attr('data-type-station');
+    // Créer un élément HTML pour le billet réservé
+    var billetReserveHTML = '<tr>'; // Ouvrir une nouvelle ligne
+    billetReserveHTML += '<td>' + destination + '</td>';
+    billetReserveHTML += '<td>' + dateDepart + '</td>';
+    billetReserveHTML += '<td>' + prix + '</td>';
+    billetReserveHTML += '<td>' + duree + '</td>';
+    billetReserveHTML += '<td>' + nomStation + ' - ' + adresseStation + ' - ' + typeStation + '</td>'; // Laisser cette colonne vide pour le moment
+    billetReserveHTML += '<td><button class="btn-annuler-reservation">Annuler</button></td>'; // Ajout du bouton Annuler
+    billetReserveHTML += '</tr>'; // Fermer la ligne
+
+    // Ajouter le billet à la liste en tant qu'élément li
+    $('#listeBilletsReserves').append(billetReserveHTML);
+});
 
 
     // Gestionnaire d'événements click pour les boutons de réservation
@@ -210,7 +242,7 @@ $(document).ready(function() {
         // Vérifier le texte actuel du bouton
         if (buttonText === "Réserver") {
             // Afficher le bouton Annuler
-            $(this).siblings('.btn-annuler').show();
+           
             // Ajouter la classe CSS pour le style rouge
             $(this).addClass("btn-annuler");
 
@@ -238,30 +270,27 @@ $(document).ready(function() {
                 }
             }
         }
-
-        // Mettre à jour les billets réservés dans le stockage local
-   
     });
-
-    // Gestionnaire d'événements click pour le bouton Annuler
-    $('.btn-annuler').click(function() {
-        // Décrémenter le nombre de réservations
-        var numberOfReservationsElement = $(this).siblings('.bi-person');
-        var currentNumberOfReservations = parseInt(numberOfReservationsElement.text().trim());
-        if (!isNaN(currentNumberOfReservations) && currentNumberOfReservations > 0) {
-            var newNumberOfReservations = currentNumberOfReservations - 1;
-            numberOfReservationsElement.text(newNumberOfReservations);
-            if (newNumberOfReservations === 0) {
-                $(this).hide();
-            }
-        }
-
-        // Mettre à jour les billets réservés dans le stockage local
-     
-    });
-
-    // Appeler la fonction pour afficher les billets réservés au chargement de la page
 
 });
+
+// Gestionnaire d'événements click pour le bouton Annuler (en dehors de $(document).ready)
+$(document).on('click', '.btn-annuler-reservation', function() {
+    console.log("Cliqué sur le bouton Annuler");
+    // Retirer l'élément li correspondant à ce billet de la liste
+    $(this).closest('tr').remove(); // Supprimez l'élément li correspondant
+
+    // Décrémenter le nombre de réservations
+    var numberOfReservationsElement = $(this).closest('.trainer-rank').find('.bi-person');
+    var currentNumberOfReservations = parseInt(numberOfReservationsElement.text().trim());
+    if (!isNaN(currentNumberOfReservations) && currentNumberOfReservations > 0) {
+        var newNumberOfReservations = currentNumberOfReservations - 1;
+        numberOfReservationsElement.text(newNumberOfReservations);
+        if (newNumberOfReservations === 0) {
+            $(this).hide(); // Masquer le bouton "Annuler" si le nombre de réservations est de zéro
+        }
+    }
+});
 </script>
+
 {% endblock %}
