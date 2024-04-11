@@ -6,6 +6,8 @@ use App\Repository\ClientRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 
 
@@ -23,9 +25,12 @@ class Client
     private ?Personne $personne = null;
 
     #[ORM\Column(length: 30)]
+    #[Assert\NotBlank(message: "Le genre ne peut pas être vide.")]
     private ?string $genre = null;
 
     #[ORM\Column]
+    #[Assert\Range(min: 15, max: 100, minMessage: "L'âge minimum est 15 ans.", maxMessage: "L'âge maximum est 100 ans.")]
+    #[Assert\Regex(pattern: "/^\d+$/", message: "L'âge doit contenir uniquement des chiffres.")]
     private ?int $age = null;
 
     #[ORM\OneToMany(mappedBy: "id_personne", targetEntity: RendezVous::class, cascade: ['persist', 'remove'])]

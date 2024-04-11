@@ -4,7 +4,11 @@ namespace App\Entity;
 
 use App\Repository\PersonneRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
+/**
+ * @ORM\Entity(repositoryClass=PersonneRepository::class)
+ */
 #[ORM\Entity(repositoryClass: PersonneRepository::class)]
 class Personne
 {
@@ -13,24 +17,76 @@ class Personne
     #[ORM\Column]
     private ?int $id_personne = null;
 
-    #[ORM\Column(length: 30)]
+    /*--------------------------------------------------------------------------------------------------------------------------- */
+    /*nom de la personne */
+    #[ORM\Column(length: 30, nullable: true)]
+    #[Assert\NotBlank(message: "Le nom est requis")]
+    #[Assert\Length(max: 30, maxMessage: "Le nom ne peut pas dépasser 30 caractères")]
+    #[Assert\Regex(
+    pattern: '/^[a-zA-Z]*$/',
+    message: "Le nom ne peut contenir que des lettres."
+    )]
     private ?string $nom_personne = null;
 
+     /*--------------------------------------------------------------------------------------------------------------------------- */
+    /*prenom de la personne */
     #[ORM\Column(length: 30)]
+    #[Assert\NotBlank(message: "Le prenom est requis")]
+    #[Assert\Length(max: 30, maxMessage: "Le prenom ne peut pas dépasser 30 caractères")]
+    #[Assert\Regex(
+    pattern: '/^[a-zA-Z]*$/',
+    message: "Le prenom ne peut contenir que des lettres."
+    )]    
     private ?string $prenom_personne = null;
 
+    /*--------------------------------------------------------------------------------------------------------------------------- */
+    /*telphone de la personne */
     #[ORM\Column]
+    #[Assert\NotBlank(message: "Le numéro de téléphone est requis")]
+    #[Assert\Regex(
+        pattern: '/^\d+$/',
+        message: "Le numéro de téléphone ne doit contenir que des chiffres."
+    )]
+    #[Assert\Length(
+        min: 8,
+        max: 8,
+        minMessage: "Le numéro de téléphone doit contenir au moins 8 chiffres.",
+        maxMessage: "Le numéro de téléphone ne peut pas contenir plus de 8 chiffres."
+    )]
     private ?int $numero_telephone = null;
 
+    /*--------------------------------------------------------------------------------------------------------------------------- */
+    /*mail de la personne */
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank(message: "L'adresse e-mail est requise")]
+    #[Assert\Regex(
+        pattern: '/^(.+)@(gmail|esprit|yahoo|hotmail)\.(tn|com)$/',
+        message: "Veuillez saisir une adresse e-mail valide (@gmail, @esprit, @yahoo, @hotmail) avec une extension .tn ou .com."
+    )]
     private ?string $mail_personne = null;
 
+    /*--------------------------------------------------------------------------------------------------------------------------- */
+    /*mdp_personne de la personne */
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank(message: "Le mot de passe est requis")]
+    #[Assert\Length(
+        min: 10,
+        minMessage: "Le mot de passe doit contenir au moins 10 caractères."
+    )]
+    #[Assert\Regex(
+        pattern: '/^(?=.*[!@#$%^&*(),.?":{}|<>])(?=.*[A-Z])(?=.*\d).*$/',
+        message: "Le mot de passe doit contenir au moins une lettre majuscule, un chiffre et un caractère spécial."
+    )]
     private ?string $mdp_personne = null;
-
+    
+    /*--------------------------------------------------------------------------------------------------------------------------- */
+    /* image de la personne */
     #[ORM\Column(length: 255)]
+    
     private ?string $image_personne = null;
 
+    /*--------------------------------------------------------------------------------------------------------------------------- */
+    /* ****************************** getter et setter ****************************************************************************/
     public function getId(): ?int
     {
         return $this->id_personne;

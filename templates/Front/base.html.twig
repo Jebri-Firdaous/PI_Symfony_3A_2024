@@ -5,13 +5,13 @@
 {% block head %}
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>{% block title %}Index - Mentor Bootstrap Template{% endblock %}</title>
+<title>{% block title %}E-city{% endblock %}</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
   <!-- Favicons -->
-  <link href="{{ asset ('img/favicon.png') }}" rel="icon">
-  <link href="{{ asset ('img/apple-touch-icon.png') }}" rel="apple-touch-icon">
+  <link href="{{ asset ('img/icone.png') }}" rel="icon">
+    <link href="{{ asset ('img/apple-touch-icon.png') }}" rel="apple-touch-icon">
 
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com" rel="preconnect">
@@ -28,7 +28,6 @@
 
   <!-- Main CSS File -->
   <link href="{{ asset ('css/main.css') }}" rel="stylesheet">
-  
 
   <!-- =======================================================
   * Template Name: Mentor
@@ -37,58 +36,42 @@
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
    {% endblock %}
-{% endblock %}
+      {% endblock %}
   ======================================================== -->
 </head>
-
-
-
 <body>
+
+{% block body %}{% endblock %}
 {% block header %}
+{% set currentRoute = app.request.attributes.get('_route') %}
   <header id="header" class="header d-flex align-items-center sticky-top">
     <div class="container-fluid container-xl position-relative d-flex align-items-center">
 
-      <a href="{{ path ('app_acceuil')}}" class="logo d-flex align-items-center me-auto">
+      <a href="{{ path ('app_acceuil')}}"  class="logo d-flex align-items-center me-auto">
         <!-- Uncomment the line below if you also wish to use an image logo -->
-         <img src="{{ asset ('img/logo.png') }}" alt=""> 
-        <h1 class="">Mentor</h1>
+        <!-- <img src="{{ asset ('img/logo.png') }}" alt=""> -->
+        <h1 class="">E-CITY</h1>
       </a>
-      <nav id="navmenu" class="navmenu">
-        <ul>
-
-          <li><a href="{{ path ('app_acceuil')}}" class="active">Acceuil</a></li>
-
-          <li class="dropdown has-dropdown" ><a href="#">Santé</a>
+<nav id="navmenu" class="navmenu">
+    <ul>
+        <li><a href="{{ path ('app_acceuil')}}" {% if currentRoute == 'app_acceuil' %}class="active"{% endif %}>Accueil</a></li>
+<li class="dropdown has-dropdown" ><a href="#">Santé</a>
             <ul>
                   <li><a href="{{ path ('app_medecin_getAll')}}">Les Medecins</a></li>
                   <li><a href="#">Les Rendez-Vous</a></li>
             </ul>
           </li>
-
-          {% block menu %}
-          <li><a href="index.html" class="active">Acceuil</a></li>
-          <li><a href="about.html">Santé</a></li>
-
-          <li><a href="courses.html">Shopping</a></li>
-
-          <li><a href="{{ path ('app_transport')}}">Transport</a></li>
-          <li><a href="{{ path ('app_parking')}}">Parking</a></li>
-          <li><a href="pricing.html">Tourisme</a></li>
-          <li><a href="contact.html">Contact</a></li>
-          {% endblock %}
-        </ul>
-        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
-      </nav>
-      <a class="btn-getstarted" href="courses.html">Get Started</a>
+        <li><a href="{{ path ('app_shopping')}}" {% if currentRoute == 'app_shopping' %}class="active"{% endif %}>Shopping</a></li>
+        <li><a href="{{ path ('app_transport')}}" {% if currentRoute == 'app_transport' %}class="active"{% endif %}>Transport</a></li>
+        <li><a href="{{ path ('app_parking')}}" {% if currentRoute == 'app_parking' %}class="active"{% endif %}>Parking</a></li>
+        <li><a href="{{ path ('app_tourism')}}" {% if currentRoute == 'app_tourism' %}class="active"{% endif %}>Tourisme</a></li>
+        <li><a href="{{ path ('app_contact')}}" {% if currentRoute == 'app_contact' %}class="active"{% endif %}>Contact</a></li>
+    </ul>
+    <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+</nav>
     </div>
   </header>
     {% endblock %}
-
-
-{% block body %}
-{% endblock %}
-
-
 
   <main class="main">
 {% block section %}
@@ -115,22 +98,20 @@
 {% block section7 %}
 {% endblock %}
   </main>
-
-
 {% block footer %}
   <footer id="footer" class="footer position-relative">
 
     <div class="container footer-top">
       <div class="row gy-4">
         <div class="col-lg-4 col-md-6 footer-about">
-          <a href="{{path ('app_acceuil')}}" class="logo d-flex align-items-center">
-            <span class="">e_city</span>
+          <a href="index.html" class="logo d-flex align-items-center">
+            <span class="">Mentor</span>
           </a>
           <div class="footer-contact pt-3">
-            <p>A108 Adam Street</p>
-            <p>New York, NY 535022</p>
-            <p class="mt-3"><strong>Phone:</strong> <span>+1 5589 55488 55</span></p>
-            <p><strong>Email:</strong> <span>info@example.com</span></p>
+            <p>Pôle Technologique, Rue André Ampère</p>
+            <p>Ariana 2083, Tunisia</p>
+            <p class="mt-3"><strong>Fix:</strong> <span>+216 71 234 567</span></p>
+            <p><strong>Email:</strong> <span>ecity.tunis2000@gmail.com</span></p>
           </div>
           <div class="social-links d-flex mt-4">
             <a href=""><i class="bi bi-twitter"></i></a>
@@ -143,7 +124,7 @@
         <div class="col-lg-2 col-md-3 footer-links">
           <h4>Useful Links</h4>
           <ul>
-            <li><a href="#">Home</a></li>
+            <li><a href="{{ path ('app_acceuil')}}">Home</a></li>
             <li><a href="#">About us</a></li>
             <li><a href="#">Services</a></li>
             <li><a href="#">Terms of service</a></li>
@@ -154,11 +135,11 @@
         <div class="col-lg-2 col-md-3 footer-links">
           <h4>Our Services</h4>
           <ul>
-            <li><a href="#">Web Design</a></li>
-            <li><a href="#">Web Development</a></li>
-            <li><a href="#">Product Management</a></li>
-            <li><a href="#">Marketing</a></li>
-            <li><a href="#">Graphic Design</a></li>
+            <li><a href="{{ path ('app_acceuil')}}">Santé</a></li>
+            <li><a href="#">Shopping</a></li>
+            <li><a href="#">Transport</a></li>
+            <li><a href="#">Parking</a></li>
+            <li><a href="#">Tourisme</a></li>
           </ul>
         </div>
 
@@ -188,8 +169,6 @@
 
   </footer>
 {%endblock %}
-
-
   <!-- Scroll Top -->
   <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
@@ -207,7 +186,6 @@
   <!-- Main JS File -->
   <script src="{{ asset ('js/main.js') }}"></script>
 {% endblock %}
-
 </body>
 
 </html>
