@@ -4,6 +4,10 @@ namespace App\Entity;
 
 use App\Repository\ClientRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+
+
 
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
 class Client
@@ -13,8 +17,8 @@ class Client
     // #[ORM\Column]
     // private ?int $id = null;
 
- #[ORM\Id]
-    #[ORM\OneToOne(targetEntity: Personne::class, cascade: ['persist', 'remove'])]
+    #[ORM\Id]
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(name: 'id_personne', referencedColumnName: 'id_personne', nullable: true)]
     private ?Personne $personne = null;
 
@@ -23,6 +27,45 @@ class Client
 
     #[ORM\Column]
     private ?int $age = null;
+
+    #[ORM\OneToMany(mappedBy: "id_personne", targetEntity: RendezVous::class, cascade: ['persist', 'remove'])]
+    private $lesRendezVous;
+
+    public function __construct()
+    {
+        $this->lesRendezVous = new ArrayCollection();
+    }
+
+    /**
+     * @return Collection|RendezVous[]
+     */
+    public function getLesRendezVous(): Collection
+    {
+        return $this->lesRendezVous;
+    }
+
+    public function addLesRendezVous(RendezVous $rendezVous): self
+    {
+        if (!$this->lesRendezVous->contains($rendezVous)) {
+            $this->lesRendezVous[] = $rendezVous;
+            $rendezVous->setIdPersonne($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLesRendezVous(RendezVous $rendezVous): self
+    {
+        if ($this->lesRendezVous->removeElement($rendezVous)) {
+            // set the owning side to null (unless already changed)
+            if ($rendezVous->getClient() === $this) {
+                $rendezVous->setIdPersonne(null);
+            }
+        }
+
+        return $this;
+    }
+
 
     // public function getId(): ?int
     // {
@@ -64,4 +107,9 @@ class Client
 
         return $this;
     }
+    public function __toString()
+    {
+        return $this->getPersonne();
+    }
 }
+

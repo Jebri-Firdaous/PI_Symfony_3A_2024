@@ -1,0 +1,51 @@
+{% extends 'Back/base.html.twig' %}
+
+{% block main %}
+
+{{ form_start(form_admin, {'attr': {'novalidate': 'novalidate'}}) }}
+    {{ form_errors(form_admin) }} {# Afficher les erreurs globales du formulaire #}
+<table>
+    <tr>
+        <td colspan="2">  {{ form_label(form_admin.personne.nom_personne, "Nom") }} </td>
+        <td colspan="2">   {{ form_widget(form_admin.personne.nom_personne) }} </td>
+        <td colspan="2"> {{ form_errors(form_admin.personne.nom_personne) }}</td>
+    </tr>
+    <tr>
+        <td colspan="2"> {{ form_label(form_admin.personne.prenom_personne  ,"Prénom") }} </td>
+        <td colspan="2"> {{ form_widget(form_admin.personne.prenom_personne) }} </td>  
+        <td colspan="2">{{ form_errors(form_admin.personne.prenom_personne) }}  </td>
+    </tr>
+    <tr>
+        <td >{{ form_label(form_admin.personne.numero_telephone,  "Numéro de Téléphone") }}<td>
+        <td >{{ form_widget(form_admin.personne.numero_telephone ) }}</td>
+        <td >{{ form_errors(form_admin.personne.numero_telephone) }}</td>
+    </tr>
+    <tr>
+        <td >{{ form_label(form_admin.personne.mail_personne,  "Adresse Mail") }}<td>
+        <td >{{ form_widget(form_admin.personne.mail_personne ) }}</td>
+        <td >{{ form_errors(form_admin.personne.mail_personne) }}</td>
+
+        <tr>
+        <td >{{ form_label(form_admin.personne.mdp_personne,  "Mot de Passe") }}<td>
+        <td >{{ form_widget(form_admin.personne.mdp_personne ) }}</td>
+        <td >{{ form_errors(form_admin.personne.mdp_personne) }}</td>
+    </tr>
+    <tr>
+        <td >{{ form_label(form_admin.personne.image_personne,  "Image") }}<td>
+        <td >{{ form_widget(form_admin.personne.image_personne ) }}</td>
+        <td >{{ form_errors(form_admin.personne.image_personne) }}</td>
+    
+    </tr>
+    <tr>
+        <td >{{ form_label(form_admin.role,  "Role") }}<td>
+        <td >{{ form_widget(form_admin.role ) }}</td>
+        <td >{{ form_errors(form_admin.role) }}</td>
+    </tr>
+    
+    </table>
+   <a href="{{ path('administrateur_list') }}">Retour à la liste</a>
+
+    {{form_widget(form_admin.Submit)}}
+{{ form_end(form_admin) }}
+
+{% endblock %}

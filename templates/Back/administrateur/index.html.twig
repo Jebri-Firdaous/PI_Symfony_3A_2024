@@ -1,33 +1,45 @@
-<!DOCTYPE html>
+{% extends 'Back/base.html.twig' %}
 
-<title>Administrateur index</title>
 
-{% block body %}
-    <h1>Administrateur index</h1>
+{% block main %}
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Role</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for administrateur in administrateurs %}
-            <tr>
-                <td>{{ administrateur.role }}</td>
-                <td>
-                    <a href="{{ path('app_administrateur_show', {'personne': administrateur.personne}) }}">show</a>
-                    <a href="{{ path('app_administrateur_edit', {'personne': administrateur.personne}) }}">edit</a>
+<table>
+<tr>
+<th>Nom</th>
+<th>Prenom</th>
+
+<th>Numéro Téléphone</th>
+<th>Adresse mail</th>
+
+<th>image</th>
+<th>role</th>
+
+
+<th></th>
+<th></th>
+</tr>
+{%  for admin in list %}
+<tr>
+<td>{{admin.personne.getNomPersonne()}}</td>
+<td>{{admin.personne.getPrenomPersonne()}}</td>
+
+<td>{{admin.personne.getNumeroTelephone()}}</td>
+<td>{{admin.personne.getMailPersonne()}}</td>
+
+<td>{{admin.personne.getImagePersonne()}}</td>
+<td>{{admin.role}}</td>
+
+
+<td>
+                    <a href="{{path('app_administrateur_edit', {id:admin.personne.getId()})}}">edit</a>
+                    
                 </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="2">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+                <td>
+                    <a href="{{path('app_administrateur_delete', {id:admin.personne.getId()})}}">Delete</a>
+</tr>
+{% endfor %}
+</table>
+                <a href="{{path('app_administrateur_add')}}">Ajouter Client</a>
 
-    <a href="{{ path('app_administrateur_new') }}">Create new</a>
+
 {% endblock %}

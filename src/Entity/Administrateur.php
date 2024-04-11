@@ -3,10 +3,9 @@
 namespace App\Entity;
 
 use App\Repository\AdministrateurRepository;
-use App\Repository\AdminRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: AdminRepository::class)]
+#[ORM\Entity(repositoryClass: AdministrateurRepository::class)]
 class Administrateur
 {
     // #[ORM\Id]

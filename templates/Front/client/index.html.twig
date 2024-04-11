@@ -1,49 +1,44 @@
+
 {% extends 'Front/base.html.twig' %}
 
-{% block title %}Client index{% endblock %}
 
-{% block body %}
-    <h1>Client index</h1>
+{% block section %}
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id_personne</th>
-                <th>Nom_personne</th>
-                <th>Prenom_personne</th>
-                <th>Numero_telephone</th>
-                <th>Mail_personne</th>
-                <th>Mdp_personne</th>
-                <th>Image_personne</th>
-                <th>Genre</th>
-                <th>Age</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for client in clients %}
-            <tr>
-                <td>{{ client.id_personne }}</td>
-                <td>{{ client.nom_personne }}</td>
-                <td>{{ client.prenom_personne }}</td>
-                <td>{{ client.numero_telephone }}</td>
-                <td>{{ client.mail_personne }}</td>
-                <td>{{ client.mdp_personne }}</td>
-                <td>{{ client.image_personne }}</td>
-                <td>{{ client.genre }}</td>
-                <td>{{ client.age }}</td>
-                <td>
-                    <a href="{{ path('app_client_show', {'id_personne': client.id_personne}) }}">show</a>
-                    <a href="{{ path('app_client_edit', {'id_personne': client.id_personne}) }}">edit</a>
+<table>
+<tr>
+<th>Nom</th>
+<th>Prenom</th>
+<th>genre</th>
+<th>age</th>
+<th>Numéro Téléphone</th>
+<th>Adresse mail</th>
+
+<th>image</th>
+
+
+<th></th>
+<th></th>
+</tr>
+{%  for client in list %}
+<tr>
+<td>{{client.personne.getNomPersonne()}}</td>
+<td>{{client.personne.getPrenomPersonne()}}</td>
+<td>{{client.genre}}</td>
+<td>{{client.age}}</td>
+<td>{{client.personne.getNumeroTelephone()}}</td>
+<td>{{client.personne.getMailPersonne()}}</td>
+
+<td>{{client.personne.getImagePersonne()}}</td>
+
+<td>
+                    <a href="{{path('app_client_edit', {id:client.personne.getId()})}}">edit</a>
+                    
                 </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="10">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+                <td>
+                    <a href="{{path('app_client_delete', {id:client.personne.getId()})}}">Delete</a>
+</tr>
+{% endfor %}
+</table>
+                <a href="{{path('app_client_add')}}">Ajouter Client</a>
 
-    <a href="{{ path('app_client_new') }}">Create new</a>
 {% endblock %}

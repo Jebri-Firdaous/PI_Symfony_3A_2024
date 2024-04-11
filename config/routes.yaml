@@ -1,7 +1,3 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
-app_client_new:
-    path: '/client/new'
-    controller: 'App\Controller\ClientController::new'
-    methods: ['GET', 'POST']
