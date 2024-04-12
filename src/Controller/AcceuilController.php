@@ -57,11 +57,5 @@ class AcceuilController extends AbstractController
             'controller_name' => 'AcceuilController',
         ]);
     }
-    #[Route('/about', name: 'app_about')]
-    public function AboutHome(): Response
-    {
-        return $this->render('Front/about.html.twig', [
-            'controller_name' => 'AcceuilController',
-        ]);
-    }
+
 }
