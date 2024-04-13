@@ -22,32 +22,44 @@
 						<div class="card">
 							<div class="card-body">
 								<div class="m-sm-4">
-<form>
+								 {{ form_start(form_client, {'attr': {'novalidate': 'novalidate'}}) }}
+								 {{ form_errors(form_client) }}
 										<div class="mb-3">
 											<label class="form-label">Nom</label>
-											<input class="form-control form-control-lg" type="text" name="name" placeholder="Saisir votre nom" />
+    {{ form_widget(form_client.personne.nom_personne, {'attr': {'class': 'form-control form-control-lg', 'type':'text', 'placeholder': 'Saisir votre nom'}}) }}
 										</div>
 										<div class="mb-3">
 											<label class="form-label">Prenom</label>
-											<input class="form-control form-control-lg" type="text" name="company" placeholder="Saisir votre prénom" />
+    {{ form_widget(form_client.personne.prenom_personne, {'attr': {'class': 'form-control form-control-lg', 'type':'text', 'placeholder': 'Saisir votre prénom'}}) }}
 										</div>
-						
+										<div class="mb-3">
+											<label class="form-label">Genre</label>
+    {{ form_widget(form_client.genre, {'attr': {'class': 'form-control form-control-lg'}}) }}
+										</div>
+											<div class="mb-3">
+											<label class="form-label">Age</label>
+    {{ form_widget(form_client.age, {'attr': {'class': 'form-control form-control-lg', 'type':'number', 'placeholder': 'Saisir votre âge', 'step': '1'}}) }}
+										</div>
 										<div class="mb-3">
 											<label class="form-label">Adresse Mail</label>
-											<input class="form-control form-control-lg" type="email" name="email" placeholder="Saisir une adresse mail" />
+    {{ form_widget(form_client.personne.mail_personne, {'attr': {'class': 'form-control form-control-lg', 'type':'email', 'placeholder': 'Saisir une adresse mail'}}) }}
 										</div>
 										<div class="mb-3">
 											<label class="form-label">Mot de passe</label>
-											<input class="form-control form-control-lg" type="password" name="password" placeholder="Saisir un mot de passe" />
+    {{ form_widget(form_client.personne.mdp_personne, {'attr': {'class': 'form-control form-control-lg', 'type':'password', 'placeholder': 'Saisir un mot de passe'}}) }}
+						</div>
+									<div class="mb-3">
+											<label class="form-label">Numero telephone</label>
+    {{ form_widget(form_client.personne.numero_telephone, {'attr': {'class': 'form-control form-control-lg', 'type':'number', 'placeholder': 'Saisir votre numero de telephone', 'step': '1'}}) }}
 										</div>
-											<div class="mb-3">
-											<input class="form-control form-control-lg" type="password" name="password" placeholder="comfirmer votre mot de passe" />
+								<div class="mb-3">
+											<label class="form-label">Image personne</label>
+    {{ form_widget(form_client.personne.image_personne, {'attr': {'class': 'form-control form-control-lg', 'type':'file'}}) }}
 										</div>
 										<div class="text-center mt-3">
-											<a href="{{ path('app_client_validate') }}" class="btn btn-lg btn-primary">S'inscrire</a>
-											<!-- <button type="submit" class="btn btn-lg btn-primary">Sign up</button> -->
+        {{ form_widget(form_client.Submit, {'label': 'S\'inscrire', 'attr': {'class': 'btn btn-lg btn-primary'}}) }}
+
 										</div>
-									</form>
 										<div style="text-align: center;">
 										 <small>
 
