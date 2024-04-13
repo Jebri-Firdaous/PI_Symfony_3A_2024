@@ -39,9 +39,8 @@
       {% endblock %}
   ======================================================== -->
 </head>
-<body>
+<body  >
 
-{% block body %}{% endblock %}
 {% block header %}
 {% set currentRoute = app.request.attributes.get('_route') %}
  <header id="header" class="header d-flex align-items-center sticky-top">
@@ -53,39 +52,33 @@
 <h1 style="color: #37423b;">E-CITY</h1>
         <!--<img src="{{ asset ('logo_city.png') }}" alt="">-->
       </a>
-     
-<nav id="navmenu" class="navmenu">
-   <ul>
+      <nav id="navmenu" class="navmenu">
+        <ul>
+
    <li> <a href="{{ path ('app_acceuil')}}" {% if currentRoute == 'app_acceuil' %}class="active"{% endif %}>Accueil</a></li>
-   <li class="dropdown has-dropdown"><a href="#"{% if currentRoute == 'app_medecin_getAll' %}class="active"{% endif %}><span>Santé</span><i class="bi bi-chevron-down"></i></a>
+
+          <li class="dropdown has-dropdown"><a href="#"{% if currentRoute == 'app_medecin_getAll' %}class="active"{% endif %}><span>Santé</span><i class="bi bi-chevron-down"></i></a>
 
     <ul>
         <li><a href="{{ path ('app_medecin_getAll')}}">Les Medecins</a></li>
         <li><a href="#">Les Rendez-Vous</a></li>
     </ul>
    </li>
-   <li><a href="{{ path ('app_shopping')}}" {% if currentRoute == 'app_shopping' %}class="active"{% endif %}>Shopping</a></li>
+ {% block menu %}
+      
+<li><a href="{{ path ('app_shopping')}}" {% if currentRoute == 'app_shopping' %}class="active"{% endif %}>Shopping</a></li>
    <li><a href="{{ path ('app_transport')}}" {% if currentRoute == 'app_transport' %}class="active"{% endif %}>Transport</a></li>
    <li><a href="{{ path ('app_parking')}}" {% if currentRoute == 'app_parking' %}class="active"{% endif %}>Parking</a></li>
    <li><a href="{{ path ('app_tourism')}}" {% if currentRoute == 'app_tourism' %}class="active"{% endif %}>Tourisme</a></li>
    <li><a href="{{ path ('app_contact')}}" {% if currentRoute == 'app_contact' %}class="active"{% endif %}>Contact</a></li>
-   <li class="dropdown has-dropdown"> <a href="#"><span class="text-dark"><img src="{{asset('#')}}" class="avatar img-fluid rounded me-1" alt="nom-client" /></span><i class="bi bi-chevron-down"></i></a>
-      <ul>
-         <li><a href="#"> Profile</a></li>
-         <a href="#"></i> Analytics</a>
-         <a href="#"> Settings & Privacy</a>
-         <a href="#"> Help Center</a>
-         <a href="#">Log out</a>
-         </div>
-         </li>
-      </ul>
-    </li>
-      <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
-</nav>
-
+          {% endblock %}
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+      <a class="btn-getstarted" href="{{ path ('app_client_signIn')}}">Se connecter</a>
+      <a class="btn-getstarted" href="{{ path ('app_client_signUp')}}">S'inscrire</a>
 
     </div>
-  
   </header>
     {% endblock %}
 

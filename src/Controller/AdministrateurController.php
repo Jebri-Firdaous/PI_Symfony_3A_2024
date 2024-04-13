@@ -24,6 +24,7 @@ class AdministrateurController extends AbstractController
         ]);
     }
     #[Route('/addAdmin', name: 'app_administrateur_add')]
+    
     public function addAdmin(Request $request, ManagerRegistry $manager): Response {
         $administrateur = new Administrateur();
     

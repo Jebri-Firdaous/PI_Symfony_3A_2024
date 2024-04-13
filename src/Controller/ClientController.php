@@ -45,7 +45,9 @@ class ClientController extends AbstractController
            
         ]);
     }
+
     #[Route('/addClient', name: 'app_client_add')]
+    
     public function addClient(Request $request, ManagerRegistry $manager): Response {
         $client = new Client();
     
