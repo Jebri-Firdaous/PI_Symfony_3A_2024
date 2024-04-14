@@ -12,11 +12,10 @@ class SmsController extends AbstractController
     #[Route('/sms', name: 'app_sms')]
     public function sendSms(): Response
     {
-       $sid="";
-         $token = "";
+      
         $phone = "";
-$firstname="ons";
-        $client = new Client($sid,$token);
+$firstname="";
+        $client = new Client();
 
         $message = $client->messages->create(
             "+216".$phone, // to
