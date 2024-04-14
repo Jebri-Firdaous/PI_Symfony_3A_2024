@@ -9,6 +9,7 @@ use App\Entity\Client;
 use DateTime;
 use App\Repository\billetRepository ;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\billetRepository")
@@ -33,10 +34,19 @@ class Billet
     private ?\DateTime $dateDepart;
 
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank(message:"Prix est obligatoire")] 
+    #[Assert\Regex(
+        pattern: '/^\d+(\.\d+)?$/',
+        message: 'Le prix doit être un nombre .'
+    )]
     private ?string $prix;
 
     #[ORM\Column(length: 40)]
-    private ?string $duree;
+    #[Assert\NotBlank(message:"La durée est obligatoire")] 
+   
+    private ?string $duree=null;
+ 
+  
 
     #[ORM\ManyToOne(targetEntity: Station::class)]
     #[ORM\JoinColumn(name: 'station', referencedColumnName: 'id_station')]
@@ -126,6 +136,20 @@ class Billet
     {
         return $this->idPersonne;
     }
-
+    #[Assert\Callback()]
+    public function validateDuree(ExecutionContextInterface $context, $payload)
+    {
+        // Vérifier si le champ de durée est vide
+        if ($this->duree === null || $this->duree === '') {
+            return; // Si vide, sortir de la fonction sans ajouter de violation
+        }
+        
+        // Vérifier le format de la durée
+        if (!preg_match('/^(?:[0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/', $this->duree)) {
+            $context->buildViolation('La durée doit être au format hh:mm:ss.')
+                ->atPath('duree')
+                ->addViolation();
+        }
+    }
 
 }

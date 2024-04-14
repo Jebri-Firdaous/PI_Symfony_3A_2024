@@ -114,8 +114,6 @@ public function ajouterbillet(Request $req,ManagerRegistry $Manager,billetReposi
 {   $em=$Manager->getManager();
     $list=$repo->findAll();
     $billet=new billet();
-    $billet->setPrix('15dt');
-    $billet->setDuree('0');
     $form=$this->createForm(BilletbackType::class,$billet);
     $form->handleRequest($req);
   

@@ -6,26 +6,28 @@
 </style>
 
 <div class="example-wrapper">
-<h2 style="text-align: center;">Ajouter Station</h2>
+<div style="background-color: #343a40; padding: 30px ;margin-bottom: 40px;"> 
+<h2 style="text-align: center;color:white;">Ajouter Station</h2>
+</div>
     {{ form_start(f, {'attr': {'class': 'form', 'novalidate': 'novalidate'}}) }}
     <div class="row">
         <div class="col-md-12">
             <div class="form-group">
-                {{ form_label(f.nomStation) }}
+                {{ form_label(f.nomStation, null, {'label_attr': {'style':  'color:#343a40 ; font-weight: bold;'}}) }}
                 {{ form_widget(f.nomStation, {'attr': {'class': 'form-control'}}) }}
                 {{ form_errors(f.nomStation) }}
             </div>
         </div>
         <div class="col-md-12">
             <div class="form-group">
-                {{ form_label(f.adressStation) }}
+                {{ form_label(f.adressStation ,null, {'label_attr': {'style':  'color:#343a40 ; font-weight: bold;'}}) }}
                 {{ form_widget(f.adressStation, {'attr': {'class': 'form-control'}}) }}
                 {{ form_errors(f.adressStation) }}
             </div>
         </div>
         <div class="col-md-12">
             <div class="form-group">
-                {{ form_label(f.type) }}
+                {{ form_label(f.type ,null, {'label_attr': {'style':  'color:#343a40 ; font-weight: bold;'}}) }}
                 {{ form_widget(f.type, {'attr': {'class': 'form-control'}}) }}
                 {{ form_errors(f.type) }}
             </div>

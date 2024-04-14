@@ -14,7 +14,9 @@
     height: 300px;
     width: 600px;
   }
-  
+  .label-bold {
+    font-weight: bold;
+}
   .card::before, .card::after {
     position: absolute;
     display: flex;

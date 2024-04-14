@@ -1,54 +1,60 @@
 {% extends 'baseBack.html.twig' %}
 {% block main %}
-<div class="example-wrapper">
-    <h2 style="text-align: center;">Ajouter Billet</h2>
-    {{ form_start(f, {'attr': {'class': 'form', 'novalidate': 'novalidate'}}) }}
-    <div class="row">
-        <div class="col-md-12">
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+<div class="example-wrapper" >
+<div style="background-color: #343a40; padding: 30px ;margin-bottom: 40px;"> 
+    <h2 style="text-align: center; color:white ">Ajouter Billet</h2>
+    </div>
+    <div class="row justify-content-center" > <!-- Centrer les champs du formulaire -->
+        <div class="col-md-6"> <!-- Utilisation de 6 colonnes pour chaque champ -->
+            {{ form_start(f, {'attr': {'class': 'form', 'novalidate': 'novalidate'}}) }}
             <div class="form-group">
-                {{ form_label(f.destinationVoyage) }}
+             {{ form_label(f.destinationVoyage, null, {'label_attr': {'style':  'color:#343a40 ; font-weight: bold;'}}) }}
                 {{ form_widget(f.destinationVoyage, {'attr': {'class': 'form-control'}}) }}
                 {{ form_errors(f.destinationVoyage) }}
             </div>
-        </div>
-        <div class="col-md-12">
             <div class="form-group">
-                {{ form_label(f.dateDepart) }}
+                {{ form_label(f.dateDepart ,null,{'label_attr': {'style':  'color:#343a40 ; font-weight: bold;'}}) }}
                 {{ form_widget(f.dateDepart, {'attr': {'class': 'form-control'}}) }}
                 {{ form_errors(f.dateDepart) }}
             </div>
-        </div>
-        <div class="col-md-12">
             <div class="form-group">
-                {{ form_label(f.prix) }}
+                {{ form_label(f.prix ,null,{'label_attr': {'style':  'color:#343a40 ; font-weight: bold;'}})  }}
                 {{ form_widget(f.prix, {'attr': {'class': 'form-control'}}) }}
                 {{ form_errors(f.prix) }}
             </div>
-        </div>
-        <div class="col-md-12">
             <div class="form-group">
-                {{ form_label(f.duree) }}
-                {{ form_widget(f.duree, {'attr': {'class': 'form-control'}}) }}
+                {{ form_label(f.duree ,null,{'label_attr': {'style':  'color:#343a40 ; font-weight: bold;'}})  }}
+              <div class="input-group">
+        {{ form_widget(f.duree, {'attr': {'class': 'form-control'}}) }}
+        <div class="input-group-append">
+            <span class="input-group-text">Format: hh:mm:ss</span>
+        </div>
+    </div>
                 {{ form_errors(f.duree) }}
             </div>
-        </div>
-        <div class="col-md-12">
             <div class="form-group">
-                {{ form_label(f.station) }}
+                {{ form_label(f.station ,null,{'label_attr': {'style':  'color:#343a40 ; font-weight: bold;'}}) }}
                 {{ form_widget(f.station, {'attr': {'class': 'form-control'}}) }}
                 {{ form_errors(f.station) }}
             </div>
+            <button type="submit" class="btn btn-primary mt-3">Confirmer</button>
+            {% for message in app.flashes('error') %}
+                <div class="alert alert-danger">{{ message }}</div>
+            {% endfor %}
+            {{ form_end(f) }}
         </div>
     </div>
-    <button type="submit" class="btn btn-primary mt-3">Confirmer</button>
-    {% for message in app.flashes('error') %}
-        <div class="alert alert-danger">{{ message }}</div>
-    {% endfor %}
-    {{ form_end(f) }}
 </div>
 
 <div style="margin-top: 20px;"> <!-- Ajustez la marge supérieure selon vos besoins -->
-    <table class="table table-bordered">
+ <i data-feather="search"></i>
+  <input type="text" id="searchInput" oninput="search()" placeholder="Rechercher destination/date...">
+
+    <table class="table table-bordered" id="billetTable">
         <thead>
             <tr>
                 <th>Destination Voyage</th>
@@ -71,10 +77,42 @@
                         <a href="{{ path('edit_billetBack',{id:billet.refVoyage}) }}" class="btn btn-info"><i data-feather="edit"></i></a>
                         <a href="{{ path('delete_billetBack',{id:billet.refVoyage}) }}" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce billet ?')"><i data-feather="trash-2"></i></a>
                     </td>
-                  
                 </tr>
             {% endfor %}
         </tbody>
     </table>
 </div>
+
+ <script>
+    function search() {
+        // Récupère la valeur de recherche
+        let input = document.getElementById("searchInput");
+        let filter = input.value.toUpperCase();
+
+        // Récupère les lignes du tableau à filtrer
+        let rows = document.querySelectorAll("#billetTable tbody tr");
+
+        // Parcours toutes les lignes du tableau et masque celles qui ne correspondent pas à la recherche
+        rows.forEach(row => {
+            let cells = row.querySelectorAll("td");
+            let matches = false;
+            // Recherche par destination (colonne 0)
+            let textDestination = cells[0].textContent || cells[0].innerText;
+            // Recherche par date de départ (colonne 1)
+            let textDate = cells[1].textContent || cells[1].innerText;
+            
+            if (textDestination.toUpperCase().indexOf(filter) > -1 || textDate.toUpperCase().indexOf(filter) > -1) {
+                matches = true;
+            }
+            if (matches) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        });
+    }
+</script>
+
+
+
 {% endblock %}

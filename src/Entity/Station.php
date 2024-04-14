@@ -26,6 +26,7 @@ class Station
     private ?string $nomStation = null ;
 
     #[ORM\Column(length:30)]
+    #[Assert\Length(min:3, minMessage:"Destination doit contenir au minimum 3 caractères !")]
     #[Assert\Regex(
         pattern:"/^[a-zA-Z]+$/",
         message:"L'adresse de la station doit contenir uniquement des caractères alphabétiques")]
