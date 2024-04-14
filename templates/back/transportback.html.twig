@@ -41,7 +41,9 @@
 </div>
 
 <div style="margin-top: 20px;"> <!-- Adjust margin-top as needed -->
-    <table class="table table-bordered">
+ <i data-feather="search"></i>
+  <input type="text" id="searchInput" oninput="search()" placeholder=" nom/aresse/type...">
+    <table class="table table-bordered" id="stationTable">
         <thead>
             <tr>
                 <th>Nom Station</th>
@@ -65,5 +67,35 @@
         </tbody>
     </table>
 </div>
+ <script>
+    function search() {
+        // Récupère la valeur de recherche
+        let input = document.getElementById("searchInput");
+        let filter = input.value.toUpperCase();
 
+        // Récupère les lignes du tableau à filtrer
+        let rows = document.querySelectorAll("#stationTable tbody tr");
+
+        // Parcours toutes les lignes du tableau et masque celles qui ne correspondent pas à la recherche
+        rows.forEach(row => {
+            let cells = row.querySelectorAll("td");
+            let matches = false;
+            // Recherche par destination (colonne 0)
+            let textDestination = cells[0].textContent || cells[0].innerText;
+            // Recherche par date de départ (colonne 1)
+            let textDate = cells[1].textContent || cells[1].innerText;
+            //Recherche par type
+              let texttype = cells[2].textContent || cells[2].innerText;
+            
+            if (textDestination.toUpperCase().indexOf(filter) > -1 || textDate.toUpperCase().indexOf(filter) > -1 ||texttype.toUpperCase().indexOf(filter) > -1) {
+                matches = true;
+            }
+            if (matches) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        });
+    }
+</script>
 {% endblock %}
