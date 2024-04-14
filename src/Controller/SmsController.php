@@ -13,10 +13,10 @@ class SmsController extends AbstractController
     public function sendSms(): Response
     {
        $sid="ACd712af928ef38f3b4753d770276588a4";
-        // $token = "db958c2c382e047a284d9a60b3876013";
+         $token = "#";
         $phone = "92701943";
 $firstname="ons";
-        $client = new Client($sid);
+        $client = new Client($sid,$token);
 
         $message = $client->messages->create(
             "+216".$phone, // to
