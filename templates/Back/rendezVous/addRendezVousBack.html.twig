@@ -17,7 +17,7 @@
 {% if form.idMedecin is defined %}
     <tr>{{ form_label(form.idMedecin) }}</tr>
     <tr>{{ form_widget(form.idMedecin) }}</tr>
-    <tr>{{ form_errors(form.idMedecin) }}</tr>
+    <tr>{{ form_errors(form) }}</tr>
 {% endif %}
 </br>
     <tr>{{form_label(form.dateRendezVous)}}</tr>

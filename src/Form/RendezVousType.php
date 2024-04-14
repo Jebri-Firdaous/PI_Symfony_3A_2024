@@ -14,6 +14,9 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+
 use Symfony\Component\Form\ChoiceList\Loader\CallbackChoiceLoader;
 
  
@@ -56,13 +59,13 @@ class RendezVousType extends AbstractType
                     "Urology" => "Urology"
                 ],
             ])
-            ->add('idMedecin', EntityType::class, [
-                'class' => Medecin::class,
-                'choice_label' => 'nomMedecin', // Assuming 'nom' is the property you want to display in the choice list
-                'label' => 'Nom Medecin',
-                'placeholder' => 'Choisissez un médecin', // Optional: Adds a placeholder option to the select
+            // ->add('idMedecin', EntityType::class, [
+            //     'class' => Medecin::class,
+            //     'choice_label' => 'nomMedecin', // Assuming 'nom' is the property you want to display in the choice list
+            //     'label' => 'Nom Medecin',
+            //     'placeholder' => 'Choisissez un médecin', // Optional: Adds a placeholder option to the select
                 
-            ])
+            // ])
             
             ->add('dateRendezVous')
             
@@ -92,6 +95,26 @@ class RendezVousType extends AbstractType
             // ->add('id_personne',HiddenType::class)
             ->add('save', SubmitType::class)
         ;
+
+
+        $builder->addEventListener(
+            FormEvents::PRE_SUBMIT,
+            function (FormEvent $event) {
+                $form = $event->getForm();
+                $data = $event->getData();
+
+                $specialite = $data['specialiteMedecin'];
+                $medecinsbySpecialite = $this->medecinRepository->findBySpecialite($specialite);
+
+                $form->add('idMedecin', EntityType::class, [
+                    'class' => Medecin::class,
+                    'choice_label' => 'nomMedecin',
+                    'label' => 'Nom Medecin',
+                    'placeholder' => 'Choisissez un médecin',
+                    'choices' => $medecinsbySpecialite,
+                ]);
+            }
+        );
     }
 
     public function configureOptions(OptionsResolver $resolver): void

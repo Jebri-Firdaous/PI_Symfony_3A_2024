@@ -16,6 +16,9 @@ use App\Form\RendezVousBackType;
 use App\Repository\ClientRepository as ClientRepository;
 use App\Repository\MedecinRepository;
 use App\Repository\RendezVousRepository;
+use App\Service\SmsGenerator;
+use Symfony\Component\Notifier\Message\SmsMessage;
+use Symfony\Component\Notifier\TexterInterface;
 
 class RendezVousController extends AbstractController
 {
@@ -181,13 +184,14 @@ class RendezVousController extends AbstractController
         $allRVInDB = $rendezVousRepository->findAll();
         dump($allRVInDB);
 
-        return $this->render('Back/rendezVous/showAllRvInDB.html.twig', [
+        return $this->render('Back/rendezVous/showAllRvInOtherForm.html.twig', [
             'controller_name' => 'RendezVousController',
             'lesRVdeClient' => $allRVInDB,
         ]);
     }
     #[Route('/addRendezVousBack', name: 'back_rendezVous_add')]
-    public function addRendezVousBack(Request $request, ManagerRegistry $doctrine, ClientRepository $clientRepository, MedecinRepository $medecinRepository): Response
+    public function addRendezVousBack(Request $request, ManagerRegistry $doctrine, ClientRepository $clientRepository, 
+                                        MedecinRepository $medecinRepository, TexterInterface $texter, SmsGenerator $smsGenerator): Response
     {
         $entityManager = $doctrine->getManager();
         // creates a doctor object and initializes some data for this example
@@ -214,6 +218,15 @@ class RendezVousController extends AbstractController
             // TODO ... perform some action, such as saving the task to the database
             $entityManager->flush();
             // return $this->redirectToRoute('app_medecin_getAll');
+            $medecinNumber = $rendezVous->getIdMedecin()->getNumeroTelephoneMedecin();
+            dump($medecinNumber);
+            $medecinNom = $rendezVous->getIdMedecin()->getNomMedecin();
+            dump($medecinNom);
+            $dateRendezVous = $rendezVous->getDateRendezVous();
+            dump($dateRendezVous);
+            $stringDate = $dateRendezVous->format('d/m/Y'); // for example
+            $body = "tu auras un rendez-vous le  ". $stringDate;
+            $smsGenerator->SendSms("+4915510686794",$medecinNom, $body);
             return $this->redirectToRoute('back_rendezVous_getAll');
         }
         // if ($form->isSubmitted() && !$form->isValid()) {

@@ -1,0 +1,54 @@
+{% extends 'Back/base.html.twig' %}
+{% block main %}
+    <h1>{{ 'List de tous les rendez-vous'|trans }}</h1>
+
+    <div class="appointments-grid">
+        {% for rv in lesRVdeClient %}
+            <div class="appointment-item">
+                <div class="appointment-details">
+                    <div class="appointment-client">{{ rv.getClient().getPersonne().getNomPersonne() ~ " " ~ rv.getClient().getPersonne().getPrenomPersonne() }}</div>
+                    <div class="appointment-doctor">Dr. {{ rv.getIdMedecin().getNomMedecin }}</div>
+                    <div class="appointment-specialty">{{ rv.getIdMedecin().specialiteMedecin }}</div>
+                    <div class="appointment-date">{{ rv.getDateRendezVous().format('d/m/Y H:i') }}</div>
+                    <div class="appointment-address">{{ rv.getIdMedecin().getAddressMedecin() }}</div>
+                </div>
+                <div class="appointment-actions">
+                    <a href="{{ path('back_rendezVous_delete', {id: rv.getRefRendezVous()}) }}" class="btn btn-sm btn-secondary">
+                        <i class="fa fa-eye" aria-hidden="true"></i> {{ 'delete'|trans }}
+                    </a>
+                    <a href="{{ path('back_rendezVous_edit', {id: rv.getRefRendezVous()}) }}" class="btn btn-sm btn-primary">
+                        <i class="fa fa-edit" aria-hidden="true"></i> {{ 'edit'|trans }}
+                    </a>
+                </div>
+            </div>
+        {% else %}
+            <div class="no-appointments">
+                <p>{{ 'post.no_posts_found'|trans }}</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <a href="{{ path('back_rendezVous_add') }}" class="btn btn-sm btn-primary">
+        <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Ajouter RendezVous'|trans }}
+    </a>
+
+    <style>
+        .appointments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .appointment-item {
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .appointment-details, .appointment-actions {
+            display: flex;
+            flex-direction: column;
+        }
+        .appointment-actions {
+            align-items: flex-end;
+        }
+    </style>
+{% endblock %}
