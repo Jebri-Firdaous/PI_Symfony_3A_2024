@@ -33,44 +33,49 @@
    <!-- Courses List Section -->
 <section id="courses-list" class="section courses-list">
   <div class="container">
-    <div class="row justify-content-center"> <!-- Ajout de la classe justify-content-center pour centrer -->
+    <div class="row justify-content-center"> <!-- Cette classe centre les éléments dans la rangée -->
       {% for billet in list %}
       
-      <div class="col" data-aos="zoom-in" data-aos-delay="100">
-        <div class="course-item h-100">
+      <!-- Début de chaque élément de cours -->
+      <div class="col mb-4" data-aos="zoom-in" data-aos-delay="100">
+        <div class="course-item h-100 p-3 shadow" >
           <div class="course-content">
+            <!-- En-tête du cours -->
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <img src="img/billet.jpg" class="card-img" alt="">
             </div>
-            <p class="dest price">Destination : {{ billet.destinationVoyage }}</p>
-            <p class="price">Prix : {{ billet.prix }} DT</p>
-            <h3 
-              data-nom-station="{{ billet.station.nomStation }}"
-              data-adresse-station="{{ billet.station.adressStation }}"
-              data-type-station="{{ billet.station.type }}"
-            >
-              {{ billet.station.nomStation }} - {{ billet.station.adressStation }} - {{ billet.station.type }}
-            </h3>
-            <p class="description price">{{ billet.dateDepart|date('Y-m-d H:i:s') }}</p>
+            
+            <!-- Informations sur le billet -->
+            <p class="dest price">
+              <i class="bi bi-geo-alt-fill"></i>   {{ billet.station.nomStation }} - {{ billet.station.adressStation }} - {{ billet.station.type }} &rarr; 
+              {{ billet.destinationVoyage }}
+            </p>
+            <p class="price"><i class="bi bi-cash"></i> Prix : {{ billet.prix }} DT</p>
+            <p class="description  mb-2"><i class="bi bi-clock"></i> {{ billet.dateDepart|date('Y-m-d H:i:s') }}</p>
+            
+            <!-- Durée du billet -->
             <div class="trainer d-flex justify-content-between align-items-center">
               <div class="trainer-profile d-flex align-items-center">
                 <a href="" class="trainer-link">Durée : {{ billet.duree }}</a>
               </div>
+              
+              <!-- Bouton de réservation -->
               <div class="trainer-rank d-flex align-items-center">
-                <a href="#" id="reservation-button" class="category btn-reserver">Réserver</a>
-                <i id="numberOfReservations" class="bi bi-person user-icon">&nbsp;0</i>
+                <a href="#" id="reservation-button" class="category btn-reserver"> Réserver</a>
+                <!-- Nombre de réservations -->
+                <i id="numberOfReservations" class="bi bi-person user-icon" data-reservations="0">&nbsp;0</i>
+
                 &nbsp;&nbsp;
               </div>
             </div>
           </div>
         </div>
-      </div> <!-- End Course Item-->
+      </div> <!-- Fin de chaque élément de cours -->
 
       {% endfor %}
     </div>
   </div>
 </section>
-
 
 <ul id="listeBilletsReservesUl">
     <table id="listeBilletsReservesTable" style="border-collapse: collapse; width: 100%;">
@@ -80,11 +85,11 @@
     </caption>
         <thead>
             <tr>
-                <th style="border: 2px solid #ddd; padding: 8px;">Destination</th>
+                <th style="border: 2px solid #ddd; padding: 8px;">Départ -> Destination</th>
                 <th style="border: 2px solid #ddd; padding: 8px;">Date de départ</th>
                 <th style="border: 2px solid #ddd; padding: 8px;">Prix</th>
                 <th style="border: 2px solid #ddd; padding: 8px;">Durée</th>
-                <th style="border: 2px solid #ddd; padding: 8px;">Station</th>
+               
                 <th style="border: 2px solid #ddd; padding: 8px;">Annuler Votre Réservation</th>
             </tr>
         </thead>
@@ -93,153 +98,27 @@
         </tbody>
     </table>
 </ul>
-
-
-<!-- /Courses List Section -->
-
-{# <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="form-wrapper"> <!-- Ajout du wrapper pour le formulaire -->
-                <h2 style="text-align: center;">Réservez votre Billet</h2> <!-- Ajout du titre du formulaire à l'intérieur du wrapper -->
-                {{ form_start(f, {'attr': {'class': 'form', 'novalidate': 'novalidate'}}) }}
-                <div class="form-group">
-                    {{ form_label(f.destinationVoyage, 'Destination du voyage', {'label_attr': {'class': 'vendor/bootstrap/css/control-label label-blue'}}) }}
-                    <br> <!-- Ajout d'un saut de ligne -->
-                    {{ form_widget(f.destinationVoyage, {'attr': {'class': 'vendor/bootstrap/css/form-control col-sm-4'}}) }}
-                    {{ form_errors(f.destinationVoyage)}}
-                </div>
-                <div class="form-group">
-                    {{ form_label(f.dateDepart, 'Date de départ', {'label_attr': {'class': 'control-label label-blue'}}) }}
-                    <br> <!-- Ajout d'un saut de ligne -->
-                    {{ form_widget(f.dateDepart, {'attr': {'class': 'vendor/bootstrap/css/form-control col-sm-4'}}) }}
-                </div>
-                <div class="form-group">
-                    {{ form_label(f.station, 'Station', {'label_attr': {'class': 'control-label label-blue'}}) }}
-                    <br> <!-- Ajout d'un saut de ligne -->
-                    {{ form_widget(f.station, {'attr': {'class': 'vendor/bootstrap/css/form-control col-sm-4'}}) }}
-                </div>
-                <button type="submit" >Enregistrer</button>
-                {{ form_end(f) }}
-            </div>
-        </div>
-    </div>
-</div> #}
-<!-- Modal de suppression -->
-<div class="modal" tabindex="-1" role="dialog" id="deleteModal">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Confirmation de suppression</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                Êtes-vous sûr de vouloir supprimer ce billet ? Cette action est irréversible.
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn-black" data-dismiss="modal" id="annuler">Annuler</button>
-                <a href="#" class="btn-black" id="confirmDelete">Supprimer</a>
-            </div>
-        </div>
-    </div>
-</div>
-{# <div class="container pt-5">
-    <div class="row justify-content-center">
-        <div class="col-12 text-center">
-            <h1 class="pb-4">Vos <i class='uil uil-bus color-yellow'></i> Billets</h1>
-            <div class="d-flex justify-content-between">
-                {% for billet in list %}
-                <div class="ticket-option">
-                    <input class="checkbox-ticket" type="radio" name="ticket" id="ticket-{{ loop.index }}">
-                    <label for="ticket-{{ loop.index }}">
-                        <span class="top-dots">
-                            <span class="section dots"></span>
-                        </span>
-                           <span class="duration">{{ billet.destinationVoyage }}</span>
-                         <span class="time mt-2">{{ billet.dateDepart|date('Y-m-d H:i:s') }}</span>
-                        <span class="price mt-2 pb-4 mb-3"><sup>DT</sup>{{ billet.prix }}</span>
-                        <span class="section dots"></span>
-                        <span class="section pt-4"><i class='uil uil-clock-two mt-3'></i></span>
-                        <span class="duration">{{ billet.duree }}</span>
-                         <span class="section dots"></span>
-                        <span class="section pt-4"><i class='uil uil-clock-two mt-3'></i></span>
-                        <span class="duration">{{ billet.station.nomStation }} - {{ billet.station.adressStation }} - {{ billet.station.type }}</span>
-                       
-                        <span class="bottom-dots"><span class="section dots"></span></span>
-                    </label> #}
-                      {# <div class="mt-3">
-                        <a href="{{ path('edit_billet',{id: billet.refVoyage}) }}" class="modifier btn btn-btn-secondary btn-sm mr-2">Modifier</a>
-                        <a href="#" class="supprimer btn btn-btn-secondary btn-sm" onclick="$('#deleteModal').modal('show'); $('#confirmDelete').attr('href', '{{ path('delete_billet', {id: billet.refVoyage}) }}'); return false;">Supprimer</a>
-                    </div> #}
-                {# </div>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-</div> #}
-
-
-{# <!-- Tableau des billets -->
-<table border="3">
-    <thead>
-        <tr>
-            <th style="border-bottom: 3px solid black;border-right: 3px solid black; ">Destination</th>
-            <th style="border-bottom: 3px solid black;border-right: 3px solid black;">Date de départ</th>
-            <th style="border-bottom: 3px solid black;border-right: 3px solid black;">Prix</th>
-            <th style="border-bottom: 3px solid black;border-right: 3px solid black;">Durée</th>
-            <th style="border-bottom: 3px solid black;border-right: 3px solid black;">Station</th>
-            <th style="border-bottom: 3px solid black;border-right: 3px solid black;">Actions</th> <!-- Nouvelle colonne pour les actions -->
-        </tr>
-    </thead>
-    <tbody>
-        {% for billet in list %}
-            <tr style="border-bottom: 3px solid black;">
-                <td style="border-right: 3px solid black;">{{ billet.destinationVoyage }}</td>
-                <td style="border-right: 3px solid black;">{{ billet.dateDepart|date('Y-m-d H:i:s') }}</td>
-                <td style="border-right: 3px solid black;">{{ billet.prix }}</td>
-                <td style="border-right: 3px solid black;">{{ billet.duree }}</td>
-                <td style="border-right:3px solid black;">{{ billet.station.nomStation }} - {{ billet.station.adressStation }} - {{ billet.station.type }}</td>
-                <td style="border-right: 3px solid;">
-                    <a href="{{ path('edit_billet',{id: billet.refVoyage}) }}" class="modifier">Modifier</a> <!-- Bouton Modifier -->
-                    <br> <!-- Ajout d'un saut de ligne -->
-                    <a href="#" class="supprimer" onclick="$('#deleteModal').modal('show'); $('#confirmDelete').attr('href', '{{ path('delete_billet', {id: billet.refVoyage}) }}'); return false;">Supprimer</a> <!-- Bouton Supprimer -->
-                </td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table> #}
-
-<!-- Script JavaScript -->
-
-
-
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-
-
-
 $(document).ready(function() {
+    // Cacher la liste des billets réservés au chargement de la page
     $('#listeBilletsReservesUl').hide();
 
-    // Cacher ou afficher la liste des billets réservés lorsque le bouton est cliqué
+    // Gérer le clic sur le bouton "Afficher votre liste des billets réservés"
     $('#afficherListeBillets').click(function() {
-        // Utiliser la méthode toggle() pour basculer la visibilité de la liste
         $('#listeBilletsReservesUl').toggle();
     });
 
-    // Cacher la liste des billets réservés lorsque l'icône "eye" est cliquée
+    // Gérer le clic sur l'icône "eye" pour cacher la liste
     $('#toggleTableIcon').click(function() {
-        // Utiliser la méthode hide() pour cacher la liste
         $('#listeBilletsReservesUl').hide();
     });
+
+    // Gérer le clic sur le bouton "Réserver"
     $('.btn-reserver').click(function() {
-        
         // Récupérer les détails du billet correspondant
         var destination = $(this).closest('.course-item').find('.dest').text().trim();
-        var prix = $(this).closest('.course-item').find('.price').text().trim();
+            var prix = $(this).closest('.course-item').find('.price').text().trim().split(":")[1].trim();
         var dateDepart = $(this).closest('.course-item').find('.description').text().trim();
         var duree = $(this).closest('.course-item').find('.trainer-link').text().trim();
         var nomStation = $(this).closest('.course-item').find('h3').attr('data-nom-station');
@@ -247,30 +126,29 @@ $(document).ready(function() {
         var typeStation = $(this).closest('.course-item').find('h3').attr('data-type-station');
         
         // Créer un élément HTML pour le billet réservé
-     var billetReserveHTML = '<tr>'; // Ouvrir une nouvelle ligne
-billetReserveHTML += '<td style="border: 1px solid #ddd; padding: 8px;">' + destination + '</td>';
-billetReserveHTML += '<td style="border: 1px solid #ddd; padding: 8px;">' + dateDepart + '</td>';
-billetReserveHTML += '<td style="border: 1px solid #ddd; padding: 8px;">' + prix + '</td>';
-billetReserveHTML += '<td style="border: 1px solid #ddd; padding: 8px;">' + duree + '</td>';
-billetReserveHTML += '<td style="border: 1px solid #ddd; padding: 8px;">' + nomStation + ' - ' + adresseStation + ' - ' + typeStation + '</td>';
-billetReserveHTML += '<td style="border: 1px solid #ddd; padding: 8px;"><button class="btn-annuler-reservation"><i class="bi bi-trash"></i></button></td>'; // Remplacement du texte par une icône de poubelle
- // Ajout du bouton Annuler
-billetReserveHTML += '</tr>'; // Fermer la ligne
+        var billetReserveHTML = '<tr>'; // Ouvrir une nouvelle ligne
+        billetReserveHTML += '<td style="border: 1px solid #ddd; padding: 8px;">' + destination + '</td>';
+        billetReserveHTML += '<td style="border: 1px solid #ddd; padding: 8px;">' + dateDepart + '</td>';
+        billetReserveHTML += '<td style="border: 1px solid #ddd; padding: 8px;">' + prix + '</td>';
+        billetReserveHTML += '<td style="border: 1px solid #ddd; padding: 8px;">' + duree + '</td>';
+        
+        billetReserveHTML += '<td style="border: 1px solid #ddd; padding: 8px;"><button class="btn-annuler-reservation bi-person"><i class="bi bi-trash"></i></button></td>';
 
+        billetReserveHTML += '</tr>'; // Fermer la ligne
 
         // Ajouter le billet à la liste en tant qu'élément de ligne de tableau
         $('#listeBilletsReserves').append(billetReserveHTML);
 
-        // Incrémenter le nombre de réservations
-        var numberOfReservationsElement = $(this).closest('.course-item').find('.bi-person');
-        var currentNumberOfReservations = parseInt(numberOfReservationsElement.text().trim());
+        // Incrémenter le nombre de réservations pour ce billet spécifique
+        var numberOfReservationsElement = $(this).closest('.trainer-rank').find('.bi-person');
+        var currentNumberOfReservations = parseInt(numberOfReservationsElement.attr('data-reservations'));
         if (!isNaN(currentNumberOfReservations)) {
             var newNumberOfReservations = currentNumberOfReservations + 1;
-            numberOfReservationsElement.text(newNumberOfReservations);
+            numberOfReservationsElement.text(newNumberOfReservations).attr('data-reservations', newNumberOfReservations);
         }
     });
 
-    // Utiliser la délégation d'événement pour gérer le clic sur le bouton "Annuler"
+    // Gérer le clic sur le bouton "Annuler"
 $(document).on('click', '.btn-annuler-reservation', function() {
     // Trouver l'élément tr correspondant à la réservation annulée
     var trElement = $(this).closest('tr');
@@ -297,12 +175,11 @@ $(document).on('click', '.btn-annuler-reservation', function() {
     trElement.remove();
 });
 
-
-
 });
-
-
 </script>
+
+
+
 
 
 {% endblock %}
