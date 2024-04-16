@@ -1,13 +1,26 @@
 {% extends 'baseBack.html.twig' %}
 {% block main %}
 <style>
+
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+      .promo-toggle-wrapper { text-align: right; margin-bottom: 20px; }
+  .custom-alert {
+    background-color: black;
+    color: #721c24;
+    border-color: #f5c6cb;
+    padding: .75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+}
+
 </style>
 <div class="example-wrapper" >
 <div style="background-color: #343a40; padding: 30px ;margin-bottom: 40px;"> 
     <h2 style="text-align: center; color:white ">Ajouter Billet</h2>
     </div>
+    
     <div class="row justify-content-center" > <!-- Centrer les champs du formulaire -->
         <div class="col-md-6"> <!-- Utilisation de 6 colonnes pour chaque champ -->
             {{ form_start(f, {'attr': {'class': 'form', 'novalidate': 'novalidate'}}) }}
@@ -43,17 +56,38 @@
             </div>
             <button type="submit" class="btn btn-primary mt-3">Confirmer</button>
             {% for message in app.flashes('error') %}
-                <div class="alert alert-danger">{{ message }}</div>
+                <div class="custom-alert">{{ message }}</div>
             {% endfor %}
             {{ form_end(f) }}
         </div>
     </div>
 </div>
+ 
+<div class="promo-toggle-wrapper" style="display: flex; justify-content: flex-end;">
+ 
+    <div style="display: flex; flex-direction: column; align-items: center; margin-left: 20px;">
+  <select id="promotion-type" style="width: 100px; height: 100px; border-radius: 50%; overflow: hidden; position: relative; background-color: #dc3545; color: #ffffff;" onchange="togglePromotion(this)">
+   
+    <option >PROMO</option>
+    <option value="20">20%</option>
+    <option value="50">50%</option>
+  
+    <!-- Ajoutez d'autres options selon vos besoins -->
+</select>
+
+
+        
+    </div>
+</div>
+
+
+
 
 <div style="margin-top: 20px;"> <!-- Ajustez la marge supérieure selon vos besoins -->
  <i data-feather="search"></i>
-  <input type="text" id="searchInput" oninput="search()" placeholder="Rechercher destination/date...">
 
+  <input type="text" id="searchInput" oninput="search()" placeholder="Rechercher destination/date...">
+  <i data-feather="refresh-cw" title="Trier par date" onclick="sortTable()"></i> 
     <table class="table table-bordered" id="billetTable">
         <thead>
             <tr>
@@ -65,17 +99,24 @@
                 <th>Actions</th>
             </tr>
         </thead>
+        
         <tbody>
             {% for billet in list %}
                 <tr>
                     <td>{{ billet.destinationVoyage }}</td>
                     <td>{{ billet.dateDepart|date('Y-m-d H:i:s') }}</td>
-                    <td>{{ billet.prix }}</td>
-                    <td>{{ billet.duree }}</td>
+        <td>
+    <span class="price" id="price{{ billet.refVoyage }}">{{ billet.prix }}</span> DT
+</td>
+
+
+                    <td>{{ billet.duree }}H</td>
                     <td>{{ billet.station.nomStation }} - {{ billet.station.adressStation }} - {{ billet.station.type }}</td>
                       <td>
+                      
                         <a href="{{ path('edit_billetBack',{id:billet.refVoyage}) }}" class="btn btn-info"><i data-feather="edit"></i></a>
                         <a href="{{ path('delete_billetBack',{id:billet.refVoyage}) }}" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce billet ?')"><i data-feather="trash-2"></i></a>
+                     
                     </td>
                 </tr>
             {% endfor %}
@@ -110,6 +151,70 @@
                 row.style.display = "none";
             }
         });
+    }
+</script>
+<script>
+    function sortTable() {
+        var table, rows, switching, i, x, y, shouldSwitch;
+        table = document.getElementById("billetTable");
+        switching = true;
+        while (switching) {
+            switching = false;
+            rows = table.rows;
+            for (i = 1; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("td")[1]; // Changer 1 à l'index de la colonne dateDepart
+                y = rows[i + 1].getElementsByTagName("td")[1];
+                if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                    shouldSwitch = true;
+                    break;
+                }
+            }
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+            }
+        }
+    }
+</script>
+<script>
+function togglePromotion50(selectElement) {
+    var selectedPercentage = selectElement.value;
+    var priceElements = document.querySelectorAll(".price"); // Sélectionne tous les éléments de prix
+
+    priceElements.forEach(function(priceElement) { // Itère sur chaque élément de prix
+        var price = parseFloat(priceElement.textContent);
+
+        // Appliquer la promotion de 50% à tous les prix
+        priceElement.textContent = (price * 0.5).toFixed(2);
+    });
+}
+
+
+
+
+    function togglePromotion20(selectElement) {
+      var selectedPercentage = selectElement.value;
+    var priceElements = document.querySelectorAll(".price"); // Sélectionne tous les éléments de prix
+
+    priceElements.forEach(function(priceElement) { // Itère sur chaque élément de prix
+        var price = parseFloat(priceElement.textContent);
+
+        // Appliquer la promotion de 50% à tous les prix
+        priceElement.textContent = (price * 0.8).toFixed(2);
+    });
+    }
+</script>
+
+<script>
+    function togglePromotion(element) {
+        var selectedValue = element.value;
+        if (selectedValue === "50") {
+            togglePromotion50(element);
+        } else if (selectedValue === "20") {
+            togglePromotion20(element);
+        }
+        // Ajoutez des conditions pour d'autres valeurs au besoin
     }
 </script>
 

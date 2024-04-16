@@ -1,7 +1,8 @@
 .card svg {
     height: 25px;
   }
-  
+
+
   .card {
     position: relative;
     display: flex;
@@ -75,7 +76,7 @@
     transition: opacity 0.25s;
     z-index: 2;
   }
-  
+
   .card .social-link {
     position: relative;
     display: flex;
@@ -115,4 +116,6 @@
     100% {
       transform: scale(1);
     }
+   
+    
   }

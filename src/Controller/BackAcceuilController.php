@@ -64,6 +64,24 @@ class BackAcceuilController extends AbstractController
             'list' => $list
         ]);
     }
+    #[Route('/appliquer_promo', name: 'appliquer_promo')] 
+    public function appliquerPromo(ManagerRegistry $manager): Response
+    {
+        $em = $manager->getManager();
+        $billets = $em->getRepository(Billet::class)->findAll();
+
+        // Appliquer la promotion à tous les billets
+        foreach ($billets as $billet) {
+            // Modifier le prix selon la promotion
+            $nouveauPrix = $billet->getPrix() * 0.8; // Exemple de réduction de 20%
+            $billet->setPrix($nouveauPrix);
+            $em->persist($billet);
+        }
+        $em->flush();
+
+        // Rediriger ou afficher un message de succès
+        return $this->redirectToRoute('app_billet');
+    }
     #[Route('/EditStation/{id}', name: 'edit_station')] 
     public function editstation (Request $req,ManagerRegistry $Manager,StationRepository $repo,$id)
     :Response {
