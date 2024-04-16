@@ -75,14 +75,15 @@ class Personne
     )]
     #[Assert\Regex(
         pattern: '/^(?=.*[!@#$%^&*(),.?":{}|<>])(?=.*[A-Z])(?=.*\d).*$/',
-        message: "Le mot de passe doit contenir au moins une lettre majuscule, un chiffre et un caractère spécial."
+        message: "(doit contenir au moins une lettre majuscule, un chiffre et un caractère spécial)."
     )]
     private ?string $mdp_personne = null;
     
     /*--------------------------------------------------------------------------------------------------------------------------- */
     /* image de la personne */
     #[ORM\Column(length: 255)]
-    
+    #[Assert\NotBlank(message: "L'image ne peut pas être vide.")]
+
     private ?string $image_personne = null;
 
     /*--------------------------------------------------------------------------------------------------------------------------- */

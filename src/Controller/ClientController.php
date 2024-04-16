@@ -135,7 +135,7 @@ class ClientController extends AbstractController
         $entityManager->persist($client);
         $entityManager->flush();
 
-            return $this->redirectToRoute('app_acceuil');
+            return $this->redirectToRoute('app_client_signIn');
         }
     
         return $this->render('Front/signUp.html.twig', [

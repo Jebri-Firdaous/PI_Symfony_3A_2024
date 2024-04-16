@@ -24,6 +24,7 @@ class Client
     #[ORM\Id]
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(name: 'id_personne', referencedColumnName: 'id_personne', nullable: true)]
+    #[Assert\Valid] // Ajout de la validation pour le champ personne
     private ?Personne $personne = null;
 
     #[ORM\Column(length: 30)]
@@ -31,6 +32,8 @@ class Client
     private ?string $genre = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: "L'age ne peut pas être vide.")]
+
     #[Assert\Range(min: 15, max: 100, minMessage: "L'âge minimum est 15 ans.", maxMessage: "L'âge maximum est 100 ans.")]
     #[Assert\Regex(pattern: "/^\d+$/", message: "L'âge doit contenir uniquement des chiffres.")]
     private ?int $age = null;
