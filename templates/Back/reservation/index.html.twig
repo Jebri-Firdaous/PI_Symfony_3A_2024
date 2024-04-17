@@ -1,0 +1,50 @@
+{% extends 'Back/base.html.twig' %}
+
+{% block title %}Liste des réservations{% endblock %}
+{% block main %}
+     <div class="row">
+                                <div class="card-header">
+<h2 style="font-weight: bold; color: #2f64b1; text-align: center;">Liste des Reservations</h2>
+      </div>
+        <table class="table table-hover my-0">
+        <thead>
+            <tr>
+                <th>RefReservation</th>
+                <th>Durée de la réservation</th>
+                <th>Prix de la réservation</th>
+                <th>Date de la réservation</th>
+                <th>Type de chambre</th>
+                <th>Nom de l'hôtel</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        
+        <tbody>
+        {% for reservation in reservations %}
+            <tr>
+                <td>{{ reservation.refReservation }}</td>
+                <td>{{ reservation.dureeReservation }}</td>
+                <td>{{ reservation.prixReservation }}</td>
+                <td>{{ reservation.dateReservation ? reservation.dateReservation|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ reservation.typeChambre }}</td>
+                <td>{{ reservation.idHotel ? reservation.idHotel.nomHotel : 'Aucun hôtel associé' }}</td>
+                <td>
+                    <a href="{{ path('app_reservation_delete_back', {'refReservation': reservation.refReservation}) }}">
+                      <span class="icon">🗑️</span>
+                    </a>
+                    &nbsp;
+                    <a href="{{ path('app_reservation_edit_back', {'refReservation': reservation.refReservation}) }}">
+                    <span class="icon">✏️</span>
+                    </a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">Aucun enregistrement trouvé</td> {# Colspan est égal au nombre de colonnes dans votre tableau #}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_tourisme_back') }}">Créer une nouvelle réservation</a>
+{% endblock %}

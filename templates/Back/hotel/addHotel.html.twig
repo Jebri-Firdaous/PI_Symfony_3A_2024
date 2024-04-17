@@ -1,0 +1,25 @@
+{% extends 'Back/base.html.twig' %}
+
+{% block title %}New Hotel{% endblock %}
+{% block main %}
+
+ <header>
+        <!-- Votre en-tête ici -->
+    </header>
+
+    <div class="container">
+            <h1 class="text-center">Entrer nouvel Hotel</h1>
+
+        <div class="form-container">
+            {{ include('Back/hotel/_form.html.twig') }}
+        </div>
+
+        <a href="{{ path('app_hotel_index') }}">retour au liste</a>
+    </div>
+    
+{% endblock %}
+{% block body %}
+   
+    
+{% endblock %}
+

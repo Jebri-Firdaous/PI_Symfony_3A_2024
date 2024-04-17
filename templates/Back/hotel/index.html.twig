@@ -1,0 +1,60 @@
+{% extends 'Back/base.html.twig' %}
+
+{% block title %}Hotel index{% endblock %}
+{% block main %}
+
+    <div class="row">
+                                <div class="card-header">
+<h2 style="font-weight: bold; color: #2f64b1; text-align: center;">Liste des Hotels</h2>
+      </div>
+        <table class="table table-hover my-0">
+        <thead>
+            <tr>
+                <th>IdHotel</th>
+                <th>NomHotel</th>
+                <th>AdressHotel</th>
+                <th>Prix1</th>
+                <th>Prix2</th>
+                <th>Prix3</th>
+                <th>Numero1</th>
+                <th>Numero2</th>
+                <th>Numero3</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for hotel in hotels %}
+            <tr>
+                <td>{{ hotel.idHotel }}</td>
+                <td>{{ hotel.nomHotel }}</td>
+                <td>{{ hotel.adressHotel }}</td>
+                <td>{{ hotel.prix1 }}</td>
+                <td>{{ hotel.prix2 }}</td>
+                <td>{{ hotel.prix3 }}</td>
+                <td>{{ hotel.numero1 }}</td>
+                <td>{{ hotel.numero2 }}</td>
+                <td>{{ hotel.numero3 }}</td>
+                <td>
+                    <a href="{{ path('app_hotel_delete', {'idHotel': hotel.idHotel}) }}">
+                    <span class="icon">🗑️</span>
+                    </a>
+                      &nbsp;
+                    <a href="{{ path('app_hotel_edit', {'idHotel': hotel.idHotel}) }}">
+                    <span class="icon">✏️</span>
+                    </a>
+
+                    
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="10">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_hotel_new') }}">Créer un hotel</a>
+    {% block body %}
+{% endblock %}
+{% endblock %}

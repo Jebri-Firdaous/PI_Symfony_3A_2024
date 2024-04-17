@@ -10,6 +10,9 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use App\Entity\Hotel;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class ReservationType extends AbstractType
 {
@@ -17,8 +20,23 @@ class ReservationType extends AbstractType
     {
         $builder
             ->add('dureeReservation')
-            ->add('prixReservation')
-            ->add('dateReservation')
+            ->add('prixReservation', TextType::class, [
+                'required' => false,
+                'attr' => [
+                    'readonly' => true, // Make the field readonly initially
+                ],
+            ])
+            ->add('dateReservation', DateTimeType::class, [
+                'label' => 'Date et heure de la réservation',
+                'widget' => 'single_text',
+                'html5' => true,
+                'attr' => [
+                    'class' => 'form-control custom-input',
+                ],
+                'required' => true,
+                'data' => new \DateTime(), // Valeur par défaut à aujourd'hui
+            ])
+            
             ->add('typeChambre', ChoiceType::class, [
                 'choices' => [
                     'Normal' => 'normal',
@@ -45,7 +63,6 @@ class ReservationType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Reservation::class,
             'hotelChoices' => [], // Ajoutez une option par défaut pour les choix d'hôtels
-            'hotelPrices' => [], // Ajoutez une option pour les prix des chambres
             'selectedHotelNames' => [], // Ajoutez l'option selectedHotelNames avec une valeur par défaut vide
 
         ]);

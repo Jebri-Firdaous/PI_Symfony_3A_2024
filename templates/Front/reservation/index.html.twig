@@ -1,0 +1,57 @@
+{% extends 'Front/base.html.twig' %}
+
+{% block title %}Reservation index{% endblock %}
+{% block section %}
+    {#<h1>Reservation index</h1>#}
+  <div class="row">
+                                <div class="card-header">
+<h2 style="font-weight: bold; color: #2f64b1; text-align: center;">Liste des Reservations</h2>
+      </div>
+        <table class="table table-hover my-0">
+        <thead>
+            <tr>
+                <th>RefReservation</th>
+                <th>DureeReservation</th>
+                <th>PrixReservation</th>
+                <th>DateReservation</th>
+                <th>TypeChambre</th>
+                <th>Hotel Name</th> {# Ajoutez une colonne pour le nom de l'hôtel #}
+                <th>actions</th>
+            </tr>
+        </thead>
+        
+        <tbody>
+        {% for reservation in reservations %}
+            <tr>
+                <td>{{ reservation.refReservation }}</td>
+                <td>{{ reservation.dureeReservation }}jour</td>
+                <td>{{ reservation.prixReservation }}</td>
+                <td>{{ reservation.dateReservation ? reservation.dateReservation|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ reservation.typeChambre }}</td>
+               <td>{{ reservation.idHotel ? reservation.idHotel.nomHotel : 'Aucun hôtel associé' }}</td>
+               {# Accédez au nom de l'hôtel associé à la réservation s'il existe, sinon affichez un message indiquant qu'aucun hôtel n'est associé #}
+                <td>
+                    <a href="{{ path('app_reservation_delete', {'refReservation': reservation.refReservation}) }}">
+                     <span class="icon">🗑️</span>
+                    </a>
+                        &nbsp;
+
+                    <a href="{{ path('app_reservation_edit', {'refReservation': reservation.refReservation}) }}">
+                     <span class="icon">✏️</span>  </a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td> {# Colspan est égal au nombre de colonnes dans votre tableau #}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_tourisme') }}">Create new</a>
+    
+   {% block body %}
+
+    
+{% endblock %}
+ {% endblock %}

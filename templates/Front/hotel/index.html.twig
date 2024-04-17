@@ -1,0 +1,54 @@
+{% extends 'Front/base.html.twig' %}
+
+{% block title %}Hotel index{% endblock %}
+{% block section %}
+
+<div class="container">
+    <h1 class="text-center">Liste des Hôtels</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>IdHotel</th>
+                <th>NomHotel</th>
+                <th>AdressHotel</th>
+                <th>Prix1</th>
+                <th>Prix2</th>
+                <th>Prix3</th>
+                <th>Numero1</th>
+                <th>Numero2</th>
+                <th>Numero3</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for hotel in hotels %}
+                <tr>
+                    <td>{{ hotel.idHotel }}</td>
+                    <td>{{ hotel.nomHotel }}</td>
+                    <td>{{ hotel.adressHotel }}</td>
+                    <td>{{ hotel.prix1 }}</td>
+                    <td>{{ hotel.prix2 }}</td>
+                    <td>{{ hotel.prix3 }}</td>
+                    <td>{{ hotel.numero1 }}</td>
+                    <td>{{ hotel.numero2 }}</td>
+                    <td>{{ hotel.numero3 }}</td>
+                    <td>
+                        <a href="{{ path('app_tourisme', {'idHotel': hotel.idHotel}) }}" class="btn btn-success">Sélectionner</a>
+                        {# Ajoutez ici les liens pour afficher et éditer l'hôtel #}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="10">
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="10">No records found</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

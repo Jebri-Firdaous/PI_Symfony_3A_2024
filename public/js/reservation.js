@@ -1,3 +1,11 @@
+/**
+* Template Name: Mentor
+* Template URL: https://bootstrapmade.com/mentor-free-education-bootstrap-theme/
+* Updated: Mar 19 2024 with Bootstrap v5.3.3
+* Author: BootstrapMade.com
+* License: https://bootstrapmade.com/license/
+*/
+
 // Définir les constantes de prix pour chaque type de chambre
 const PRIX_STANDARD = 150.0;
 const PRIX_LUXE = 200.0;
@@ -10,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (reservationContainer && reservationContainer.getAttribute('data-hotel-prices')) {
         try {
-            hotelPrices = JSON.parse(reservationContainer.getAttribute('data-hotel-prices'));
+            hotelPrices = JSON.parse(reservationContainer.getAttribute('data+-hotel-prices'));
         } catch (error) {
             console.error('Erreur lors de la conversion des données JSON :', error);
         }

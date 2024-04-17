@@ -7,7 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Client;
 use App\Repository\ReservationRepository;
-
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 /**
@@ -22,27 +22,35 @@ class Reservation
      #[ORM\Id]
      #[ORM\GeneratedValue]
      #[ORM\Column]
-
+    
     private ?int $refReservation = null;
 
    
     #[ORM\Column]
-    private ?float  $dureeReservation = null;
+    #[Assert\NotBlank(message: "La durée de la réservation est requise")]
+    #[Assert\PositiveOrZero(message: "La durée doit être un nombre positif ou nul")]
+
+    private ?float $dureeReservation = null;
 
    
 
      #[ORM\Column]
-   
+ 
     private ?float  $prixReservation = null ;
 
   
     
 
-    #[ORM\Column]
-     private ?\DateTime $dateReservation = null;
+    #[ORM\Column(nullable: true)]
+    #[Assert\NotBlank(message: "La date de la réservation est requise")]
+    #[Assert\Type(type: "\DateTimeInterface", message: "La date de la réservation doit être une instance de DateTimeInterface")]
+    #[Assert\GreaterThan("today", message: "La date de la réservation doit être postérieure à la date actuelle")]
+    private ?\DateTime $dateReservation;
+    
 
  
      #[ORM\Column]
+     #[Assert\NotBlank(message:"Le type de la réservation est requise")]
     private ?string $typeChambre = null ;
 
    
@@ -64,7 +72,7 @@ class Reservation
     private ?Hotel $idHotel = null;
   
   
-
+ 
    /* private $hotels;
 
     public function __construct()

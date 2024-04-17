@@ -1,0 +1,16 @@
+{% extends 'Front/base.html.twig' %}
+
+{% block title %}Edit Reservation{% endblock %}
+{% block section %}
+
+    
+            <h1 class="text-center">modifier Reservation</h1>
+
+    {{ include('Front/reservation/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_reservation_index') }}">retour au Tableau</a>
+
+
+{% block body %}
+{% endblock %}
+{% endblock %}
