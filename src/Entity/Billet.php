@@ -32,6 +32,22 @@ class Billet
     #[Assert\GreaterThan('today',message:"date non valide")]
     #[Assert\NotBlank(message:"La date est obligatoire")] 
     private ?\DateTime $dateDepart;
+    #[Assert\Callback]
+public function validateDateTime(ExecutionContextInterface $context)
+{
+    // Récupérer la date de départ
+    $dateDepart = $this->getDateDepart();
+
+    // Vérifier si l'heure est renseignée
+    $heureDepart = $dateDepart->format('H:i:s');
+    if ($heureDepart === '00:00:00') {
+        $context->buildViolation("L'heure de départ est obligatoire.")
+            ->atPath('dateDepart')
+            ->addViolation();
+        return;
+    }
+
+}
 
     #[ORM\Column(length: 50)]
     #[Assert\NotBlank(message:"Prix est obligatoire")] 
