@@ -20,7 +20,7 @@
     <p>Date limite de commande: {{ limitDate|date('Y-m-d H:i:s') }}</p>
 
     {# Bouton pour passer la commande #}
-    <form action="{{ path('cart_place_order') }}" method="post">
+    <form action="{{ path('cart_place_order_back') }}" method="post">
         <button type="submit">Passer la commande</button>
     </form>
 {% endblock %}

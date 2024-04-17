@@ -10,6 +10,7 @@ use App\Repository\CommandeRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CommandeRepository::class)]
 class Commande
@@ -20,12 +21,20 @@ class Commande
     private ?int $idCommande;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: "Le nombre d'articles est requis")]
+    #[Assert\Type(type: 'integer', message: "Le nombre d'articles doit être un entier")]
+    #[Assert\PositiveOrZero(message: "Le nombre d'articles doit être positif ou zéro")]
     private ?int $nombreArticle;
 
     #[ORM\Column(length: 10)]
+    #[Assert\NotBlank(message: "Le prix total est requis")]
+    #[Assert\Type(type: 'numeric', message: "Le prix total doit être numérique")]
+    #[Assert\PositiveOrZero(message: "Le prix total doit être positif ou zéro")]
     private ?string $prixTotale;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: "Le délai de commande est requis")]
+    #[Assert\Type(type: '\DateTime', message: "Le délai de commande doit être une date")]
     private ?DateTime $delaisCommande;
 
     #[ORM\ManyToOne(targetEntity: client::class)]

@@ -60,6 +60,28 @@ public function adminArticles(EntityManagerInterface $entityManager): Response
         return $this->redirectToRoute('app_article_index');
     }
 
+    #[Route('/article/{id}/add-to-cart/back', name: 'article_add_to_cart_back')]
+    public function addToCartBack(Article $article, SessionInterface $session): Response
+    {
+        $cart = $session->get('cart', []);
+        $id = $article->getIdArticle();
+
+        if (!isset($cart[$id])) {
+            $cart[$id] = [
+                'id' => $article->getIdArticle(),
+                'nomArticle' => $article->getNomArticle(),
+                'prixArticle' => $article->getPrixArticle(),
+                'photoArticle' => $article->getPhotoArticle(),
+                'quantity' => 1
+            ];
+        } else {
+            $cart[$id]['quantity']++;
+        }
+
+        $session->set('cart', $cart);
+
+        return $this->redirectToRoute('app_article_index_back2');
+    }
 
     #[Route('/article/{id}/remove-from-cart', name: 'remove_from_cart')]
 public function removeFromCart(Article $article, SessionInterface $session): Response
@@ -73,6 +95,20 @@ public function removeFromCart(Article $article, SessionInterface $session): Res
     }
 
     return $this->redirectToRoute('cart_index');
+}
+
+#[Route('/article/{id}/remove-from-cart/back', name: 'remove_from_cart_back')]
+public function removeFromCartback(Article $article, SessionInterface $session): Response
+{
+    $cart = $session->get('cart', []);
+    $id = $article->getIdArticle();
+
+    if (isset($cart[$id])) {
+        unset($cart[$id]);
+        $session->set('cart', $cart);
+    }
+
+    return $this->redirectToRoute('cart_index_back');
 }
 
 
@@ -100,6 +136,34 @@ public function removeFromCart(Article $article, SessionInterface $session): Res
 
          // Afficher le contenu du panier
     return $this->render('Front/article/cart.html.twig', [
+        'cart' => $cartWithData,
+        'total' => $total, // Passage de la variable 'total' au rendu Twig
+    ]);
+    }
+    #[Route('/cart/back', name: 'cart_index_back')]
+    public function cartback(SessionInterface $session, ArticleRepository $articleRepository): Response
+    {
+        $cart = $session->get('cart', []);
+    $cartWithData = [];
+    $total = 0; // Déclaration de la variable 'total'
+
+    foreach ($cart as $itemId => $item) {
+        $article = $articleRepository->find($itemId);
+        if ($article) {
+            $photoArticle = method_exists($article, 'getPhotoArticle') ? $article->getPhotoArticle() : null;
+            $cartWithData[] = [
+                'id' => $article->getIdArticle(),
+                'nomArticle' => $article->getNomArticle(),
+                'prixArticle' => $article->getPrixArticle(),
+                'quantity' => $item['quantity'],
+                'photoArticle' => $photoArticle, // Ajout de la clé "photoArticle"
+            ];
+            $total += $item['quantity'] * $article->getPrixArticle(); // Calcul du total
+        }
+    }
+
+         // Afficher le contenu du panier
+    return $this->render('Back/article/cart.html.twig', [
         'cart' => $cartWithData,
         'total' => $total, // Passage de la variable 'total' au rendu Twig
     ]);
@@ -158,6 +222,60 @@ public function removeFromCart(Article $article, SessionInterface $session): Res
 
         // Rediriger vers les informations de la commande
         return $this->redirectToRoute('app_commande_show', ['idCommande' => $commande->getIdCommande()]);
+    }
+    #[Route('/cart/checkout/back', name: 'cart_checkout_back')]
+    public function checkout_back(SessionInterface $session, EntityManagerInterface $entityManager, ArticleRepository $articleRepository, FlashBagInterface $flashBag): Response
+    {
+        // Récupérer le contenu du panier
+        $cart = $session->get('cart', []);
+
+        // Créer une nouvelle commande
+        $commande = new Commande();
+
+        // Calculer le prix total
+        $total = 0;
+        foreach ($cart as $itemId => $item) {
+            $article = $articleRepository->find($itemId);
+            if ($article) {
+                $total += $article->getPrixArticle() * $item['quantity'];
+            }
+        }
+
+        // Calculer la date limite de commande (2 jours à partir d'aujourd'hui)
+        $limitDate = new DateTime();
+        $limitDate->add(new \DateInterval('P2D'));
+
+        // Assigner les valeurs à la commande
+        $totalArticles = array_sum(array_column($cart, 'quantity'));
+        $commande->setNombreArticle($totalArticles);
+        $commande->setPrixTotale($total);
+        $commande->setDelaisCommande($limitDate);
+
+        // Enregistrer la commande dans la base de données
+        $entityManager->persist($commande);
+
+        // Enregistrer les articles associés à cette commande dans la table commande_article
+        foreach ($cart as $itemId => $item) {
+            $article = $articleRepository->find($itemId);
+            if ($article) {
+                $commandeArticle = new CommandeArticle();
+                $commandeArticle->setIdCommande($commande);
+                $commandeArticle->setIdArticle($article);
+                $entityManager->persist($commandeArticle);
+            }
+        }
+
+        // Vider le panier
+        $session->set('cart', []);
+
+        // Exécuter les opérations de base de données
+        $entityManager->flush();
+
+        // Ajouter un message flash de confirmation
+        $flashBag->add('success', 'Votre commande a été passée avec succès.');
+
+        // Rediriger vers les informations de la commande
+        return $this->redirectToRoute('app_commande_show_back', ['idCommande' => $commande->getIdCommande()]);
     }
 
 
@@ -219,13 +337,74 @@ public function placeOrder(SessionInterface $session, EntityManagerInterface $en
     return $this->redirectToRoute('app_commande_show', ['idCommande' => $commande->getIdCommande()]);
 }
 
+#[Route('/cart/place-order/back', name: 'cart_place_order_back')]
+public function placeOrderback(SessionInterface $session, EntityManagerInterface $entityManager, ArticleRepository $articleRepository, FlashBagInterface $flashBag): Response
+{
+    // Récupérer le contenu du panier
+    $cart = $session->get('cart', []);
 
+    // Créer une nouvelle commande
+    $commande = new Commande();
+
+    // Calculer le prix total
+    $total = 0;
+    foreach ($cart as $itemId => $item) {
+        $article = $articleRepository->find($itemId);
+        if ($article) {
+            $total += $article->getPrixArticle() * $item['quantity'];
+        }
+    }
+
+    // Calculer la date limite de commande (2 jours à partir d'aujourd'hui)
+    $limitDate = new DateTime();
+    $limitDate->add(new \DateInterval('P2D')); // Utilisation correcte de DateInterval
+
+    // Calculer le nombre total d'articles dans le panier
+    $totalArticles = array_sum(array_column($cart, 'quantity'));
+
+    // Assigner les valeurs à la commande
+    $commande->setNombreArticle($totalArticles); // Assigner le nombre total d'articles
+    $commande->setPrixTotale($total);
+    $commande->setDelaisCommande($limitDate);
+
+    // Enregistrer la commande dans la base de données
+    $entityManager->persist($commande);
+    $entityManager->flush();
+
+    // Enregistrer les articles associés à cette commande dans la table commande_article
+    foreach ($cart as $itemId => $item) {
+        $article = $articleRepository->find($itemId);
+        if ($article) {
+            $commandeArticle = new CommandeArticle();
+            $commandeArticle->setIdCommande($commande);
+            $commandeArticle->setIdArticle($article);
+            $entityManager->persist($commandeArticle);
+        }
+    }
+    $entityManager->flush();
+
+    // Vider le panier
+    $session->set('cart', []);
+
+    // Ajouter un message flash de confirmation
+    $flashBag->add('success', 'Votre commande a été passée avec succès.');
+
+    // Rediriger vers les informations de la commande
+    return $this->redirectToRoute('app_commande_show_back', ['idCommande' => $commande->getIdCommande()]);
+}
 
 
     #[Route('/', name: 'app_article_index', methods: ['GET'])]
     public function index(ArticleRepository $articleRepository): Response
     {
         return $this->render('Front/article/index.html.twig', [
+            'articles' => $articleRepository->findAll(),
+        ]);
+    }
+    #[Route('/backarticle', name: 'app_article_index_back2', methods: ['GET'])]
+    public function indexBack(ArticleRepository $articleRepository): Response
+    {
+        return $this->render('Back/commande/articleCommande.html.twig', [
             'articles' => $articleRepository->findAll(),
         ]);
     }
@@ -260,7 +439,7 @@ public function new(Request $request): Response
             $entityManager->persist($article);
             $entityManager->flush();
     
-            return $this->redirectToRoute('app_article_index', [
+            return $this->redirectToRoute('app_article_index_back', [
                 'photoArticleFullPath' => $photoArticleFullPath,
             ]);
         }
@@ -341,7 +520,7 @@ public function delete(Request $request, Article $article, EntityManagerInterfac
         $entityManager->flush();
     }
 
-    return $this->redirectToRoute('app_article_index', [], Response::HTTP_SEE_OTHER);
+    return $this->redirectToRoute('app_article_index_back', [], Response::HTTP_SEE_OTHER);
 }
 
 

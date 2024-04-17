@@ -116,7 +116,7 @@ public function showback(Commande $commande, EntityManagerInterface $entityManag
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_commande_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_commande_index_back', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('Back/commande/edit.html.twig', [

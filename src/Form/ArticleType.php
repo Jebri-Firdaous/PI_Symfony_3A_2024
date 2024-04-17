@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class ArticleType extends AbstractType
 {
@@ -33,7 +34,13 @@ class ArticleType extends AbstractType
                 ],
                 'placeholder' => 'Choisir un type',
             ])            
-            ->add('descriptionArticle')
+            ->add('descriptionArticle', TextareaType::class, [
+                'label' => 'Description de l\'article',
+                'attr' => [
+                    'rows' => 5, // Nombre de lignes pour la zone de texte
+                    'class' => 'form-control', // Classes CSS supplémentaires
+                ],
+            ])
             ->add('photoArticle', FileType::class, [
                 'label' => 'Photo (JPEG, PNG, GIF)',
                 'mapped' => false,

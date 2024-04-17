@@ -1,0 +1,58 @@
+{% extends 'Back/base.html.twig' %}
+
+{% block title %}Back-office - Gestion des articles{% endblock %}
+
+{% block main %}
+    <div class="container">
+        <div class="row justify-content-end">
+            <div class="col-md-6 text-right">
+                <h1 style="font-family: Arial, sans-serif; color: black; font-size: 35px;">Liste des articles :</h1>
+            </div>
+            <div class="col-md-6 d-flex justify-content-end"> 
+   <div class="attr-nav">
+            <a href="{{ path('cart_index_back') }}">
+                 <i class="align-middle" data-feather="shopping-bag" style="color: #e80368; font-size: 100px;"></i> Panier
+            </a>
+        </div>
+</div>
+
+        </div>
+        <div class="row mt-4">
+            {% for article in articles %}
+                <div class="col-md-6 mb-4">
+                    <div class="card article-card">
+                        <div class="row no-gutters">
+                            <div class="col-md-4">
+                                <img src="{{ asset(article.photoArticle) }}" class="card-img-top article-image" style="width: 100%; height: 200px;" alt="Article Image">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="card-title font-weight-bold" style="color: black;">{{ article.nomArticle }}</h5>
+                                    <p class="card-text"><strong>Prix:</strong> {{ article.prixArticle }}</p>
+                                    <p class="card-text"><strong>Quantité:</strong> {{ article.quantiteArticle }}</p>
+                                    <p class="card-text"><strong>Type:</strong> {{ article.typeArticle }}</p>
+                                    <p class="card-text">{{ article.descriptionArticle }}</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="btn-group">
+                                            <a href="{{ path('app_article_show_back', {'idArticle': article.idArticle}) }}" class="btn btn-secondary">Voir</a>
+                                            <a href="{{ path('app_article_edit', {'idArticle': article.idArticle}) }}" class="btn btn-secondary"> Modifier</a>
+                                            {{ include('Back/article/_delete_form.html.twig') }}
+                                        </div>
+                                        <div>
+                                <!-- Ajout d'une icône pour le bouton "Ajouter au panier" -->
+                                <a href="{{ path('article_add_to_cart_back', {'id': article.idArticle}) }}"><i class="align-middle" data-feather="shopping-bag"></i> ajouter au panier</a>
+                            </div>
+                                      
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   
+                </div>
+                
+            {% endfor %}
+        </div>
+   
+    </div>
+{% endblock %}
