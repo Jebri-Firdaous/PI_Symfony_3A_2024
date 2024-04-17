@@ -14,7 +14,7 @@
 
 	<link rel="canonical" href="https://demo-basic.adminkit.io/" />
 
-	<title>AdminKit Demo - Bootstrap 5 Admin Template</title>
+	<title>E-city Back</title>
 
 	<link href="{{asset('css/app.css')}}" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
@@ -25,95 +25,103 @@
 		{% block sideBar %}
 		<nav id="sidebar" class="sidebar js-sidebar">
 			<div class="sidebar-content js-simplebar">
-				<a class="sidebar-brand" href="index.html">
-          <span class="align-middle">AdminKit</span>
+				<a class="sidebar-brand" href="{{ path ('app_back_acceuil')}}">
+		   <img src="{{ asset('img/logo2.png') }}" class="img-fluid" alt="Logo" style="max-width: 100px;"> 
         </a>
 
 				<ul class="sidebar-nav">
 					<li class="sidebar-header">
-						Pages
+					 <i class="align-middle" data-feather="plus-square"></i>
+						Gestion Santé
 					</li>
 
-					<li class="sidebar-item active">
-						<a class="sidebar-link" href="index.html">
-              <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
+					<li class="sidebar-item ">
+						<a class="sidebar-link" href="{{ path ('app_article_index_back')}}">
+              <span class="align-middle">Gestion médecins</span>
             </a>
+					</li>
+					<li class="sidebar-item ">
+						<a class="sidebar-link" href="{{ path ('app_article_index_back')}}">
+            <span class="align-middle">Gestion rendez-vous</span>
+            </a>
+					</li>
+					<li class="sidebar-header">
+					<i class="align-middle" data-feather="shopping-cart"></i>
+						Gestion Shopping
 					</li>
 
 					<li class="sidebar-item">
-						<a class="sidebar-link" href="pages-profile.html">
-              <i class="align-middle" data-feather="user"></i> <span class="align-middle">Profile</span>
+						<a class="sidebar-link" href="{{ path ('app_article_index_back')}}">
+               <span class="align-middle">Gestion articles</span>
             </a>
+					</li>
+					<li class="sidebar-item ">
+						<a class="sidebar-link" href="{{ path ('app_commande_index_back')}}">
+               <span class="align-middle">Gestion commandes</span>
+            </a>
+					</li>
+					<li class="sidebar-header">
+					<i class="align-middle" data-feather="map"></i>
+						Gestion Transport
 					</li>
 
 					<li class="sidebar-item">
-						<a class="sidebar-link" href="pages-sign-in.html">
-              <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Sign In</span>
+						<a class="sidebar-link" href="{{ path ('app_article_index_back')}}">
+               <span class="align-middle">Gestion billets</span>
             </a>
+					</li>
+					<li class="sidebar-item ">
+						<a class="sidebar-link" href="{{ path ('app_article_index_back')}}">
+           <span class="align-middle">Gestion stations</span>
+            </a>
+					</li>
+					<li class="sidebar-header">
+					<i class="align-middle" data-feather="map-pin"></i> 
+						Gestion Parking
 					</li>
 
 					<li class="sidebar-item">
 						<a class="sidebar-link" href="pages-sign-up.html">
-              <i class="align-middle" data-feather="user-plus"></i> <span class="align-middle">Sign Up</span>
+              <span class="align-middle">Gestion places</span>
             </a>
 					</li>
-
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="pages-blank.html">
-              <i class="align-middle" data-feather="book"></i> <span class="align-middle">Blank</span>
+					<li class="sidebar-item ">
+						<a class="sidebar-link" href="{{ path ('app_article_index_back')}}">
+               <span class="align-middle">Gestion parking</span>
             </a>
 					</li>
-
 					<li class="sidebar-header">
-						Tools & Components
+					 <i class="align-middle" data-feather="briefcase"></i>
+						Gestion Tourisme
 					</li>
 
 					<li class="sidebar-item">
-						<a class="sidebar-link" href="ui-buttons.html">
-              <i class="align-middle" data-feather="square"></i> <span class="align-middle">Buttons</span>
+						<a class="sidebar-link" href="{{ path ('app_article_index_back')}}">
+              <span class="align-middle">Gestion hotels</span>
             </a>
 					</li>
-
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="ui-forms.html">
-              <i class="align-middle" data-feather="check-square"></i> <span class="align-middle">Forms</span>
+					<li class="sidebar-item ">
+						<a class="sidebar-link" href="{{ path ('app_article_index_back')}}">
+               <span class="align-middle">Gestion reservations</span>
             </a>
 					</li>
-
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="ui-cards.html">
-              <i class="align-middle" data-feather="grid"></i> <span class="align-middle">Cards</span>
-            </a>
-					</li>
-
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="ui-typography.html">
-              <i class="align-middle" data-feather="align-left"></i> <span class="align-middle">Typography</span>
-            </a>
-					</li>
-
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="icons-feather.html">
-              <i class="align-middle" data-feather="coffee"></i> <span class="align-middle">Icons</span>
-            </a>
-					</li>
-
 					<li class="sidebar-header">
-						Plugins & Addons
+					<i class="align-middle" data-feather="users"></i> 
+						Gestion Utilisateurs
 					</li>
 
 					<li class="sidebar-item">
-						<a class="sidebar-link" href="charts-chartjs.html">
-              <i class="align-middle" data-feather="bar-chart-2"></i> <span class="align-middle">Charts</span>
+						<a class="sidebar-link" href="{{ path ('app_article_index_back')}}">
+              <span class="align-middle">Gestion clients</span>
+            </a>
+					</li>
+					<li class="sidebar-item ">
+						<a class="sidebar-link" href="{{ path ('app_article_index_back')}}">
+            <span class="align-middle">Gestion administrateurs</span>
             </a>
 					</li>
 
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="maps-google.html">
-              <i class="align-middle" data-feather="map"></i> <span class="align-middle">Maps</span>
-            </a>
-					</li>
-				</ul>
+					
 
 				<div class="sidebar-cta">
 					<div class="sidebar-cta-content">

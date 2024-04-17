@@ -5,63 +5,63 @@
 {% block section %}
     <div class="container d-flex justify-content-between align-items-center">
         <div class="search-icon" id="searchIcon">
-            <i class="fas fa-search"></i>
+            <i class="fas fa-search" style="color: #333071; font-size: 40px;"></i>
         </div>
         <div class="attr-nav">
-            
-                    <a href="{{ path('cart_index') }}">
-                        <i class="bi bi-cart4" style="color: #e80368; font-size: 25px;"> Mon panier </i>
-                    </a>
-            
-            
+            <a href="{{ path('cart_index') }}">
+                 <i class="bi bi-cart4" style="color: #333071; font-size: 45px;"> </i>
+            </a>
         </div>
     </div>
 
     <!-- Section d'accueil -->
-    <section id="hero" class="hero section">
-        <img src="{{ asset('img/AfficherArticle1.png') }}" alt="" data-aos="fade-in">
-        <div class="container">
-            <h2 data-aos="fade-up" data-aos-delay="100" class="">E-City,<br> Bienvenue dans notre boutique en ligne !</h2>
-            <div class="d-flex mt-4" data-aos="fade-up" data-aos-delay="300">
-                <a href="courses.html" class="btn-get-started">Acheter</a>
-            </div>
-        </div>
-    </section><!-- /Section d'accueil -->
+    
+          <img src="{{ asset('img/article2.png') }}" alt="" data-aos="fade-in" style="width: 100%; max-width: 100%;">
+    
+ 
 
     <div class="row mt-4">
-    <hr style="border-top: 2px solid black; width: 100%;">
-    <h2 class="text-center mb-4">Nos articles</h2>
-    <hr style="border-top: 2px solid black; width: 100%;">
-</div>
+        
+        <hr style="border-top: 5px solid #333071; width: 100%;">
+        <h2 class="text-center mb-4">Découvrez nos articles uniques</h2>
+       <hr style="border-top: 5px solid #333071; width: 100%;">
+    
 
-<div class="row mt-4">
-    {% for article in articles %}
-        <div class="col-md-3 mb-3">
-            <div class="card article-card" style="width: 300px;">
-                <!-- Image de l'article -->
-                <img src="{{ asset(article.photoArticle) }}" class="card-img-top article-image" style="width: 200px; height: 200px;">
-                <div class="card-body">
-                    <h4 class="card-title font-weight-bold">{{ article.nomArticle }}</h4>
-                    <p class="card-text">Type: {{ article.typeArticle }}</p>
-                    <p class="card-text"><span style="color: grey;">{{ article.descriptionArticle }}</span></p>
-                    <p class="card-text"><span style="color: red; font-weight: bold;">{{ article.prixArticle }} DT</span></p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="btn-group">
-                            <!-- Utilisation d'icônes pour les boutons -->
-                            <a href="{{ path('app_article_show', {'idArticle': article.idArticle}) }}" ><i class="bi bi-eye" style="color: black; font-size: 20px;"></i></a>
-                        </div>
-                        <div>
-                            <!-- Ajout d'une icône pour le bouton "Ajouter au panier" -->
-                            <a href="{{ path('article_add_to_cart', {'id': article.idArticle}) }}"><i class="bi bi-cart4" style="color: #e80368; font-size: 30px;"></i></a>
+    </div>
+
+    <div class="container">
+    <div class="row">
+        {% for article in articles %}
+            <div class="col-md-3 mb-3">
+                <div class="card article-card border rounded" style="width: 100%; max-width: 400px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); ">
+                    <!-- Image de l'article -->
+                     <img src="{{ asset(article.photoArticle) }}" class="card-img-top article-image" style="width: 200px; height: 200px;">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="card-title font-weight-bold mb-0">{{ article.nomArticle }}</h4>
+                         <h5 class="card-text mb-0"><span style="color: red; font-weight: bold;">{{ article.prixArticle }} DT</span></h5>
+                          </div>
+                        <p class="card-text mb-2">{{ article.typeArticle }}</p>
+                        <p class="card-text mb-3"><span style="color: grey;">{{ article.descriptionArticle }}</span></p>
+                       
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <div class="btn-group">
+                                <!-- Utilisation d'icônes pour les boutons -->
+                                <a href="{{ path('app_article_show', {'idArticle': article.idArticle}) }}" ><i class="bi bi-eye" style="color: #333071; font-size: 35px;"></i></a>
+                            </div>
+                            <div>
+                                <!-- Ajout d'une icône pour le bouton "Ajouter au panier" -->
+                                <a href="{{ path('article_add_to_cart', {'id': article.idArticle}) }}"><i class="bi bi-cart4" style="color: #333071; font-size: 35px;"></i></a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    {% endfor %}
+        {% endfor %}
+    </div>
 </div>
-
-    
+    <hr style="border-top: 5px solid #333071; width: 100%;">
+     <img src="{{ asset('img/article3.png') }}" alt="" data-aos="fade-in" style="width: 100%; max-width: 100%;">
 
     <!-- Ajouter des points pour faire défiler vers les autres articles -->
     {% if articles|length > 8 %}
@@ -77,7 +77,6 @@
     {% for article in articles[8:] %}
         <!-- Afficher les articles restants ici -->
     {% endfor %}
-
 
 {% endblock %}
 

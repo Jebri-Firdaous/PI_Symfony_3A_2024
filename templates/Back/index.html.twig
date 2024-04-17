@@ -1,19 +1,216 @@
 {% extends 'Back/base.html.twig' %}
 
-
 {% block main %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+<main class="content">
+    <div class="container-fluid p-0">
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+        <h1 class="h3 mb-3"><strong>Smart City - E-City</strong> Dashboard</h1>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/Users/ffelh/pidev_symfony/src/Controller/BackAcceuilController.php'|file_link(0) }}">src/Controller/BackAcceuilController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/Users/ffelh/pidev_symfony/templates/back_acceuil/index.html.twig'|file_link(0) }}">templates/back_acceuil/index.html.twig</a></code></li>
-    </ul>
+        <div class="row">
+            <div class="col-xl-6 col-xxl-5 d-flex">
+                <div class="w-100">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col mt-0">
+                                            <h5 class="card-title">Gestion Santé</h5>
+                                        </div>
+                                        <div class="col-auto">
+                                            <div class="stat text-primary">
+                                                <i class="align-middle" data-feather="plus-square"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Ajoutez d'autres cards ici -->
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col mt-0">
+                                            <h5 class="card-title">Gestion shopping</h5>
+                                        </div>
+                                        <div class="col-auto">
+                                            <div class="stat text-primary">
+                                                <i class="align-middle" data-feather="shopping-cart"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col mt-0">
+                                            <h5 class="card-title">Gestion transport</h5>
+                                        </div>
+                                        <div class="col-auto">
+                                            <div class="stat text-primary">
+                                                <i class="align-middle" data-feather="map"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col mt-0">
+                                            <h5 class="card-title">Gestion parking</h5>
+                                        </div>
+                                        <div class="col-auto">
+                                            <div class="stat text-primary">
+                                               <i class="align-middle" data-feather="map-pin"></i> 
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Ajoutez d'autres cards ici -->
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col mt-0">
+                                            <h5 class="card-title">Gestion tourisme</h5>
+                                        </div>
+                                        <div class="col-auto">
+                                            <div class="stat text-primary">
+                                                 <i class="align-middle" data-feather="briefcase"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col mt-0">
+                                            <h5 class="card-title">Gestion utilisateurs</h5>
+                                        </div>
+                                        <div class="col-auto">
+                                            <div class="stat text-primary">
+                                                <i class="align-middle" data-feather="users"></i> 
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-6 col-xxl-7">
+    <div class="card flex-fill w-100">
+       
+        <div class="card-body py-3">
+            <!-- Remplacer le graphique par une image -->
+            <img src="{{ asset('img/scity.png') }}" alt="Image description" class="img-fluid">
+        </div>
+    </div>
 </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-md-6 col-xxl-3 d-flex order-2 order-xxl-3">
+                <div class="card flex-fill w-100">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">gestion e-city</h5>
+                    </div>
+                    <div class="card-body d-flex">
+                        <div class="align-self-center w-100">
+                            <div class="py-3">
+                                <div class="chart chart-xs">
+                                    <canvas id="chartjs-dashboard-pie"></canvas>
+                                </div>
+                            </div>
+
+                            <table class="table mb-0">
+                                <tbody>
+                                    <tr>
+                                        <td>clients</td>
+                                        <td class="text-end">4306</td>
+                                    </tr>
+                                    <tr>
+                                        <td>medecin</td>
+                                        <td class="text-end">3801</td>
+                                    </tr>
+                                    <tr>
+                                        <td>station</td>
+                                        <td class="text-end">1689</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-12 col-xxl-6 d-flex order-3 order-xxl-2">
+                <div class="card flex-fill w-100">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Map</h5>
+                    </div>
+                    <div class="card-body px-4">
+                        <div id="world_map" style="height:350px;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-xxl-3 d-flex order-1 order-xxl-1">
+                <div class="card flex-fill">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Calendrier</h5>
+                    </div>
+                    <div class="card-body d-flex">
+                        <div class="align-self-center w-100">
+                            <div class="chart">
+                                <div id="datetimepicker-dashboard"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+    <div class="col-12 col-lg-8 col-xxl-9 d-flex">
+        <div class="card flex-fill">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Description (e-city)</h5>
+            </div>
+            <div class="card-body">
+                <!-- Paragraphe descriptif de la smart city -->
+                <p>Notre smart city, appelée e-city, est un modèle de ville intelligente qui intègre diverses technologies pour améliorer la qualité de vie de ses habitants et optimiser la gestion des ressources.</p>
+                
+                <!-- Paragraphe descriptif des différentes gestions -->
+                <p>Voici quelques-unes des gestions clés de notre e-city :</p>
+                <ul>
+                    <li>Gestion Santé</li>
+                    
+                    <li>Gestion Shopping</li>
+                 
+                    <li>Gestion Transport</li>
+                   
+                    <li>Gestion Parking</li>
+                   
+                    <li>Gestion Tourisme</li>
+                    
+                    <li>Gestion Utilisateurs</li>
+                 
+                </ul>
+
+               
+            </div>
+        </div>
+    </div>
+  
+
+
+    </div>
+</main>
 {% endblock %}

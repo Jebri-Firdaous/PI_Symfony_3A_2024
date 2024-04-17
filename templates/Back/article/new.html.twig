@@ -6,19 +6,19 @@
     <div class="container">
         <div class="row">
             <div class="col-md-6 offset-md-3">
-                <h1 class="text-center mb-4">Créer un nouvel article</h1>
+                <h1 class="text-center mb-4"> Créer un nouvel article</h1>
                 <div class="card">
                     <div class="card-body">
                         {{ form_start(form, {'attr': {'class': 'article-form', 'novalidate': 'novalidate'}}) }}
                             <div class="form-group">
                                 {{ form_label(form.nomArticle, 'Nom de l\'article', {'label_attr': {'class': 'form-label'}}) }}
                                 {{ form_widget(form.nomArticle, {'attr': {'class': 'form-control'}}) }}
-                                {{ form_errors(form.nomArticle) }}
+                                {{ form_errors(form.nomArticle,{'attr': {'class':'error-message'}}) }}
                             </div>
                             <div class="form-group">
                                 {{ form_label(form.prixArticle, 'Prix de l\'article', {'label_attr': {'class': 'form-label'}}) }}
                                 {{ form_widget(form.prixArticle, {'attr': {'class': 'form-control'}}) }}
-                                {{ form_errors(form.prixArticle) }}
+                                {{ form_errors(form.prixArticle,{'attr': {'class':'error-message'}}) }}
                             </div>
                             <div class="form-group">
                                 {{ form_label(form.quantiteArticle, 'Quantité de l\'article', {'label_attr': {'class': 'form-label'}}) }}

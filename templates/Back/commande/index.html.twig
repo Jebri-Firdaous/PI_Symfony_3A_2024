@@ -3,7 +3,18 @@
 {% block title %}Commande index{% endblock %}
 
 {% block main %}
-    <h1 style="font-family: Arial, sans-serif; color: black; font-size: 35px;">Liste des commandes</h1>
+    <div class="container">
+        <div class="row justify-content-end">
+            <div class="col-md-6 text-right">
+                <h1 style="font-family: Arial, sans-serif; color: black; font-size: 35px;">Liste des commandes :</h1>
+            </div>
+            <div class="col-md-6 d-flex justify-content-end"> 
+    <div class="mt-4">
+        <a href="{{ path('app_article_new') }}" class="btn btn-success">
+            <i class="align-middle me-1" data-feather="plus-circle"></i> Ajouter un nouvel commande
+        </a>
+    </div>
+</div>
 
     <div class="container">
         <div class="row">
@@ -15,7 +26,7 @@
                         </div>
                         <div class="card-body">
                             <p>Nombre d'articles: {{ commande.nombreArticle }}</p>
-                            <p>Prix total: {{ commande.prixTotale }}</p>
+                            <p>Prix total: {{ commande.prixTotale }} DT</p>
                             <p>Délai de commande: {{ commande.delaisCommande ? commande.delaisCommande|date('Y-m-d H:i:s') : '' }}</p>
                             <hr>
                             <h6>Articles dans la commande :</h6>
@@ -27,7 +38,7 @@
                                     <div class="col-md-9">
                                         <div class="card-body">
                                             <h5 class="card-title font-weight-bold" style="color: black;">{{ article.nomArticle }}</h5>
-                                            <p class="card-text">Prix: {{ article.prixArticle }}</p>
+                                            <p class="card-text">Prix: {{ article.prixArticle }} DT</p>
                                             <p class="card-text">Type: {{ article.typeArticle }}</p>
                                             <p class="card-text">{{ article.descriptionArticle }}</p>
                                         </div>
@@ -35,13 +46,12 @@
                                 {% endfor %}
                             </div>
                         </div>
-                        <div class="card-footer">
-                            <a href="{{ path('app_commande_show_back', {'idCommande': commande.idCommande}) }}" class="btn btn-primary">Voir détails</a>
+                       <div class="d-flex justify-content-between align-items-center">
+                                        <div class="btn-group">
+                            <a href="{{ path('app_commande_show_back', {'idCommande': commande.idCommande}) }}" class="btn btn-secondary">Voir détails</a>
                             <a href="{{ path('app_commande_edit', {'idCommande': commande.idCommande}) }}" class="btn btn-secondary">Modifier</a>
-                            <form method="post" action="{{ path('app_commande_delete', {'idCommande': commande.idCommande}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette commande?');">
-                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ commande.idCommande) }}">
-                                <button type="submit" class="btn btn-danger">Supprimer</button>
-                            </form>
+                            {{ include('Back/commande/_delete_form.html.twig') }}
+                        </div>
                         </div>
                     </div>
                 </div>

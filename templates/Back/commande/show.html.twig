@@ -8,7 +8,7 @@
 
         <div class="mb-4">
             <strong>Nombre d'articles:</strong> {{ commande.nombreArticle }}<br>
-            <strong>Prix total:</strong> {{ commande.prixTotale }}<br>
+            <strong>Prix total:</strong> {{ commande.prixTotale }} DT<br>
             <strong>Délai de commande:</strong> {{ commande.delaisCommande ? commande.delaisCommande|date('Y-m-d H:i:s') : '' }}
         </div>
 
@@ -25,7 +25,7 @@
                             <div class="col-md-8">
                                 <div class="card-body">
                                     <h5 class="card-title">{{ article.nomArticle }}</h5>
-                                    <p class="card-text">Prix: {{ article.prixArticle }}</p>
+                                    <p class="card-text">Prix: {{ article.prixArticle }} DT</p>
                                     <p class="card-text">Type: {{ article.typeArticle }}</p>
                                     <p class="card-text">{{ article.descriptionArticle }}</p>
                                 </div>
