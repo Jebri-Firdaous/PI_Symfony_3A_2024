@@ -11,6 +11,12 @@ class AcceuilController extends AbstractController
     #[Route('/home', name: 'app_acceuil')]
     public function index(): Response
     {
+        // Starting or resuming a session
+        session_start();
+
+        // Adding a variable to the session
+        $_SESSION['user_id'] = 48;
+
         return $this->render('Front/index.html.twig', [
             'controller_name' => 'AcceuilController',
         ]);
@@ -25,7 +31,7 @@ class AcceuilController extends AbstractController
     #[Route('/parking', name: 'app_parking')]
     public function parkingHome(): Response
     {
-        return $this->render('Front/index.html.twig', [
+        return $this->render('Front/parking/index.html.twig', [
             'controller_name' => 'AcceuilController',
         ]);
     }

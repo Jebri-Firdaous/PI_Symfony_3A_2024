@@ -17,28 +17,50 @@ use App\Repository\ClientRepository;
 
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
 
-class Client extends Personne
+class Client
 {
-    #[ORM\Column(name: "genre", type: "string", length: 30, nullable: false)]
+    #[ORM\Id]
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(name: 'id_personne', referencedColumnName: 'id_personne', nullable: true)]
+    private ?Personne $personne = null;
 
-    private ?string $genre='';
+    // #[ORM\Column(name: "id_personne", type: "integer")] // Map 'id' as integer type
+    // protected ?int $idPersonne;
+
+    #[ORM\Column(name: "genre", type: "string", length: 30, nullable: false)]
+    protected ?string $genre='';
 
     #[ORM\Column(name: "age", type: "integer", nullable: false)]
-    private ?int $age=0;
+    protected ?int $age=0;
+
+    #[ORM\OneToOne(targetEntity: Place::class, mappedBy: "id_personne", cascade: ["persist", "remove"])]
+    protected ?Place $place;
     
-    #[ORM\OneToOne( inversedBy: "lesclient")]
-    private ?Personne $idPersonne;
-    public function getIdPersonne(): ?int
+    // #[ORM\OneToOne(targetEntity: Personne::class)]
+    // #[ORM\JoinColumn(name:"idPersonne", referencedColumnName:"idPersonne")]
+    // protected ?int $idPersonne;
+    // public function getIdPersonne(): ?int
+    // {
+    //     return $this->idPersonne;
+    // }
+
+    // public function setIdPersonne(?Personne $idPersonne): static
+    // {
+    //     $this->idPersonne = $idPersonne;
+    //     return $this;
+    // }
+
+    public function getPersonne(): ?Personne
     {
-        return $this->idPersonne;
+        return $this->personne;
     }
 
-    public function setIdPersonne(?Personne $idPersonne): static
+    public function setPersonne(Personne $personne): static
     {
-        $this->idPersonne = $idPersonne;
+        $this->personne = $personne;
+
         return $this;
     }
-
 
     public function getGenre(): ?string
     {

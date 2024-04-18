@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+
+<title>Edit Parking</title>
+
+{% block body %}
+    <h1>Modifier Parking</h1>
+
+    {{ include('parking/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_parking_index') }}">back to list</a>
+
+    {{ include('parking/_delete_form.html.twig') }}
+{% endblock %}

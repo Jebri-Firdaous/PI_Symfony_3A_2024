@@ -1,0 +1,23 @@
+<div class="container mt-4">
+
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'} }) }}
+    
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>{{ form_label(form.numPlace, 'Numéro') }}</th>
+                <td>{{ form_widget(form.numPlace, {'attr': {'class': 'form-control'} }) }}</td>
+                <td>{{ form_errors(form.numPlace) }}</td>
+            </tr>
+            <tr>
+                <th>{{ form_label(form.typePlace, 'Type') }}</th>
+                <td>{{ form_widget(form.typePlace, {'attr': {'class': 'form-control'} }) }}</td>
+                <td>{{ form_errors(form.typePlace) }}</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    {{ form_widget(form.submit, {'attr': {'class': 'btn btn-primary'} }) }}
+
+    {{ form_end(form) }}
+</div>

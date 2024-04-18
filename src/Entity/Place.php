@@ -5,8 +5,10 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Client;
 use App\Entity\Parking;
+use Symfony\Component\Validator\Constraints as Assert;
 
 use App\Repository\PlaceRepository;
+use App\Repository\ParkingRepository;
 
 #[ORM\Entity(repositoryClass: PlaceRepository::class)]
 class Place
@@ -17,19 +19,27 @@ class Place
     private ?int $refPlace;
 
     #[ORM\Column]
+    #[Assert\NotBlank()]
+    #[Assert\Positive(message:'doit etre positive')]
+    #[Assert\Type("integer", message:'doit contenir que des chiffre')]
     private ?int $numPlace;
 
     #[ORM\Column(length: 30)]
+    #[Assert\NotBlank()]
     private ?string $typePlace;
 
     #[ORM\Column(length: 30)]
     private ?string $etat;
 
     #[ORM\ManyToOne(inversedBy: 'places', targetEntity: Parking::class)]
+    #[ORM\JoinColumn(name: 'id_parking', referencedColumnName: 'id_parking')]
     private ?Parking $idParking;
 
-    #[ORM\OneToOne(mappedBy: 'idPersonne', targetEntity: Client::class)]
-    private ?Client $idUser;
+    // #[ORM\OneToOne(targetEntity: Client::class)]
+    // #[ORM\JoinColumn(name: 'idUser', referencedColumnName: 'idPersonne')]
+    #[ORM\OneToOne(targetEntity: Client::class, inversedBy: "place")]
+    #[ORM\JoinColumn(name: "id_personne", referencedColumnName: "id_personne")]
+    private ?Client $id_personne;
 
     public function getRefPlace(): ?int
     {
@@ -84,14 +94,14 @@ class Place
         return $this;
     }
 
-    public function getIdUser(): ?Client
+    public function getIdPersonne(): ?Client
     {
-        return $this->idUser;
+        return $this->id_personne;
     }
 
-    public function setIdUser(?Client $idUser): static
+    public function setIdPersonne(?Client $idUser): static
     {
-        $this->idUser = $idUser;
+        $this->id_personne = $idUser;
 
         return $this;
     }

@@ -21,20 +21,30 @@ class PlaceRepository extends ServiceEntityRepository
         parent::__construct($registry, Place::class);
     }
 
-//    /**
-//     * @return Place[] Returns an array of Place objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('p.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    /**
+     * @return Place[] Returns an array of Place objects
+     */
+    public function findByIdPark($value): array
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.idParking = :val')
+            ->setParameter('val', $value)
+         //    ->setMaxResults(10)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findByIdClient($value): ?Place
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.id_personne = :val')
+            ->setParameter('val', $value)
+         //    ->setMaxResults(10)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 
 //    public function findOneBySomeField($value): ?Place
 //    {

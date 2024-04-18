@@ -1,0 +1,38 @@
+<div class="container mt-4">
+
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'} }) }}
+    
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>{{ form_label(form.nomParking, 'Nom') }}</th>
+                <td>{{ form_widget(form.nomParking, {'attr': {'class': 'form-control'} }) }}</td>
+                <td>{{ form_errors(form.nomParking) }}</td>
+            </tr>
+            <tr>
+                <th>{{ form_label(form.addressParking, 'Address') }}</th>
+                <td>{{ form_widget(form.addressParking, {'attr': {'class': 'form-control'} }) }}</td>
+                <td>{{ form_errors(form.addressParking) }}</td>
+            </tr>
+            <tr>
+                <th>{{ form_label(form.latitude, 'Latitude') }}</th>
+                <td>{{ form_widget(form.latitude, {'attr': {'class': 'form-control'} }) }}</td>
+                <td>{{ form_errors(form.latitude) }}</td>
+            </tr>
+            <tr>
+                <th>{{ form_label(form.longitude, 'Longitude') }}</th>
+                <td>{{ form_widget(form.longitude, {'attr': {'class': 'form-control'} }) }}</td>
+                <td>{{ form_errors(form.longitude) }}</td>
+            </tr>
+            <tr>
+                <th>{{ form_label(form.nombrePlaceMax, 'MNombre de place Max') }}</th>
+                <td>{{ form_widget(form.nombrePlaceMax, {'attr': {'class': 'form-control'} }) }}</td>
+                <td>{{ form_errors(form.nombrePlaceMax) }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    {{ form_widget(form.submit, {'attr': {'class': 'btn btn-primary'} }) }}
+
+    {{ form_end(form) }}
+</div>

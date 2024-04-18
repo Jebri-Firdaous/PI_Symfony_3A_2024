@@ -3,10 +3,15 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\ParkingRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
-use App\Repository\ParkingRepository;
+use Symfony\Component\Validator\Constraints\LessThan;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ParkingRepository")
  */
@@ -20,28 +25,59 @@ class Parking
 
     
     #[ORM\Column(length: 30)]
+    #[Assert\NotBlank()]
+    #[Assert\Length(min:3, minMessage:'doit etre >=3', max:10, maxMessage:'doit etre <=10')]
+    #[Assert\Type("string", message:'doit contenir que des lettre')]
     private ?string $nomParking;
 
     
     #[ORM\Column(length: 100)]
+    #[Assert\NotBlank()]
+    #[Assert\Length(min:5, minMessage:'doit etre >=5', max:15, maxMessage:'doit etre <=15')]
+    #[Assert\Type("string", message:'doit contenir que des lettre')]
     private ?string $addressParking;
 
     
     #[ORM\Column]
+    #[Assert\Type("float", message:'doit contenir que des chiffre')]
     private ?float $latitude;
 
     
     #[ORM\Column]
+    #[Assert\Type("float", message:'doit contenir que des chiffre')]
     private ?float $longitude;
 
     
     #[ORM\Column]
+    #[Assert\NotBlank()]
+    #[Assert\LessThan(value:100, message:'doit etre <100')]
+    // #[Assert\GreaterThanOrEqual(propertyPath: 'nombrePlaceOcc', message:'doit etre >Nombre de places')]
+    #[Assert\Positive(message:'doit etre positive')]
+    #[Assert\Type("integer", message:'doit contenir que des chiffre')]
+    // #[Assert\Callback(callback: 'validateNombrePlaceMax')]
     private ?int $nombrePlaceMax;
-
     
+    public function validateNombrePlaceMax($object, ExecutionContextInterface $context): void
+    {
+        if (!$object instanceof Parking) {
+            return; // If not a Parking entity, skip validation
+        }
+        $nombrePlaceMax = $object->getNombrePlaceMax();
+        $idParking = $object->getIdParking();
+
+        $rep = $this->entityManager->getRepository(Parking::class);
+        $nb = $rep->nbPlace($idParking);
+
+        // Custom validation logic
+        if ($nombrePlaceMax !== null && $nombrePlaceMax < $nb) {
+            $context->buildViolation('The value should be a number.')->atPath('nombrePlaceMax')->addViolation();
+        }
+    }
+
     #[ORM\Column]
     private ?int $nombrePlaceOcc;
 
+    private EntityManagerInterface $entityManager;
     
     #[ORM\Column(length: 50)]
     private ?string $etatParking;

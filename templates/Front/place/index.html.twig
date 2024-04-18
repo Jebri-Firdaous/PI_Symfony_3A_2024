@@ -1,0 +1,65 @@
+{% extends 'Front/base.html.twig' %}
+
+{% block title %}Hello ParkingController!{% endblock %}
+
+{% block menu %}
+<li><a href="{{ path ('app_acceuil')}}">Acceuil</a></li>
+<li><a href="{{ path ('app_acceuil')}}">Santé</a></li>
+<li><a href="{{ path ('app_acceuil')}}">Shopping</a></li>
+<li><a href="{{ path ('app_transport')}}">Transport</a></li>
+<li><a href="{{ path ('app_parkingF')}}" class="active">Parking</a></li>
+<li><a href="{{ path ('app_acceuil')}}">Tourisme</a></li>
+<li><a href="{{ path ('app_acceuil')}}">Contact</a></li>
+{% endblock %}
+
+{% block body %}
+<h1>Liste des Places</h1><br>
+
+{# <a href="{{  path('app_parkingF') }}">back to parkings</a><br> #}
+
+    <table class="table" style="text-align: center;">
+        <thead>
+            <tr>
+                {# <th>RefPlace</th> #}
+                <th>Numéro</th>
+                <th>Type</th>
+                <th>Etat</th>
+                <th></th>
+                {# <th>actions</th> #}
+            </tr>
+        </thead>
+        <tbody>
+        {% for place in places %}
+            <tr>
+                {# <td>{{ place.refPlace }}</td> #}
+                <td>{{ place.numPlace }}</td>
+                <td>{{ place.typePlace }}</td>
+                <td>{{ place.etat }}</td>
+                <td>
+                    {% if place.etat == 'Libre' %}
+                        <a href="{{ path('app_place_reserveF', {'idP': idP, 'refP': place.refplace}) }}" class="btn btn-primary">réserver</a>
+                    {% endif %}
+                    {# <a href="{{ path('app_place_show', {'refPlace': place.refPlace, 'idP': idP}) }}">show</a>
+                    <a href="{{ path('app_place_edit', {'refPlace': place.refPlace, 'idP': idP}) }}">edit</a> #}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">Il n'y a pas des places</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <br><br><br><br><br><br>
+<!-- Vesitable Shop End -->
+<!-- JavaScript Libraries -->
+    <script src="{{asset('https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js')}}"></script>
+    <script src="{{asset('https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js')}}"></script>
+    <script src="{{asset('parking/lib/easing/easing.min.js')}}"></script>
+    <script src="{{asset('parking/lib/waypoints/waypoints.min.js')}}"></script>
+    <script src="{{asset('parking/lib/lightbox/js/lightbox.min.js')}}"></script>
+    <script src="{{asset('parking/lib/owlcarousel/owl.carousel.js')}}"></script>
+    
+    <!-- Template Javascript -->
+    <script src="{{asset('parking/js/main.js')}}"></script>
+{% endblock %}

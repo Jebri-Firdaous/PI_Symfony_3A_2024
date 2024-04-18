@@ -21,6 +21,13 @@ class ParkingRepository extends ServiceEntityRepository
         parent::__construct($registry, Parking::class);
     }
 
+    public function nbPlaces($id){
+        $em = $this->getEntityManager();
+        return $em->createQuery('SELECT count(p) FROM App\Entity\Place p WHERE p.idParking = :id')
+        ->setParameter('id', $id)
+        ->getSingleScalarResult();
+    }
+
 //    /**
 //     * @return Parking[] Returns an array of Parking objects
 //     */

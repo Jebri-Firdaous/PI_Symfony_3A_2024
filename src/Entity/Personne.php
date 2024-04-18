@@ -7,34 +7,33 @@ use App\Repository\PersonneRepository;
  * @ORM\Entity(repositoryClass="App\Repository\PersonneRepository")
  */
 #[ORM\Entity(repositoryClass: PersonneRepository::class)]
+// #[ORM\Table(name: "Personne")]
+// #[ORM\InheritanceType("JOINED")]
+// #[ORM\DiscriminatorColumn(name: "type", type: "string")]
+// #[ORM\DiscriminatorMap(["personne" => "Personne", "client" => "Client"])]
 class Personne
 {   #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
-     /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private ?int $idPersonne=null;
+    #[ORM\Column(type: "integer")]
+    protected ?int $idPersonne=null;
 
     #[ORM\Column(length: 30)]
-    private ?string $nomPersonne=null;
+    protected ?string $nomPersonne=null;
 
     #[ORM\Column(length: 30)]
-    private ?string $prenomPersonne = null;
+    protected ?string $prenomPersonne = null;
 
     #[ORM\Column]
-    private ?int $numeroTelephone= 0;
+    protected ?int $numeroTelephone= 0;
 
     #[ORM\Column( length: 50)]
-    private ?string $mailPersonne = null;
+    protected ?string $mailPersonne = null;
 
     #[ORM\Column( length: 50)]
-    private ?string $mdpPersonne=null;
+    protected ?string $mdpPersonne=null;
 
     #[ORM\Column(length: 255)]
-    private ?string $imagePersonne=null;
+    protected ?string $imagePersonne=null;
 
     public function getIdPersonne(): ?int
     {

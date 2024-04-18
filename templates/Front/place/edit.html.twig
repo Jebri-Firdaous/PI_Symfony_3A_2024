@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+
+<title>Edit Place</title>
+
+{% block body %}
+    <h1>Edit Place</h1>
+
+    {{ include('Front/place/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_place_index') }}">back to list</a>
+
+    {{ include('Front/place/_delete_form.html.twig') }}
+{% endblock %}

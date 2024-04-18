@@ -22,11 +22,10 @@ use App\Repository\AdminRepository;
 class Administrateur extends Personne
 {
     #[ORM\Column(name: "role", type: "string", length: 30, nullable: false)]
-
     private ?string $role = '';
 
-    #[ORM\OneToOne( inversedBy: "administrateur")]
-    private ?Personne $idPersonne;
+    #[ORM\Column(name: "idPersonne", type: "integer")] // Map 'id' as integer type
+    protected ?int $idPersonne;
 
     public function getRole(): ?string
     {
@@ -39,16 +38,8 @@ class Administrateur extends Personne
 
         return $this;
     }
-    public function getIdPersonne(): ?int
-    {
-        return $this->idPersonne;
-    }
-
-    public function setIdPersonne(?Personne $idPersonne): static
-    {
-        $this->idPersonne = $idPersonne;
-        return $this;
-    }
-
-
+    // public function getIdPersonne(): ?int
+    // {
+    //     return $this->idPersonne;
+    // }
 }
