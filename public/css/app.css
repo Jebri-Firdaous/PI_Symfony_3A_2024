@@ -2381,7 +2381,16 @@ textarea.form-control-lg {
 .btn-primary {
     background-color: #3b7ddd;
     border-color: #3b7ddd;
-    color: #fff
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    align-self: center;
+    height: 40px;
+    text-decoration: none;
+    border-radius: 10%;
+    
 }
 .btn-check:focus+.btn-primary, .btn-primary:focus, .btn-primary:hover {
     background-color: #326abc;

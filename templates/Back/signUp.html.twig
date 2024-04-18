@@ -1,0 +1,114 @@
+<link href="css/app.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<title>{% block title %}E-city{% endblock %}</title>
+
+  <link href="{{ asset ('img/icone.png') }}" rel="icon">
+  
+
+{% block section %}
+
+	
+	<main class="d-flex w-100">
+		<div class="container d-flex flex-column">
+			<div class="row vh-100">
+				<div class="col-sm-10 col-md-8 col-lg-6 mx-auto d-table h-100">
+					<div class="d-table-cell align-middle">
+
+						<div class="text-center mt-4">
+	<a href="{{ path ('app_back_acceuil')}}">
+		<h1 style="color: #37423b; font-size: 35px;">
+			<strong>E-CITY</strong>
+		</h1>
+	</a>
+	<p  style=" font-size: 20px; font-weight: bold;"> Créer un compte</p>
+</div>
+
+						<div class="card">
+							<div class="card-body">
+								<div class="m-sm-4">
+{{ form_start(form_admin, {'attr': {'novalidate': 'novalidate'}}) }}
+    {{ form_errors(form_admin) }} {# Afficher les erreurs globales du formulaire #}
+										<div class="mb-3">
+											<label class="form-label">Nom</label>
+   <td colspan="2">   {{ form_widget(form_admin.personne.nom_personne) }} </td>
+        <td colspan="2"> {{ form_errors(form_admin.personne.nom_personne) }}</td>
+    {{ form_row(form_admin._token) }}
+
+										</div>
+										<div class="mb-3">
+											<label class="form-label">Prenom</label>
+             <td colspan="2"> {{ form_widget(form_admin.personne.prenom_personne) }} </td>  
+        <td colspan="2">{{ form_errors(form_admin.personne.prenom_personne) }}  </td>
+
+										</div>
+																<div class="mb-3">
+											<label class="form-label">Role</label>
+        <td >{{ form_widget(form_admin.role ) }}</td>
+        <td >{{ form_errors(form_admin.role) }}</td>
+
+
+										</div>
+									
+										<div class="mb-3">
+											<label class="form-label">Adresse Mail</label>
+    <td >{{ form_widget(form_admin.personne.mail_personne ) }}</td>
+        <td >{{ form_errors(form_admin.personne.mail_personne) }}</td>
+
+										</div>
+										<div class="mb-3">
+											<label class="form-label">Mot de passe</label>
+       <td >{{ form_widget(form_admin.personne.mdp_personne ) }}</td>
+        <td >{{ form_errors(form_admin.personne.mdp_personne) }}</td>
+
+						</div>
+									<div class="mb-3">
+											<label class="form-label">Numero telephone</label>
+     <td >{{ form_widget(form_admin.personne.numero_telephone ) }}</td>
+        <td >{{ form_errors(form_admin.personne.numero_telephone) }}</td>
+
+										</div>
+								<div class="mb-3">
+											<label class="form-label">Image personne</label>
+          <td >{{ form_widget(form_admin.personne.image_personne ) }}</td>
+        <td >{{ form_errors(form_admin.personne.image_personne) }}</td>
+
+
+										</div>
+							
+<div class="d-flex justify-content-center">
+    {{ form_widget(form_admin.Submit, {'label': 'S\'inscrire', 'attr': {'class': 'btn btn-lg btn-primary'}}) }}
+</div>
+										<div style="text-align: center;">
+										 <small>
+
+
+								</div>
+							</div>
+						</div>
+
+					</div>
+					<div class="card">
+                     <div >
+                        <div class="m-sm-4">
+                        
+                          
+                           <div style="text-align: center;" >
+                              Vous avez déja un compte? <a href="{{ path ('app_admin_signIn')}}">Se connecter</a>
+                             
+                           </div>
+                        </div>
+						
+                     </div>
+
+					 
+                  </div>
+				</div>
+			</div>
+		</div>
+
+	</main>
+
+
+	<script src="js/app.js"></script>
+{% endblock %}
+

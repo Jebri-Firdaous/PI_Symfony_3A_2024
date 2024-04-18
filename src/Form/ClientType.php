@@ -30,7 +30,6 @@ class ClientType extends AbstractType
             'attr' => [
                 'placeholder' => 'Entrez votre âge',
             ],
-            'required' => false, // Rend le champ optionnel
         ])
         ->add('Submit', SubmitType::class); // Bouton de soumission
     }

@@ -42,17 +42,8 @@ class Personne
     /*--------------------------------------------------------------------------------------------------------------------------- */
     /*telphone de la personne */
     #[ORM\Column]
-    #[Assert\NotBlank(message: "Le numéro de téléphone est requis")]
-    #[Assert\Regex(
-        pattern: '/^\d+$/',
-        message: "Le numéro de téléphone ne doit contenir que des chiffres."
-    )]
-    #[Assert\Length(
-        min: 8,
-        max: 8,
-        minMessage: "Le numéro de téléphone doit contenir au moins 8 chiffres.",
-        maxMessage: "Le numéro de téléphone ne peut pas contenir plus de 8 chiffres."
-    )]
+    #[Assert\NotBlank(message: "Le numero de telephone ne peut pas être vide.")]
+    #[Assert\Regex(    pattern: '/^\d{8}$/', message: "L'âge doit contenir uniquement des chiffres (exactement 8).")]
     private ?int $numero_telephone = null;
 
     /*--------------------------------------------------------------------------------------------------------------------------- */
@@ -83,6 +74,7 @@ class Personne
     /* image de la personne */
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "L'image ne peut pas être vide.")]
+    #[Assert\File(mimeTypes:["image/png", "image/jpeg", "image/jpg"], mimeTypesMessage:"Veuillez télécharger un fichier d'image valide (PNG, JPEG, JPG).")]
 
     private ?string $image_personne = null;
 

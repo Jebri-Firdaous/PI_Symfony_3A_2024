@@ -33,6 +33,8 @@ class Client
 
     #[ORM\Column]
     #[Assert\NotBlank(message: "L'age ne peut pas être vide.")]
+    #[Assert\Positive(message: "L'âge doit être un nombre positif.")]
+
 
     #[Assert\Range(min: 15, max: 100, minMessage: "L'âge minimum est 15 ans.", maxMessage: "L'âge maximum est 100 ans.")]
     #[Assert\Regex(pattern: "/^\d+$/", message: "L'âge doit contenir uniquement des chiffres.")]

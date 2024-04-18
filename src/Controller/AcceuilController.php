@@ -43,7 +43,7 @@ class AcceuilController extends AbstractController
             'controller_name' => 'AcceuilController',
         ]);
     }
-    #[Route('/tourism', name: 'app_tourism')]
+    #[Route('/tourism', name: 'app_tourisme')]
     public function tourismHome(): Response
     {
         return $this->render('Front/tourism.html.twig', [
@@ -55,6 +55,14 @@ class AcceuilController extends AbstractController
     {
         return $this->render('Front/contact.html.twig', [
             'controller_name' => 'AcceuilController',
+        ]);
+    }
+    #[Route('/SignIn', name: 'app_signIn')]
+    public function signIn(): Response
+    {
+        
+        return $this->render('Front/signIn.html.twig', [
+           
         ]);
     }
 

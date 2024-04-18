@@ -15,6 +15,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Filesystem\Filesystem;
+
 
 
 class ClientController extends AbstractController
@@ -25,13 +27,14 @@ class ClientController extends AbstractController
         $list=$repo->findAll();
         return $this->render('Front/client/index.html.twig', [
             'list' => $list,
+            
         ]);
     }
     #[Route('/clientSignIn', name: 'app_client_signIn')]
     public function signIn(ClientRepository $repo): Response
     {
         
-        return $this->render('Front/client/signIn.html.twig', [
+        return $this->render('Front/signIn.html.twig', [
            
         ]);
     }
@@ -182,11 +185,160 @@ class ClientController extends AbstractController
         $entityManager = $manager->getManager();
 
         $client= $repo->find($id);    
-       
+        if (!$client) {
+            throw $this->createNotFoundException('Client non trouvé');
+        }
+        // Obtenez le chemin complet de l'image
+    $imagePath = $this->getParameter('image_directory').'/'.$client->getPersonne()->getImagePersonne();
+
+    // Vérifiez si le fichier image existe avant de le supprimer
+    if (file_exists($imagePath)) {
+        // Supprimez le fichier image du répertoire
+        $filesystem = new Filesystem();
+        $filesystem->remove($imagePath);
+    }
         $entityManager->remove($client);
         $entityManager->flush();
     
         return $this->redirectToRoute('client_list');
+        
+
+    
+    }
+    /**-----------------------------Back----------------- */
+    #[Route('/clientGetAllBack', name: 'client_list_Back')]
+    public function listClientBack(ClientRepository $repo): Response
+    {
+        $list=$repo->findAll();
+        return $this->render('Back/client/index.html.twig', [
+            'list' => $list,
+        ]);
+    }
+
+
+
+    #[Route('/addClientBack', name: 'app_client_add_Back')]
+    
+    public function addClientBack(Request $request, ManagerRegistry $manager): Response {
+        $client = new Client();
+    
+        $form = $this->createForm(ClientType::class, $client);
+        $form->handleRequest($request);
+    
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Get the uploaded file
+        /** @var UploadedFile $uploadedFile */
+        $uploadedFile = $form['personne']['image_personne']->getData();
+
+        // Check if a file was uploaded
+        if ($uploadedFile) {
+            // Generate a unique filename for the file
+            $newFilename = uniqid().'.'.$uploadedFile->guessExtension();
+
+            // Move the file to the desired directory
+            try {
+                $uploadedFile->move(
+                    $this->getParameter('image_directory'), // Path to the directory where you want to save the file
+                    $newFilename
+                );
+            } catch (FileException $e) {
+                // Handle file upload error
+                // You may want to add error handling here
+            }
+
+            // Set the image path in the entity
+            $client->getPersonne()->setImagePersonne($newFilename);
+        }
+
+        // Save the client to the database
+        $entityManager = $manager->getManager();
+        $entityManager->persist($client);
+        $entityManager->flush();
+
+        // Redirect to the client list page
+        return $this->redirectToRoute('client_list_Back');
+        }
+    
+        return $this->render('Back/client/addClient.html.twig', [
+            'form_client' => $form->createView(),
+        ]);
+    }
+    #[Route('/editClientBack/{id}', name: 'app_client_edit_Back')]
+    public function editClientBack(Request $request, ClientRepository $clientRepository, EntityManagerInterface $entityManager, $id): Response {
+        // Récupérer le client à éditer à partir de son identifiant
+        $client = $clientRepository->find($id);
+        
+        // Créer le formulaire d'édition associé à l'entité Client
+        $form = $this->createForm(ClientType::class, $client);
+        $form->handleRequest($request);
+    
+        if ($form->isSubmitted() && $form->isValid()) {
+ /** @var UploadedFile $uploadedFile */
+ $uploadedFile = $form['personne']['image_personne']->getData();
+
+ // Check if a file was uploaded
+ if ($uploadedFile) {
+     // Generate a unique filename for the file
+     $newFilename = uniqid().'.'.$uploadedFile->guessExtension();
+
+     // Move the file to the desired directory
+     try {
+         $uploadedFile->move(
+             $this->getParameter('image_directory'), // Path to the directory where you want to save the file
+             $newFilename
+         );
+     } catch (FileException $e) {
+         // Handle file upload error
+         // You may want to add error handling here
+     }
+
+     // Set the image path in the entity
+     $client->getPersonne()->setImagePersonne($newFilename);
+ }            $entityManager->flush();
+    
+            return $this->redirectToRoute('client_list_Back'); // Rediriger vers la liste des clients après l'édition
+        }
+    
+        // Get the image filename
+        $clientImageFilename = $client->getPersonne()->getImagePersonne();
+        
+        // Check if the filename exists
+        $clientImagePath = null;
+        if ($clientImageFilename) {
+            // Construct the full image path
+            $clientImagePath = $this->getParameter('image_directory') . '/' . $clientImageFilename;
+        }
+    
+        return $this->render('Back/client/editClient.html.twig', [
+            'form_client' => $form->createView(),
+            'client_image' => $clientImagePath // Pass the client's image path to the template
+        ]);
+    }
+    
+    
+
+
+    #[Route('/deleteClientBack/{id}', name: 'app_client_delete_Back')]
+    public function deleteClientBack(ManagerRegistry $manager, ClientRepository $repo, $id): Response {
+        $entityManager = $manager->getManager();
+
+        $client= $repo->find($id);    
+        if (!$client) {
+            throw $this->createNotFoundException('Client non trouvé');
+        }
+        // Obtenez le chemin complet de l'image
+    $imagePath = $this->getParameter('image_directory').'/'.$client->getPersonne()->getImagePersonne();
+
+    // Vérifiez si le fichier image existe avant de le supprimer
+    if (file_exists($imagePath)) {
+        // Supprimez le fichier image du répertoire
+        $filesystem = new Filesystem();
+        $filesystem->remove($imagePath);
+    }
+        $entityManager->remove($client);
+        $entityManager->flush();
+    
+        return $this->redirectToRoute('client_list_Back');
         
 
     

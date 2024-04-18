@@ -6,6 +6,7 @@ use App\Entity\Personne;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -29,10 +30,12 @@ class PersonneType extends AbstractType
             'label' => 'Prénom',
             'attr' => ['placeholder' => 'Saisir votre prénom'],
         ])
-        ->add('numero_telephone', TelType::class, [
-            'label' => 'Numéro de Téléphone',
-            'attr' => ['placeholder' => 'Saisir votre numéro de téléphone'],
-        ])
+        ->add('numero_telephone', IntegerType::class, [
+            'attr' => [
+                'placeholder' => 'Entrez votre numéro de téléphone',
+            ],
+            'required' => false, // Rend le champ optionnel
+            ])
         ->add('mail_personne', EmailType::class, [
             'label' => 'Adresse Mail',
             'attr' => ['placeholder' => 'Saisir votre adresse mail'],

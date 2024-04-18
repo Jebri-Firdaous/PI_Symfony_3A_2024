@@ -13,9 +13,13 @@ security:
         main:
             lazy: true
             provider: users_in_memory
+            custom_authenticator: App\Security\PersonneAuthentificatorAuthenticator
+        csrf_protection: true
+
+            
     encoders:
         App\Entity\Personne:
-            algorithm: bcrypt
+            algorithm: auto
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall

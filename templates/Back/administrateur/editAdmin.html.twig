@@ -5,7 +5,7 @@
 <main class="content">
     <div class="container-fluid p-0">
         <div class="mb-3">
-<h1 style="font-weight: bold; color: #2f64b1;">Ajouter Administrateur</h2>
+<h1 style="font-weight: bold; color: #2f64b1;">Modifier Administrateur</h2>
 
         </div>
         <div class="row">
@@ -52,7 +52,12 @@
                             </div>
                             <div class="text-center mt-3">
                                 {{ form_widget(form_admin.Submit, {'label': 'S\'inscrire', 'attr': {'class': 'btn btn-lg btn-primary'}}) }}
-                                <a href="{{ path('administrateur_list') }}" style="display: block; text-align: left;">Retour à la liste</a>
+<a href="{{ path('administrateur_list') }}" style="display: block; text-align: left;">Retour à la liste</a>
+
+
+
+
+
 
                             </div>
                         {{ form_end(form_admin) }}
@@ -61,6 +66,7 @@
             </div>
         </div>
     </div>
+
 </main>
 
 {% endblock %}

@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\AdministrateurRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: AdministrateurRepository::class)]
 class Administrateur
@@ -16,9 +18,12 @@ class Administrateur
     #[ORM\Id]
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(name: 'id_personne', referencedColumnName: 'id_personne', nullable: true)]
+    #[Assert\Valid] // Ajout de la validation pour le champ personne
+
     private ?Personne $personne = null;
 
     #[ORM\Column(length: 30)]
+    #[Assert\NotBlank(message: "Le role ne peut pas être vide.")]
     private ?string $role = null;
 
     // public function getId(): ?int

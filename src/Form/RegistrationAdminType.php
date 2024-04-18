@@ -2,19 +2,21 @@
 
 namespace App\Form;
 
-use App\Entity\Administrateur;
+use App\Entity\Client;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 
-class AdministrateurType extends AbstractType
+
+class RegistrationAdminType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-        ->add('personne', PersonneType::class)
+        ->add('personne', PersonneType::class) // Ajout du champ 'personne' en utilisant PersonneType
         ->add('role', ChoiceType::class, [
             'choices' => [
                 'Gestion Transport' => 'Gestion Transport',
@@ -25,17 +27,15 @@ class AdministrateurType extends AbstractType
                 'Gestion Tourisme' => 'Gestion Tourisme',
                 // Ajoutez d'autres choix si nécessaire
             ],
-            'required' => false, // Rend le champ optionnel
-            'placeholder' => 'Sélectionnez un role', // Placeholder par défaut
         ])
-        ->add('Submit', SubmitType::class);
-
+        ->add('Submit', SubmitType::class); // Bouton de soumission
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Administrateur::class,
+            'data_class' => Client::class,
+            'csrf_protection' => false, // Disable CSRF protection
         ]);
     }
 }

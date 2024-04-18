@@ -1,0 +1,66 @@
+{% extends 'Back/base.html.twig' %}
+
+{% block main %}
+<main class="content">
+    <div class="container-fluid p-0">
+        <div class="mb-3">
+            <h1 style="font-weight: bold; color: #2f64b1;">Ajouter Client</h1>
+        </div>
+        <div class="row">
+            <div class="col-12 col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        {{ form_start(form_client, {'attr': {'novalidate': 'novalidate'}}) }}
+                            {{ form_errors(form_client) }}
+                            <div class="mb-3">
+                                {{ form_label(form_client.personne.nom_personne, "Nom", {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(form_client.personne.nom_personne, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_errors(form_client.personne.nom_personne) }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form_label(form_client.personne.prenom_personne, "Prénom", {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(form_client.personne.prenom_personne, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_errors(form_client.personne.prenom_personne) }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form_label(form_client.genre, "Genre", {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(form_client.genre, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_errors(form_client.genre) }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form_label(form_client.age, "Age", {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(form_client.age, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_errors(form_client.age) }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form_label(form_client.personne.numero_telephone, "Numéro de Téléphone", {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(form_client.personne.numero_telephone, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_errors(form_client.personne.numero_telephone) }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form_label(form_client.personne.mail_personne, "Adresse Mail", {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(form_client.personne.mail_personne, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_errors(form_client.personne.mail_personne) }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form_label(form_client.personne.mdp_personne, "Mot de Passe", {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(form_client.personne.mdp_personne, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_errors(form_client.personne.mdp_personne) }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form_label(form_client.personne.image_personne, "Image", {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(form_client.personne.image_personne, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_errors(form_client.personne.image_personne) }}
+                            </div>
+                            <div class="text-center mt-3">
+                                {{ form_widget(form_client.Submit, {'label': 'S\'inscrire', 'attr': {'class': 'btn btn-lg btn-primary'}}) }}
+                                <a href="{{ path('client_list_Back') }}" style="display: block; text-align: left;">Retour à la liste</a>
+                            </div>
+                        {{ form_end(form_client) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

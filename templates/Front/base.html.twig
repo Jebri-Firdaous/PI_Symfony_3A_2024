@@ -57,10 +57,10 @@
 
    <li> <a href="{{ path ('app_acceuil')}}" {% if currentRoute == 'app_acceuil' %}class="active"{% endif %}>Accueil</a></li>
 
-          <li class="dropdown has-dropdown"><a href="#"{% if currentRoute == 'app_medecin_getAll' %}class="active"{% endif %}><span>Santé</span><i class="bi bi-chevron-down"></i></a>
+          <li class="dropdown has-dropdown"><a href="#"{% if currentRoute == 'app_sante' %}class="active"{% endif %}><span>Santé</span><i class="bi bi-chevron-down"></i></a>
 
     <ul>
-        <li><a href="{{ path ('app_medecin_getAll')}}">Les Medecins</a></li>
+        <li><a href="{{ path ('app_sante')}}">Les Medecins</a></li>
         <li><a href="#">Les Rendez-Vous</a></li>
     </ul>
    </li>
@@ -69,7 +69,7 @@
 <li><a href="{{ path ('app_shopping')}}" {% if currentRoute == 'app_shopping' %}class="active"{% endif %}>Shopping</a></li>
    <li><a href="{{ path ('app_transport')}}" {% if currentRoute == 'app_transport' %}class="active"{% endif %}>Transport</a></li>
    <li><a href="{{ path ('app_parking')}}" {% if currentRoute == 'app_parking' %}class="active"{% endif %}>Parking</a></li>
-   <li><a href="{{ path ('app_tourism')}}" {% if currentRoute == 'app_tourism' %}class="active"{% endif %}>Tourisme</a></li>
+   <li><a href="{{ path ('app_tourisme')}}" {% if currentRoute == 'app_tourisme' %}class="active"{% endif %}>Tourisme</a></li>
    <li><a href="{{ path ('app_contact')}}" {% if currentRoute == 'app_contact' %}class="active"{% endif %}>Contact</a></li>
           {% endblock %}
         </ul>
@@ -116,7 +116,7 @@
       <div class="row gy-4">
         <div class="col-lg-4 col-md-6 footer-about">
           <a href="index.html" class="logo d-flex align-items-center">
-            <span class="">Mentor</span>
+            <span class="">E-CITY</span>
           </a>
           <div class="footer-contact pt-3">
             <p>Pôle Technologique, Rue André Ampère</p>
@@ -132,34 +132,37 @@
           </div>
         </div>
 
-        <div class="col-lg-2 col-md-3 footer-links">
-          <h4>Useful Links</h4>
+  <div class="col-lg-2 col-md-3 footer-links">
+          <h4>Liens utiles</h4>
           <ul>
-           
-            <li><a href="#">Terms of service</a></li>
-            <li><a href="#">Privacy policy</a></li>
+            <li><a href="#">À propos</a></li>
+           <li><a href="#">Contact</a></li>
+
+            <li><a href="#">Conditions d'utilisation</a></li>
+            <li><a href="#">Politique de confidentialité</a></li>
+
           </ul>
         </div>
 
         <div class="col-lg-2 col-md-3 footer-links">
-          <h4>Our Services</h4>
+          <h4>Nos Services</h4>
           <ul>
-            <li><a href="{{ path ('app_acceuil')}}">Santé</a></li>
-            <li><a href="#">Shopping</a></li>
-            <li><a href="#">Transport</a></li>
-            <li><a href="#">Parking</a></li>
-            <li><a href="#">Tourisme</a></li>
+            <li><a href="{{ path ('app_sante')}}">Santé</a></li>
+            <li><a href="{{ path ('app_shopping')}}" >Shopping</a></li>
+            <li><a  href="{{ path ('app_transport')}}">Transport</a></li>
+            <li><a href="{{ path ('app_parking')}}">Parking</a></li>
+            <li><a  href="{{ path ('app_tourisme')}}">Tourisme</a></li>
           </ul>
         </div>
 
         <div class="col-lg-4 col-md-12 footer-newsletter">
-          <h4>Our Newsletter</h4>
-          <p>Subscribe to our newsletter and receive the latest news about our products and services!</p>
+          <h4>Notre newsletter</h4>
+          <p>Abonnez-vous à notre newsletter et recevez les dernières nouvelles sur nos services !</p>
           <form action="forms/newsletter.php" method="post" class="php-email-form">
-            <div class="newsletter-form"><input type="email" name="email"><input type="submit" value="Subscribe"></div>
-            <div class="loading">Loading</div>
+            <div class="newsletter-form"><input type="email" name="email"><input type="submit" value="S'abonner"></div>
+            <div class="loading">Chargement</div>
             <div class="error-message"></div>
-            <div class="sent-message">Your subscription request has been sent. Thank you!</div>
+            <div class="sent-message">Votre demande d'abonnement a été envoyée. Merci!</div>
           </form>
         </div>
       </div>
