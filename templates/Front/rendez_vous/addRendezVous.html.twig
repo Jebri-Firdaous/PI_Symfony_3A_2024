@@ -4,7 +4,7 @@
 {% block body %}
 <div style="display: flex; align-items: center;">
     <div style="margin-right: 159px;">
-         {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'style': 'margin: 90px;'}}) }}
+         {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'style': 'margin: 143px;'}}) }}
     <table>
    
     <tr>{{form_label(form.specialiteMedecin)}}</tr>
@@ -25,6 +25,12 @@
     {{form_widget(form.save)}}
     {{form_end(form)}}
     </div>
-    <img src="{{ asset('img/imgGM/rendezVous.png') }}" alt="Image Description" style="width: 500px; height: auto;">
+    <img src="{{ asset('img/imgGM/rendezVous.png') }}" alt="Image Description" style="width: 412px; height: auto;">
 </div>
+
+<style>
+    button{
+        margin-top: 8px;
+    }
+</style>
 {% endblock %}

@@ -87,7 +87,8 @@ class RendezVousController extends AbstractController
         );
     }
     #[Route('/addRendezVousFront', name: 'front_rendezVous_add')]
-    public function addRendezVous(Request $request, ManagerRegistry $doctrine, ClientRepository $clientRepository, MedecinRepository $medecinRepository): Response
+    public function addRendezVous(Request $request, ManagerRegistry $doctrine, 
+    ClientRepository $clientRepository, MedecinRepository $medecinRepository, SmsGenerator $smsGenerator): Response
     {
         $entityManager = $doctrine->getManager();
         // creates a doctor object and initializes some data for this example
@@ -112,6 +113,15 @@ class RendezVousController extends AbstractController
             // TODO ... perform some action, such as saving the task to the database
             $entityManager->flush();
             // return $this->redirectToRoute('app_medecin_getAll');
+            $medecinNumber = $rendezVous->getIdMedecin()->getNumeroTelephoneMedecin();
+            dump($medecinNumber);
+            $medecinNom = $rendezVous->getIdMedecin()->getNomMedecin();
+            dump($medecinNom);
+            $dateRendezVous = $rendezVous->getDateRendezVous();
+            dump($dateRendezVous);
+            $stringDate = $dateRendezVous->format('d/m/Y'); // for example
+            $body = "tu auras un rendez-vous le  ". $stringDate;
+            $smsGenerator->SendSms("+4915510686794",$medecinNom, $body);
             return $this->redirectToRoute('front_rendezVous_getAll');
         }
 
@@ -191,7 +201,7 @@ class RendezVousController extends AbstractController
     }
     #[Route('/addRendezVousBack', name: 'back_rendezVous_add')]
     public function addRendezVousBack(Request $request, ManagerRegistry $doctrine, ClientRepository $clientRepository, 
-                                        MedecinRepository $medecinRepository, TexterInterface $texter, SmsGenerator $smsGenerator): Response
+                                        MedecinRepository $medecinRepository, SmsGenerator $smsGenerator): Response
     {
         $entityManager = $doctrine->getManager();
         // creates a doctor object and initializes some data for this example
