@@ -115,38 +115,61 @@ $(document).ready(function() {
     });
 
     // Gérer le clic sur le bouton "Réserver"
-    $('.btn-reserver').click(function() {
-        // Récupérer les détails du billet correspondant
-        var destination = $(this).closest('.course-item').find('.dest').text().trim();
-            var prix = $(this).closest('.course-item').find('.price').text().trim().split(":")[1].trim();
-        var dateDepart = $(this).closest('.course-item').find('.description').text().trim();
-        var duree = $(this).closest('.course-item').find('.trainer-link').text().trim();
-        var nomStation = $(this).closest('.course-item').find('h3').attr('data-nom-station');
-        var adresseStation = $(this).closest('.course-item').find('h3').attr('data-adresse-station');
-        var typeStation = $(this).closest('.course-item').find('h3').attr('data-type-station');
-        
-        // Créer un élément HTML pour le billet réservé
-        var billetReserveHTML = '<tr>'; // Ouvrir une nouvelle ligne
-        billetReserveHTML += '<td style="border: 1px solid #ddd; padding: 8px;">' + destination + '</td>';
-        billetReserveHTML += '<td style="border: 1px solid #ddd; padding: 8px;">' + dateDepart + '</td>';
-        billetReserveHTML += '<td style="border: 1px solid #ddd; padding: 8px;">' + prix + '</td>';
-        billetReserveHTML += '<td style="border: 1px solid #ddd; padding: 8px;">' + duree + '</td>';
-        
-        billetReserveHTML += '<td style="border: 1px solid #ddd; padding: 8px;"><button class="btn-annuler-reservation bi-person"><i class="bi bi-trash"></i></button></td>';
+$('.btn-reserver').click(function(e) {
+    e.preventDefault(); // Empêcher le comportement par défaut du lien
 
-        billetReserveHTML += '</tr>'; // Fermer la ligne
+    // Capturer la référence à l'élément
+    var btnReserver = $(this);
 
-        // Ajouter le billet à la liste en tant qu'élément de ligne de tableau
-        $('#listeBilletsReserves').append(billetReserveHTML);
+    // Récupérer les détails du billet
+    var destination = btnReserver.closest('.course-item').find('.dest').text().trim();
+    var prix = btnReserver.closest('.course-item').find('.price').text().trim().split(":")[1].trim();
+    var dateDepart = btnReserver.closest('.course-item').find('.description').text().trim();
+    var duree = btnReserver.closest('.course-item').find('.trainer-link').text().trim();
 
-        // Incrémenter le nombre de réservations pour ce billet spécifique
-        var numberOfReservationsElement = $(this).closest('.trainer-rank').find('.bi-person');
-        var currentNumberOfReservations = parseInt(numberOfReservationsElement.attr('data-reservations'));
-        if (!isNaN(currentNumberOfReservations)) {
-            var newNumberOfReservations = currentNumberOfReservations + 1;
-            numberOfReservationsElement.text(newNumberOfReservations).attr('data-reservations', newNumberOfReservations);
+    // Envoyer une demande AJAX à votre contrôleur Symfony
+    $.ajax({
+        url: '{{ path('send_sms') }}', // Remplacez 'send_sms' par le nom de votre route Symfony
+        type: 'GET',
+        data: {
+            destination: destination,
+            dateDepart: dateDepart,
+            prix: prix,
+            duree: duree
+        },
+        success: function(response) {
+            alert('SMS envoyé avec succès!');
+            
+            // Créer un élément HTML pour le billet réservé
+            var billetReserveHTML = '<tr>'; // Ouvrir une nouvelle ligne
+            billetReserveHTML += '<td style="border: 1px solid #ddd; padding: 8px;">' + destination + '</td>';
+            billetReserveHTML += '<td style="border: 1px solid #ddd; padding: 8px;">' + dateDepart + '</td>';
+            billetReserveHTML += '<td style="border: 1px solid #ddd; padding: 8px;">' + prix + '</td>';
+            billetReserveHTML += '<td style="border: 1px solid #ddd; padding: 8px;">' + duree + '</td>';
+
+            billetReserveHTML += '<td style="border: 1px solid #ddd; padding: 8px;"><button class="btn-annuler-reservation bi-person"><i class="bi bi-trash"></i></button></td>';
+
+            billetReserveHTML += '</tr>'; // Fermer la ligne
+
+            // Ajouter le billet à la liste en tant qu'élément de ligne de tableau
+            $('#listeBilletsReserves').append(billetReserveHTML);
+
+            // Incrémenter le nombre de réservations pour ce billet spécifique
+            var numberOfReservationsElement = btnReserver.closest('.trainer-rank').find('.bi-person');
+            var currentNumberOfReservations = parseInt(numberOfReservationsElement.attr('data-reservations'));
+            if (!isNaN(currentNumberOfReservations)) {
+                var newNumberOfReservations = currentNumberOfReservations + 1;
+                numberOfReservationsElement.text(newNumberOfReservations).attr('data-reservations', newNumberOfReservations);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error(error);
+            alert('Erreur lors de l\'envoi du SMS.');
         }
     });
+});
+
+
 
     // Gérer le clic sur le bouton "Annuler"
 $(document).on('click', '.btn-annuler-reservation', function() {

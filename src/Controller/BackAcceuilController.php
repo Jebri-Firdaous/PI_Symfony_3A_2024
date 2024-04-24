@@ -73,7 +73,7 @@ class BackAcceuilController extends AbstractController
         // Appliquer la promotion à tous les billets
         foreach ($billets as $billet) {
             // Modifier le prix selon la promotion
-            $nouveauPrix = $billet->getPrix() * 0.8; // Exemple de réduction de 20%
+            $nouveauPrix = $billet->getPrix() * 0.5; // Exemple de réduction de 20%
             $billet->setPrix($nouveauPrix);
             $em->persist($billet);
         }
