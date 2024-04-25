@@ -5,14 +5,16 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Repository\ClientRepository;
 
 class AcceuilController extends AbstractController
 {
     #[Route('/home', name: 'app_acceuil')]
-    public function index(): Response
+    public function index(ClientRepository $c): Response
     {
         // Starting or resuming a session
         session_start();
+        // $_SESSION['user'] = $c->find(48);
 
         // Adding a variable to the session
         $_SESSION['user_id'] = 48;

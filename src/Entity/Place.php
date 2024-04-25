@@ -19,13 +19,13 @@ class Place
     private ?int $refPlace;
 
     #[ORM\Column]
-    #[Assert\NotBlank()]
+    #[Assert\NotBlank(message:'Ce champ est obligatoire!')]
     #[Assert\Positive(message:'doit etre positive')]
     #[Assert\Type("integer", message:'doit contenir que des chiffre')]
     private ?int $numPlace;
 
     #[ORM\Column(length: 30)]
-    #[Assert\NotBlank()]
+    #[Assert\NotBlank(message:'Ce champ est obligatoire!')]
     private ?string $typePlace;
 
     #[ORM\Column(length: 30)]

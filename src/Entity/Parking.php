@@ -25,32 +25,36 @@ class Parking
 
     
     #[ORM\Column(length: 30)]
-    #[Assert\NotBlank()]
+    #[Assert\NotBlank(message:'Ce champ est obligatoire!')]
     #[Assert\Length(min:3, minMessage:'doit etre >=3', max:10, maxMessage:'doit etre <=10')]
-    #[Assert\Type("string", message:'doit contenir que des lettre')]
+    #[Assert\Regex(
+        pattern: '/^[a-zA-Z]*$/',
+        message: "Le nom ne peut contenir que des lettres."
+        )]
     private ?string $nomParking;
-
     
     #[ORM\Column(length: 100)]
-    #[Assert\NotBlank()]
+    #[Assert\NotBlank(message:'Ce champ est obligatoire!')]
     #[Assert\Length(min:5, minMessage:'doit etre >=5', max:15, maxMessage:'doit etre <=15')]
-    #[Assert\Type("string", message:'doit contenir que des lettre')]
+    #[Assert\Type("string")]
     private ?string $addressParking;
 
     
     #[ORM\Column]
+    #[Assert\NotBlank(message:'Ce champ est obligatoire!')]
     #[Assert\Type("float", message:'doit contenir que des chiffre')]
     private ?float $latitude;
 
     
     #[ORM\Column]
+    #[Assert\NotBlank(message:'Ce champ est obligatoire!')]
     #[Assert\Type("float", message:'doit contenir que des chiffre')]
     private ?float $longitude;
 
     
     #[ORM\Column]
-    #[Assert\NotBlank()]
-    #[Assert\LessThan(value:100, message:'doit etre <100')]
+    #[Assert\NotBlank(message:'Ce champ est obligatoire!')]
+    #[Assert\LessThan(value:100, message:'doit etre <50')]
     // #[Assert\GreaterThanOrEqual(propertyPath: 'nombrePlaceOcc', message:'doit etre >Nombre de places')]
     #[Assert\Positive(message:'doit etre positive')]
     #[Assert\Type("integer", message:'doit contenir que des chiffre')]

@@ -20,6 +20,8 @@ class ParkingController extends AbstractController
     #[Route('home/parking/', name: 'app_parkingF', methods: ['GET'])]
     public function indexFront(ParkingRepository $parkingRepository): Response
     {
+        // session_start();
+        // var_dump($_SESSION['user']);
         return $this->render('Front/parking/index.html.twig', [
             'parkings' => $parkingRepository->findAll(),
             'repo' => $parkingRepository,

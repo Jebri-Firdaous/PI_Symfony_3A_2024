@@ -6,8 +6,14 @@
         <tbody>
             <tr>
                 <th>{{ form_label(form.numPlace, 'Numéro') }}</th>
-                <td>{{ form_widget(form.numPlace, {'attr': {'class': 'form-control'} }) }}</td>
-                <td>{{ form_errors(form.numPlace) }}</td>
+                <td>
+                    <div>
+                        {{ form_widget(form.numPlace, {'attr': {'class': 'form-control'} }) }}
+                    </div>
+                    <div>
+                        {{ form_errors(form.numPlace) }}
+                    </div>
+                </td>
             </tr>
             <tr>
                 <th>{{ form_label(form.typePlace, 'Type') }}</th>
