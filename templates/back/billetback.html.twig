@@ -122,32 +122,59 @@
         </tbody>
     </table>
 </div>
-<a href="{{ path('appliquer_promo') }}" id="promoButton" class="btn btn-danger">
+<a href="{{ path('appliquer_promo') }}" id="promoButton" class="btn btn-danger" onclick="togglePromotion50()">
     <i class="bi bi-clock"></i> <!-- Icône -->
     Appliquer Promo 50%
 </a>
 
-
-
 <script>
-    var promoApplied = false;
-    function togglePromotion50() {
-        console.log("fff");
-        if (!promoApplied) {
-            var priceElements = document.querySelectorAll(".price");
+    window.addEventListener('load', function() {
+        // Récupérer l'état de la promotion à partir de la session côté serveur lors du chargement de la page
+        var promoApplied = {{ app.session.get('promoApplied') ? 'true' : 'false' }};
+        
+        function togglePromotion50() {
+            if (!promoApplied) {
+                var priceElements = document.querySelectorAll(".price");
 
-            priceElements.forEach(function(priceElement) {
-                var price = parseFloat(priceElement.textContent);
-                priceElement.textContent = (price * 0.5).toFixed(2);
-            });
+                priceElements.forEach(function(priceElement) {
+                    var price = parseFloat(priceElement.textContent);
+                    priceElement.textContent = (price * 0.5).toFixed(2);
+                });
 
-            document.getElementById("promoButton").disabled = true;
-            promoApplied = true;
-        } else {
-            alert('La promotion a déjà été appliquée une fois.');
+                document.getElementById("promoButton").disabled = true;
+
+                // Enregistrer l'état de la promotion dans la session côté serveur
+                fetch('{{ path('save_promo_state') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({ promoApplied: true })
+                }).then(response => {
+                    // Vérifier si la réponse est réussie
+                    if (response.ok) {
+                        // Mettre à jour la valeur de promoApplied côté client
+                        promoApplied = true;
+                    } else {
+                        console.error('Failed to save promotion state:', response.statusText);
+                    }
+                }).catch(error => {
+                    console.error('Error:', error);
+                });
+            } else {
+                alert('La promotion a déjà été appliquée une fois.');
+            }
         }
-    }
+
+        // Assurez-vous que la fonction togglePromotion50 est accessible globalement
+        window.togglePromotion50 = togglePromotion50;
+    });
 </script>
+
+
+
+
 
 
  <script>
@@ -204,11 +231,9 @@
     }
 </script>
 
-
-
-
-
 <div class="d-flex justify-content-center">
+       
+      
     {{ knp_pagination_render(list, 'pagination.html.twig') }}
 </div>
 

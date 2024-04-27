@@ -14,6 +14,8 @@ use Knp\Component\Pager\PaginatorInterface;
 use App\Repository\billetRepository;
 use App\Form\BilletbackType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 class BackAcceuilController extends AbstractController
 {
     #[Route('/back/acceuil', name: 'app_back_acceuil')]
@@ -70,25 +72,39 @@ class BackAcceuilController extends AbstractController
         ]);
     }
     #[Route('/appliquer_promo', name: 'appliquer_promo')] 
-    public function appliquerPromo(ManagerRegistry $manager): Response
+    public function appliquerPromo(ManagerRegistry $manager, SessionInterface $session): Response
     {
         $em = $manager->getManager();
         $billets = $em->getRepository(Billet::class)->findAll();
-
+    
+        // Récupérer les IDs des billets sur lesquels la promotion a déjà été appliquée
+        $billetsWithPromoApplied = $session->get('billetsWithPromoApplied', []);
+    
         // Appliquer la promotion à tous les billets
         foreach ($billets as $billet) {
-            // Modifier le prix selon la promotion
-            $nouveauPrix = $billet->getPrix() * 0.5; // Exemple de réduction de 20%
-            $billet->setPrix($nouveauPrix);
-            $em->persist($billet);
+            // Vérifier si la promotion a déjà été appliquée à ce billet
+            if (!in_array($billet->getRefVoyage(), $billetsWithPromoApplied)) {
+                // Modifier le prix selon la promotion
+                $nouveauPrix = $billet->getPrix() * 0.5; // Exemple de réduction de 50%
+                $billet->setPrix($nouveauPrix);
+                $em->persist($billet);
+                
+                // Enregistrer l'ID du billet dans la session pour indiquer que la promotion a été appliquée à ce billet
+                $billetsWithPromoApplied[] = $billet->getRefVoyage();
+            }
         }
         $em->flush();
-
-        // Rediriger ou afficher un message de succès
+    
+        // Enregistrer les IDs des billets sur lesquels la promotion a été appliquée dans la session
+        $session->set('billetsWithPromoApplied', $billetsWithPromoApplied);
+    
         return $this->redirectToRoute('app_billet');
     }
+    
+        
+    
     #[Route('/EditStation/{id}', name: 'edit_station')] 
-    public function editstation (Request $req,ManagerRegistry $Manager,StationRepository $repo,$id)
+    public function editstation (Request $req,ManagerRegistry $Manager,StationRepository $repo,$id,PaginatorInterface $paginator)
     :Response {
         $em=$Manager->getManager();
         $station=$repo->find($id);
@@ -103,6 +119,11 @@ class BackAcceuilController extends AbstractController
         }
         else {
             $list = $repo->findAll();
+            $list = $paginator->paginate(
+                $list, /* query NOT result */
+                $req->query->getInt('page', 1),
+                3
+            );
         return $this->renderForm('back/transportback.html.twig',
         ['f'=>$form,
         'list' => $list
@@ -132,39 +153,58 @@ class BackAcceuilController extends AbstractController
         // Redirect to the desired route after successful deletion
         return $this->redirectToRoute('transport_back');
     }
-    #[Route('/billetback', name: 'app_billet')]
-    public function ajouterbillet(Request $req, ManagerRegistry $Manager, billetRepository $repo, PaginatorInterface $paginator): Response
-    {
-        $em = $Manager->getManager();
-        $billet = new billet();
-        $form = $this->createForm(BilletbackType::class, $billet);
-        $form->handleRequest($req);
-    
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em->persist($billet);
-            $em->flush();
-    
-            return $this->redirectToRoute('app_billet');
-        }
-    
-        // Récupérer les billets non paginés
-        $nonPaginatedList = $repo->findAll();
-    
-        // Paginer les résultats
-        $paginatedList = $paginator->paginate(
-            $nonPaginatedList, /* query NOT result */
-            $req->query->getInt('page', 1),
-            4
-        );
-    
-        return $this->render('back/billetback.html.twig', [
-            'f' => $form->createView(),
-            'list' => $paginatedList // Utiliser la variable paginée ici
-        ]);
+   #[Route('/billetback', name: 'app_billet')]
+public function ajouterbillet(Request $req, ManagerRegistry $Manager, billetRepository $repo, PaginatorInterface $paginator, SessionInterface $session): Response
+{
+    $em = $Manager->getManager();
+    $billet = new billet();
+    $form = $this->createForm(BilletbackType::class, $billet);
+    $form->handleRequest($req);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $em->persist($billet);
+        $em->flush();
+        
+        // Mettre à jour l'état de la promotion dans la session pour indiquer qu'elle a été appliquée sur ce nouveau billet
+        $session->set('promoApplied', false);
+
+        return $this->redirectToRoute('app_billet');
     }
-    
+
+    // Récupérer les billets non paginés
+    $nonPaginatedList = $repo->findAll();
+
+    // Paginer les résultats
+    $paginatedList = $paginator->paginate(
+        $nonPaginatedList, /* query NOT result */
+        $req->query->getInt('page', 1),
+        3
+    );
+
+    return $this->render('back/billetback.html.twig', [
+        'f' => $form->createView(),
+        'list' => $paginatedList // Utiliser la variable paginée ici
+    ]);
+}
+
+#[Route('/save-promo-state', name:'save_promo_state', methods: ['POST'])]
+public function savePromoState(Request $request): JsonResponse
+{
+    // Récupérer les données JSON de la requête
+    $data = json_decode($request->getContent(), true);
+
+    // Vérifier si l'état de la promotion est défini dans les données
+    $promoApplied = $data['promoApplied'] ?? false;
+
+    // Mettre à jour l'état de la promotion dans la session
+    $request->getSession()->set('promoApplied', $promoApplied);
+
+    // Répondre avec un message JSON
+    return new JsonResponse(['message' => 'Promotion state updated']);
+}
+
 #[Route('/EditBilletback/{id}', name: 'edit_billetBack')] 
-public function editBillet (Request $req,ManagerRegistry $Manager,billetRepository $repo,$id)
+public function editBillet (Request $req,ManagerRegistry $Manager,billetRepository $repo,$id,PaginatorInterface $paginator)
 :Response {
     $em=$Manager->getManager();
     $billet=$repo->find($id);
@@ -178,10 +218,18 @@ public function editBillet (Request $req,ManagerRegistry $Manager,billetReposito
     return $this->redirectToRoute('app_billet');
     }
     else {
-        $list = $repo->findAll();
+       
+        $nonPaginatedList = $repo->findAll();
+
+        // Paginer les résultats
+        $paginatedList = $paginator->paginate(
+            $nonPaginatedList, /* query NOT result */
+            $req->query->getInt('page', 1),
+            3
+        );
     return $this->renderForm('back/billetback.html.twig',
     ['f'=>$form,
-    'list' => $list
+    'list' => $paginatedList
     ]
 );
 }}
