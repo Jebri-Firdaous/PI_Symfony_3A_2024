@@ -69,6 +69,7 @@
         </tbody>
     </table>
 </div>
+
  <script>
     function search() {
         // Récupère la valeur de recherche
@@ -124,4 +125,8 @@
         }
     }
 </script>
+<div class="d-flex justify-content-center">
+             {% do list.setPageRange(2) %}
+             {{ knp_pagination_render(list, 'pagination.html.twig') }}
+         </div>
 {% endblock %}

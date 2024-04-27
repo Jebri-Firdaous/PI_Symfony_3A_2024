@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\Persistence\ManagerRegistry;
  use App\Repository\billetRepository;
+ use Knp\Component\Pager\PaginatorInterface;
  use App\Repository\StationRepository;
 
 class AcceuilController extends AbstractController
@@ -32,7 +33,7 @@ class AcceuilController extends AbstractController
     }
     
     #[Route('/transport', name: 'app_transport')]
-    public function reserver(Request $req,ManagerRegistry $Manager,billetRepository $repo): Response
+    public function reserver(Request $req,ManagerRegistry $Manager,billetRepository $repo,PaginatorInterface $paginator): Response
     {   $em=$Manager->getManager();
         $list=$repo->findAll();
         $billet=new billet();
@@ -49,8 +50,13 @@ class AcceuilController extends AbstractController
         
         else {
             $list = $repo->findAll();
+            $list = $paginator->paginate(
+                $list, /* query NOT result */
+                $req->query->getInt('page', 1),
+                3
+            );
         return $this->render('home/transport.html.twig', [
-            'f'=>$form->createView(),
+           
             'list' => $list
         ]);
     }}

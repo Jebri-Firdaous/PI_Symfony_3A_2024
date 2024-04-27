@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\Station;
 use App\Form\StationType;
+use Knp\Component\Pager\PaginatorInterface;
 use App\Repository\billetRepository;
 use App\Form\BilletbackType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
@@ -31,10 +32,14 @@ class BackAcceuilController extends AbstractController
     }
 
     #[Route('/transportback', name: 'transport_back')]
-    public function indexxx(Request $req,ManagerRegistry $Manager,StationRepository $repo): Response
+    public function indexxx(Request $req,ManagerRegistry $Manager,StationRepository $repo,PaginatorInterface $paginator): Response
     {  $entityManager = $Manager->getManager();
         $list = $repo->findAll();
-        
+        $list = $paginator->paginate(
+            $list, /* query NOT result */
+            $req->query->getInt('page', 1),
+            3
+        );
         $station = new Station();
         $form = $this->createForm(StationType::class, $station);
         $form->handleRequest($req);
@@ -127,29 +132,37 @@ class BackAcceuilController extends AbstractController
         // Redirect to the desired route after successful deletion
         return $this->redirectToRoute('transport_back');
     }
-#[Route('/billetback', name: 'app_billet')]
-public function ajouterbillet(Request $req,ManagerRegistry $Manager,billetRepository $repo): Response
-{   $em=$Manager->getManager();
-    $list=$repo->findAll();
-    $billet=new billet();
-    $form=$this->createForm(BilletbackType::class,$billet);
-    $form->handleRequest($req);
-  
-    if ($form ->isSubmitted() && $form ->isValid())
+    #[Route('/billetback', name: 'app_billet')]
+    public function ajouterbillet(Request $req, ManagerRegistry $Manager, billetRepository $repo, PaginatorInterface $paginator): Response
     {
-    $em->persist($billet);
-    $em->flush();
-  
-    return $this->redirectToRoute('app_billet');
+        $em = $Manager->getManager();
+        $billet = new billet();
+        $form = $this->createForm(BilletbackType::class, $billet);
+        $form->handleRequest($req);
+    
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($billet);
+            $em->flush();
+    
+            return $this->redirectToRoute('app_billet');
+        }
+    
+        // Récupérer les billets non paginés
+        $nonPaginatedList = $repo->findAll();
+    
+        // Paginer les résultats
+        $paginatedList = $paginator->paginate(
+            $nonPaginatedList, /* query NOT result */
+            $req->query->getInt('page', 1),
+            4
+        );
+    
+        return $this->render('back/billetback.html.twig', [
+            'f' => $form->createView(),
+            'list' => $paginatedList // Utiliser la variable paginée ici
+        ]);
     }
     
-    else {
-        $list = $repo->findAll();
-    return $this->render('back/billetback.html.twig', [
-        'f'=>$form->createView(),
-        'list' => $list
-    ]);
-}}
 #[Route('/EditBilletback/{id}', name: 'edit_billetBack')] 
 public function editBillet (Request $req,ManagerRegistry $Manager,billetRepository $repo,$id)
 :Response {

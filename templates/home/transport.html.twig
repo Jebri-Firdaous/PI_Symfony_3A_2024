@@ -75,6 +75,7 @@
       {% endfor %}
     </div>
   </div>
+  
 </section>
 
 <ul id="listeBilletsReservesUl">
@@ -98,6 +99,10 @@
         </tbody>
     </table>
 </ul>
+<div class="d-flex justify-content-center">
+             {% do list.setPageRange(2) %}
+             {{ knp_pagination_render(list, 'pagination.html.twig') }}
+         </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 $(document).ready(function() {
@@ -200,9 +205,6 @@ $(document).on('click', '.btn-annuler-reservation', function() {
 
 });
 </script>
-
-
-
 
 
 {% endblock %}

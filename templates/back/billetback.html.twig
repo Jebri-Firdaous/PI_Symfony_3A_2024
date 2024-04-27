@@ -122,10 +122,32 @@
         </tbody>
     </table>
 </div>
-<a href="{{ path('appliquer_promo') }}" class="btn btn-danger">
+<a href="{{ path('appliquer_promo') }}" id="promoButton" class="btn btn-danger">
     <i class="bi bi-clock"></i> <!-- Icône -->
     Appliquer Promo 50%
 </a>
+
+
+
+<script>
+    var promoApplied = false;
+    function togglePromotion50() {
+        console.log("fff");
+        if (!promoApplied) {
+            var priceElements = document.querySelectorAll(".price");
+
+            priceElements.forEach(function(priceElement) {
+                var price = parseFloat(priceElement.textContent);
+                priceElement.textContent = (price * 0.5).toFixed(2);
+            });
+
+            document.getElementById("promoButton").disabled = true;
+            promoApplied = true;
+        } else {
+            alert('La promotion a déjà été appliquée une fois.');
+        }
+    }
+</script>
 
 
  <script>
@@ -181,52 +203,14 @@
         }
     }
 </script>
-<script>
-   function togglePromotion50() {
-        var priceElements = document.querySelectorAll(".price"); // Sélectionne tous les éléments de prix
 
-        priceElements.forEach(function(priceElement) { // Itère sur chaque élément de prix
-            var price = parseFloat(priceElement.textContent);
 
-            // Appliquer la promotion de 50% à tous les prix
-            priceElement.textContent = (price * 0.5).toFixed(2);
-        });
-    }
 
-    function togglePromotion20() {
-        var priceElements = document.querySelectorAll(".price"); // Sélectionne tous les éléments de prix
 
-        priceElements.forEach(function(priceElement) { // Itère sur chaque élément de prix
-            var price = parseFloat(priceElement.textContent);
 
-            // Appliquer la promotion de 20% à tous les prix
-            priceElement.textContent = (price * 0.8).toFixed(2);
-        });
-    }
-
-    function togglePromotion(element) {
-        var selectedValue = element.value;
-        if (selectedValue === "50") {
-            togglePromotion50();
-        } else if (selectedValue === "20") {
-            togglePromotion20();
-        }
-        // Ajoutez des conditions pour d'autres valeurs au besoin
-    }
-</script>
-
-<script>
-    function togglePromotion(element) {
-        var selectedValue = element.value;
-        if (selectedValue === "50") {
-            togglePromotion50(element);
-        } else if (selectedValue === "20") {
-            togglePromotion20(element);
-        }
-        // Ajoutez des conditions pour d'autres valeurs au besoin
-    }
-</script>
-
+<div class="d-flex justify-content-center">
+    {{ knp_pagination_render(list, 'pagination.html.twig') }}
+</div>
 
 
 {% endblock %}
