@@ -56,5 +56,11 @@
      <a href="{{ path('app_medecin_add') }}" class="btn btn-sm btn-primary">
     <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Ajouter Medecin'|trans }}
         </a>
+    {# pagination----------------------------------- #}
+    <div class="container py-5">
+  <div class="d-flex justify-content-center">
+    {{ knp_pagination_render(doctors) }}
 
+    </div>
+</div>
 {% endblock %}

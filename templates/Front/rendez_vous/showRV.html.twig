@@ -2,6 +2,7 @@
 {# templates/task/new.html.twig #}
 
 {% block body %}
+
       <h1 style="margin-left: 39px; margin-top: 10px;">{{ 'Mes RendezVous'|trans }}</h1>
 
   <style>
@@ -59,4 +60,11 @@
     <a style="margin-left: 39px; margin-top: 10px;" href="{{ path('front_rendezVous_add') }}" class="btn btn-sm btn-primary">
              <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Ajouter Rendez Vous'|trans }}
     </a>
+
+     <div class="container py-5">
+  <div class="d-flex justify-content-center">
+    {{ knp_pagination_render(lesRVdeClient) }}
+
+    </div>
+    </div>
 {% endblock %}

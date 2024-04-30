@@ -19,6 +19,10 @@ use App\Repository\RendezVousRepository;
 use App\Service\SmsGenerator;
 use Symfony\Component\Notifier\Message\SmsMessage;
 use Symfony\Component\Notifier\TexterInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
+use Knp\Component\Pager\PaginatorInterface;
+
 
 class RendezVousController extends AbstractController
 {
@@ -88,7 +92,8 @@ class RendezVousController extends AbstractController
     }
     #[Route('/addRendezVousFront', name: 'front_rendezVous_add')]
     public function addRendezVous(Request $request, ManagerRegistry $doctrine, 
-    ClientRepository $clientRepository, MedecinRepository $medecinRepository, SmsGenerator $smsGenerator): Response
+    ClientRepository $clientRepository, MedecinRepository $medecinRepository, SmsGenerator $smsGenerator,
+    MailerInterface $mailer): Response
     {
         $entityManager = $doctrine->getManager();
         // creates a doctor object and initializes some data for this example
@@ -122,8 +127,21 @@ class RendezVousController extends AbstractController
             $stringDate = $dateRendezVous->format('d/m/Y'); // for example
             $body = "tu auras un rendez-vous le  ". $stringDate;
             $smsGenerator->SendSms("+4915510686794",$medecinNom, $body);
+            // Mailing -------------------
+            
+
+
             return $this->redirectToRoute('front_rendezVous_getAll');
         }
+
+        // Send email
+        $email = (new Email())
+        ->from('testpi3a8@outlook.com') // Replace with your email
+        ->to('benzbibaezzdine@gmail.com') // Assuming getClient() returns the email
+        ->subject('Reservation Confirmation')
+        ->text('Your reservation has been confirmed.');
+
+        $mailer->send($email);
 
         return $this->render('Front/rendez_vous/addRendezVous.html.twig', [
             'controller_name' => 'RendezVousController',
@@ -132,13 +150,17 @@ class RendezVousController extends AbstractController
         ]);
     }
     #[Route('/Rvbyclient', name: 'front_rendezVous_getAll')]
-    public function showAllRendezVousBySession(RendezVousRepository $rendezVousRepository,MedecinRepository $medecinRepository ,ClientRepository $clientRepository): Response
+    public function showAllRendezVousBySession(RendezVousRepository $rendezVousRepository,
+    MedecinRepository $medecinRepository ,ClientRepository $clientRepository,
+    Request $request, PaginatorInterface $paginator): Response
     {
         $client = $clientRepository->find(55);
-        dump($client);
-        $lesRendezVousByClient =  $client->getLesRendezVous();
-        dump($lesRendezVousByClient);
-
+        $query =  $client->getLesRendezVous();
+        $lesRendezVousByClient = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1), // Current page number
+            4 // Items per page
+        );
         return $this->render('Front/rendez_vous/showRV.html.twig', [
             'controller_name' => 'RendezVousController',
             'lesRVdeClient' => $lesRendezVousByClient,
@@ -189,11 +211,11 @@ class RendezVousController extends AbstractController
 
     
     #[Route('/allRVExist', name: 'back_rendezVous_getAll')]
-    public function showAllRendezVousForAdmin(RendezVousRepository $rendezVousRepository,MedecinRepository $medecinRepository ,ClientRepository $clientRepository): Response
+    public function showAllRendezVousForAdmin(RendezVousRepository $rendezVousRepository,
+    MedecinRepository $medecinRepository ,ClientRepository $clientRepository,
+    Request $request, PaginatorInterface $paginator): Response
     {
         $allRVInDB = $rendezVousRepository->findAll();
-        dump($allRVInDB);
-
         return $this->render('Back/rendezVous/showAllRvInOtherForm.html.twig', [
             'controller_name' => 'RendezVousController',
             'lesRVdeClient' => $allRVInDB,
