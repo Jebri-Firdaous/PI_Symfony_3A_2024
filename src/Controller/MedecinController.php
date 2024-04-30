@@ -54,6 +54,63 @@ class MedecinController extends AbstractController
         ]);
              
     }
+    #[Route('/medecin/search', name: 'app_medecins_search')]
+    public function search(Request $request, MedecinRepository $medecinRepository, PaginatorInterface $paginator): Response
+    {
+        $query = $request->query->get('query');
+        if ($query) {
+            $medecins = $medecinRepository->createQueryBuilder('a')
+                ->where('a.nomMedecin LIKE :query')
+                ->setParameter('query', '%' . $query . '%')
+                ->getQuery();
+
+
+            $doctors = $paginator->paginate(
+                $medecins, 
+                $request->query->getInt('page', 1), 
+                10 
+            );
+        } else {
+
+            $query = $medecinRepository->findAll(); // Assuming you have a custom query method in your repository
+            $doctors = $paginator->paginate(
+                $query,
+            $request->query->getInt('page', 1), // Current page number
+            4 // Items per page
+        );
+        }
+
+        return $this->render('Back/medecin/showDoctors.html.twig', [
+            'doctors' => $doctors,
+        ]);
+    }
+    #[Route('/medecin/tri', name: 'app_medecins_tri')]
+    public function tri(Request $request, MedecinRepository $medecinRepository , PaginatorInterface $paginator): Response
+    {
+        $order = $request->query->get('order', 'asc'); 
+        $field = $request->query->get('field', 'nomMedecin'); 
+
+        if (!in_array(strtolower($order), ['asc', 'desc'])) {
+            $order = 'asc'; 
+        }
+
+        if (!in_array($field, ['nomMedecin', 'date'])) {
+            $field = 'nomMedecin'; 
+        }
+
+        $queryBuilder = $medecinRepository->createQueryBuilder('a')
+            ->orderBy('a.' . $field, $order);
+
+        $doctors = $paginator->paginate(
+            $queryBuilder->getQuery(),
+            $request->query->getInt('page', 1),
+            10 
+        );
+        return $this->render('Back/medecin/showDoctors.html.twig', [
+            'doctors' => $doctors,
+
+        ]);
+    }
 
     #[Route('/doctorList', name: 'app_medecin_getAll')]
     public function showDoctors(MedecinRepository $medecinRepository, Request $request, PaginatorInterface $paginator): Response

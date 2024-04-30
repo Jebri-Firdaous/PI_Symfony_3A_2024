@@ -22,6 +22,8 @@ use Symfony\Component\Notifier\TexterInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Knp\Component\Pager\PaginatorInterface;
+use DateTime;
+
 
 
 class RendezVousController extends AbstractController
@@ -223,7 +225,8 @@ class RendezVousController extends AbstractController
     }
     #[Route('/addRendezVousBack', name: 'back_rendezVous_add')]
     public function addRendezVousBack(Request $request, ManagerRegistry $doctrine, ClientRepository $clientRepository, 
-                                        MedecinRepository $medecinRepository, SmsGenerator $smsGenerator): Response
+                                        MedecinRepository $medecinRepository, SmsGenerator $smsGenerator, 
+                                        RendezVousRepository $rendezVousRepository): Response
     {
         $entityManager = $doctrine->getManager();
         // creates a doctor object and initializes some data for this example
@@ -235,12 +238,29 @@ class RendezVousController extends AbstractController
         // $client = $clientRepository->find($personne);
         // dump($client);
         // $rendezVous->setIdPersonne($client);
-
-        
+        $events = $rendezVousRepository->findAll();
+        // dd($events);
         // $rendezVous->setIdPersonne($client);
         $entityManager->persist($rendezVous);
         $form = $this->createForm(RendezVousBackType::class, $rendezVous, ['medecinRepository' => $medecinRepository], ['clientRepository' => $clientRepository],['entityManager' => $entityManager]);
         $form->handleRequest($request);
+        $rdvs = [
+        ];
+
+        foreach($events as $event){
+            
+            
+            $rdvs[] = [
+                'id' => $event->getRefRendezVous(),
+                'title' => "Dr ".$event->getIdMedecin()->getNomMedecin(),
+                'start' => $event->getDateRendezVous()->format('Y-m-d H:i:s'),
+                'end' => date_modify($event->getDateRendezVous(),"30 minutes")->format('Y-m-d H:i:s'),
+                'id_personne' => $event->getClient()->getPersonne()->getNomPersonne(),
+
+            ];
+        }
+
+        $data = json_encode($rdvs);
         if ($form->isSubmitted() && $form->isValid())
         {
             // $form->get('id_personne')->setData(34); // Set id_personne to 34
@@ -269,6 +289,7 @@ class RendezVousController extends AbstractController
         return $this->render('Back/rendezVous/addRendezVousBack.html.twig', [
             'controller_name' => 'RendezVousController',
             'form' => $form->createView(),
+            'data' => $data
 
         ]);
     }
@@ -294,6 +315,66 @@ class RendezVousController extends AbstractController
 
       
     }
+    #[Route('/rendezvous/search', name: 'app_rv_search')]
+    public function search(Request $request, RendezVousRepository $rendezVousRepository, PaginatorInterface $paginator): Response
+    {
+        $query = $request->query->get('query');
+        if ($query) {
+            $listrendezVous = $rendezVousRepository->createQueryBuilder('r')
+                ->join('r.id_medecin', 'm')
+                ->where('m.nomMedecin LIKE :query')
+                ->setParameter('query', '%' . $query . '%')
+                ->getQuery()
+                ->getResult();
+
+
+
+            $lesRVdeClient = $paginator->paginate(
+                $listrendezVous, 
+                $request->query->getInt('page', 1), 
+                10 
+            );
+        } else {
+
+            $query = $rendezVousRepository->findAll(); // Assuming you have a custom query method in your repository
+            $lesRVdeClient = $paginator->paginate(
+                $query,
+            $request->query->getInt('page', 1), // Current page number
+            4 // Items per page
+        );
+        }
+
+        return $this->render('Back/rendezVous/showAllRvInOtherForm.html.twig', [
+            'lesRVdeClient' => $lesRVdeClient,
+        ]);
+    }
+    #[Route('/rv/tri', name: 'app_rv_tri')]
+    public function tri(Request $request, MedecinRepository $medecinRepository , PaginatorInterface $paginator): Response
+    {
+        $order = $request->query->get('order', 'asc'); 
+        $field = $request->query->get('field', 'nomMedecin'); 
+
+        if (!in_array(strtolower($order), ['asc', 'desc'])) {
+            $order = 'asc'; 
+        }
+
+        if (!in_array($field, ['nomMedecin', 'date'])) {
+            $field = 'nomMedecin'; 
+        }
+
+        $queryBuilder = $medecinRepository->createQueryBuilder('a')
+            ->orderBy('a.' . $field, $order);
+
+        $doctors = $paginator->paginate(
+            $queryBuilder->getQuery(),
+            $request->query->getInt('page', 1),
+            10 
+        );
+        return $this->render('Back/medecin/showDoctors.html.twig', [
+            'doctors' => $doctors,
+
+        ]);
+    }
     #[Route('/deleteRVBack/{id}', name: 'back_rendezVous_delete')]
     public function deleteRendezVousfromAdmin(Request $request, ManagerRegistry $doctrine, RendezVousRepository $rendezVousRepository, int $id): Response
     {
@@ -310,5 +391,52 @@ class RendezVousController extends AbstractController
         $entityManager->flush();
 
         return $this->redirectToRoute('back_rendezVous_getAll');
+    }
+    // Calender -------------------------
+      /**
+     * @Route("/api/{id}/edit", name="api_event_edit", methods={"PUT"})
+     */
+    public function majEvent(?RendezVous $rendezVous, Request $request, ManagerRegistry $doctrine)
+    {
+        // On récupère les données
+        $donnees = json_decode($request->getContent());
+
+        // if(
+        //     isset($donnees->title) && !empty($donnees->title) &&
+        //     isset($donnees->start) && !empty($donnees->start) &&
+        //     isset($donnees->description) && !empty($donnees->description) &&
+        //     isset($donnees->backgroundColor) && !empty($donnees->backgroundColor) &&
+        //     isset($donnees->borderColor) && !empty($donnees->borderColor) &&
+        //     isset($donnees->textColor) && !empty($donnees->textColor)
+        // ){
+            // Les données sont complètes
+            // On initialise un code
+            $code = 200;
+
+            // On vérifie si l'id existe
+            if(!$rendezVous){
+                // On instancie un rendez-vous
+                $rendezVous = new RendezVous;
+
+                // On change le code
+                $code = 201;
+            }
+
+            // On hydrate l'objet avec les données
+            $rendezVous->setDateRendezVous(new DateTime($donnees->start));
+
+            $em =  $doctrine->getManager();;
+            $em->persist($rendezVous);
+            $em->flush();
+
+            // On retourne le code
+            return new Response('Ok', $code);
+        // }else{
+        //     // Les données sont incomplètes
+        //     return new Response('Données incomplètes', 404);
+        // }
+
+
+        return $this->redirectToRoute('back_rendezVous_add');
     }
 }
