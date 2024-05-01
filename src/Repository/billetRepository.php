@@ -60,11 +60,12 @@ public function getDestinationsByStation()
 public function getPricesByStation()
 {
     return $this->createQueryBuilder('b')
-        ->select('s.nomStation as nom,s.adressStation as adresse,s.type as type , SUM(b.prix) as totalPrice')
+        ->select('s.nomStation as nom, s.adressStation as adresse, s.type as type, SUM(b.prix) as totalPrice')
         ->leftJoin('b.station', 's')
-        ->groupBy('s.nomStation')
+        ->groupBy('s.nomStation, s.adressStation, s.type') // Regroupement par nom de la station, adresse et type
         ->getQuery()
         ->getResult();
 }
+
     
 }

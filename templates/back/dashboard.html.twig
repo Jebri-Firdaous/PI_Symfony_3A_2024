@@ -563,6 +563,7 @@ function drawChart1() {
             ['{{ item.nom }} - {{ item.adresse }} - {{ item.type }}', {{ item.totalPrice }}],
         {% endfor %}
     ]);
+	  console.log(data1);
 
     var options1 = {
         title: 'Total des prix des billets par station',
@@ -574,13 +575,6 @@ function drawChart1() {
 
     var chart1 = new google.visualization.PieChart(document.getElementById('piechart-container1'));
     chart1.draw(data1, options1);
-
-    // Exemple de mise à jour du piechart
-    // var newData = [
-    //     ['New Label 1', 200],
-    //     ['New Label 2', 300],
-    // ];
-    // updatePieChart(newData);
 }
 </script>
 
@@ -601,7 +595,7 @@ var data2 = google.visualization.arrayToDataTable([
 
 
         var options2 = {
-            title: 'Pourcentage des destinations pour chaque station',
+            title: 'Pourcentage des billets par station',
             is3D: true,
             backgroundColor: 'white',
             titleTextStyle: {color: 'black'},
