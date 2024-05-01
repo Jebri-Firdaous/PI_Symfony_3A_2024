@@ -15,6 +15,8 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 #[Route('/commande/article')]
 class CommandeArticleController extends AbstractController
 {
+
+    
     #[Route('/', name: 'app_commande_article_index', methods: ['GET'])]
     public function index(CommandeArticleRepository $commandeArticleRepository): Response
     {

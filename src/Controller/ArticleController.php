@@ -18,6 +18,20 @@ use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use DateTime; 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use BaconQrCode\Encoder\QrCode;
+use Knp\Component\Pager\PaginatorInterface;
+use Stripe\StripeClient;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
+
+
+use App\Services\QrCodeService;
+use Doctrine\DBAL\Connection;
+use Knp\Snappy\Pdf;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 
 
@@ -26,17 +40,136 @@ use Symfony\Component\Form\FormError;
 #[Route('/article')]
 class ArticleController extends AbstractController
 {
+    private $session;
+   
+ 
+
+    private $qrcodeService;
+    private $paginator;
+
+    public function __construct(QrCodeService $qrcodeService, PaginatorInterface $paginator,private Connection $connection)
+    {
+        $this->qrcodeService = $qrcodeService;
+        $this->paginator = $paginator;
+    }
     
+    
+    #[Route('/search', name: 'app_article_search', methods: ['GET'])]
+
+public function search(Request $request, ArticleRepository $ArticleRepository): JsonResponse
+
+{
+
+    $query = $request->query->get('q');
+
+    $results = $ArticleRepository->findBySearchQuery($query); // Implement findBySearchQuery method in your repository
+
+
+
+
+    $formattedResults = [];
+
+    foreach ($results as $result) {
+
+        // Format results as needed
+
+        $formattedResults[] = [
+
+            'idArticle' => $result->getIdArticle(),
+
+            'nomArticle' => $result->getNomArticle(),
+
+            'prixArticle' => $result->getPrixArticle(),
+
+            'descriptionArticle' => $result->getDescriptionArticle(),
+
+            'typeArticle' => $result->getTypeArticle(),
+
+            // Add other fields as needed
+
+        ];
+
+    }
+
+    return new JsonResponse($formattedResults);
+
+}
+
+   
+
     
     #[Route('/back', name: 'app_article_index_back', methods: ['GET'])]
-public function adminArticles(EntityManagerInterface $entityManager): Response
-{
-    $articles = $entityManager->getRepository(Article::class)->findAll();
+    public function adminArticles(ArticleRepository $articleRepository, Request $request): Response
+    {
+        // Récupérer tous les articles avec une requête de base
+        $articlesQuery = $articleRepository->createQueryBuilder('a')
+            ->getQuery();
 
-    return $this->render('Back/article/index.html.twig', [
-        'articles' => $articles,
+        // Paginer les articles
+        $articles = $this->paginator->paginate(
+            $articlesQuery, // Requête à paginer
+            $request->query->getInt('page', 1), // Numéro de page par défaut
+            2 // Limiter à 2 articles par page
+        );
+
+        $qrCodes = [];
+    foreach ($articles as $article) {
+        // Générer le QR code pour chaque article
+        $qrCodePath = $this->qrcodeService->qrcode($article);
+        $qrCodes[$article->getIdArticle()] = $qrCodePath; // Utilisez l'ID de l'article comme clé du tableau
+    }
+
+        // Récupérer le numéro de page actuel
+        $currentPage = $request->query->getInt('page', 1);
+
+        // Calculer le nombre total de pages en fonction du nombre total d'articles et du nombre par page
+        $totalArticlesCount = $articleRepository->createQueryBuilder('a')->select('COUNT(a.idArticle)')->getQuery()->getSingleScalarResult();
+        $maxPage = ceil($totalArticlesCount / 2); // 2 articles par page
+
+        return $this->render('Back/article/index.html.twig', [
+            'qrCodes' => $qrCodes,
+            'articles' => $articles,
+            'page' => $currentPage, // Ajouter la variable 'page' au contexte
+            'maxPage' => $maxPage, // Ajouter la variable 'maxPage' au contexte
+        ]);
+    }
+
+
+
+#[Route('/payment', name: 'process_payment')]
+public function processPayment(Request $request, StripeClient $stripeClient): Response
+{
+    $paymentMethodId = json_decode($request->getContent(), true)['payment_method_id'];
+    
+    // Récupérer le total depuis la session
+    $total = $this->session->get('total');
+
+    // Vérifier si le total est défini
+    if (!$total) {
+        // Gérer l'erreur, rediriger ou afficher un message
+        // Par exemple, rediriger vers la page du panier avec un message d'erreur
+        return $this->redirectToRoute('cart_index', ['error' => 'Total not found']);
+    }
+
+    // Créer le paiement avec Stripe
+    $paymentIntent = $stripeClient->paymentIntents->create([
+        'amount' => $total * 100, // Montant en cents
+        'currency' => 'eur', // Devise (EUR dans cet exemple)
+        'payment_method' => $paymentMethodId,
+        'confirm' => true,
     ]);
+
+    // Le paiement a réussi, rediriger vers une page de confirmation ou afficher un message de succès
+    return new JsonResponse(['message' => 'Paiement réussi', 'paymentIntentId' => $paymentIntent->id]);
 }
+
+
+#[Route('/paymentsucess', name: 'payment_success')]
+public function paymentSuccess(): Response
+    {
+        return $this->render('Front/article/payement.html.twig');
+    }
+
     #[Route('/article/{id}/add-to-cart', name: 'article_add_to_cart')]
     public function addToCart(Article $article, SessionInterface $session): Response
     {
@@ -59,6 +192,8 @@ public function adminArticles(EntityManagerInterface $entityManager): Response
 
         return $this->redirectToRoute('app_article_index');
     }
+    
+
 
     #[Route('/article/{id}/add-to-cart/back', name: 'article_add_to_cart_back')]
     public function addToCartBack(Article $article, SessionInterface $session): Response
@@ -114,8 +249,8 @@ public function removeFromCartback(Article $article, SessionInterface $session):
 
     #[Route('/cart', name: 'cart_index')]
     public function cart(SessionInterface $session, ArticleRepository $articleRepository): Response
-    {
-        $cart = $session->get('cart', []);
+{
+    $cart = $session->get('cart', []);
     $cartWithData = [];
     $total = 0; // Déclaration de la variable 'total'
 
@@ -134,12 +269,16 @@ public function removeFromCartback(Article $article, SessionInterface $session):
         }
     }
 
-         // Afficher le contenu du panier
+    // Stocker le total dans la session
+    $session->set('total', $total);
+
+    // Afficher le contenu du panier
     return $this->render('Front/article/cart.html.twig', [
         'cart' => $cartWithData,
         'total' => $total, // Passage de la variable 'total' au rendu Twig
     ]);
-    }
+}
+
     #[Route('/cart/back', name: 'cart_index_back')]
     public function cartback(SessionInterface $session, ArticleRepository $articleRepository): Response
     {
@@ -223,6 +362,7 @@ public function removeFromCartback(Article $article, SessionInterface $session):
         // Rediriger vers les informations de la commande
         return $this->redirectToRoute('app_commande_show', ['idCommande' => $commande->getIdCommande()]);
     }
+
     #[Route('/cart/checkout/back', name: 'cart_checkout_back')]
     public function checkout_back(SessionInterface $session, EntityManagerInterface $entityManager, ArticleRepository $articleRepository, FlashBagInterface $flashBag): Response
     {
@@ -394,13 +534,76 @@ public function placeOrderback(SessionInterface $session, EntityManagerInterface
 }
 
 
-    #[Route('/', name: 'app_article_index', methods: ['GET'])]
-    public function index(ArticleRepository $articleRepository): Response
+#[Route('/', name: 'app_article_index', methods: ['GET'])]
+    public function index(ArticleRepository $articleRepository, Request $request, PaginatorInterface $paginator): Response
     {
+        $sortOrder = $request->query->get('sortOrder', 'asc'); // Par défaut, tri croissant
+
+        // Récupérer tous les articles avec une requête de base
+        $articlesQuery = $articleRepository->createQueryBuilder('a')
+            ->orderBy('a.prixArticle', $sortOrder) // Tri par prix
+            ->getQuery();
+
+        // Paginer les articles
+        $articles = $paginator->paginate(
+            $articlesQuery, // Requête à paginer
+            $request->query->getInt('page', 1), // Numéro de page par défaut
+            8 // Limiter à 4 articles par page
+        );
+
+        // Récupérer le numéro de page actuel
+        $currentPage = $request->query->getInt('page', 1);
+
+        // Calculer le nombre total de pages en fonction du nombre total d'articles et du nombre par page
+        $totalArticlesCount = $articleRepository->createQueryBuilder('a')->select('COUNT(a.idArticle)')->getQuery()->getSingleScalarResult();
+        $maxPage = ceil($totalArticlesCount / 4); // 4 articles par page
+
+        // Récupérer les statistiques sur les articles les plus vendus
+        $articlesStats = $this->getArticlesStats(
+
+        );
+
         return $this->render('Front/article/index.html.twig', [
-            'articles' => $articleRepository->findAll(),
+            'articles' => $articles,
+            'page' => $currentPage, // Ajouter la variable 'page' au contexte
+            'maxPage' => $maxPage, // Ajouter la variable 'maxPage' au contexte
+            'articlesStats' => $articlesStats, // Ajouter les statistiques des articles les plus vendus
         ]);
     }
+
+    private function getArticlesStats(): array
+{
+    $query = "
+        SELECT 
+            a.id_article,
+            a.nom_article,
+            a.photo_article,
+            a.prix_article,
+            a.type_article,
+            a.description_article,
+            COUNT(ca.id_article) AS totalVentes
+        FROM 
+            article a
+        JOIN 
+            commande_article ca ON a.id_article = ca.id_article
+        GROUP BY 
+            a.id_article,
+            a.nom_article,
+            a.photo_article,
+            a.prix_article,
+            a.type_article,
+            a.description_article
+        ORDER BY 
+            totalVentes DESC
+        LIMIT 4"; // Limiter aux 5 articles les plus vendus
+
+    $result = $this->connection->executeQuery($query)->fetchAllAssociative();
+    return $result;
+}
+
+
+
+
     #[Route('/backarticle', name: 'app_article_index_back2', methods: ['GET'])]
     public function indexBack(ArticleRepository $articleRepository): Response
     {
@@ -452,14 +655,15 @@ public function new(Request $request): Response
     ]);
 }
 
-
-    #[Route('/{idArticle}', name: 'app_article_show', methods: ['GET'])]
+#[Route('/{idArticle}', name: 'app_article_show', methods: ['GET'])]
     public function show(Article $article): Response
     {
         return $this->render('Front/article/show.html.twig', [
             'article' => $article,
         ]);
     }
+   
+   
     #[Route('/back/{idArticle}', name: 'app_article_show_back', methods: ['GET'])]
     public function showback(Article $article): Response
     {
@@ -522,6 +726,7 @@ public function delete(Request $request, Article $article, EntityManagerInterfac
 
     return $this->redirectToRoute('app_article_index_back', [], Response::HTTP_SEE_OTHER);
 }
+
 
 
 

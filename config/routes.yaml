@@ -1,3 +1,12 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
+process_payment:
+    path: /payment
+    controller: App\Controller\ArticleController::processPayment
+
+app_article_search:
+  path: /search
+  controller: App\Controller\ArticleController::search
+  methods: [GET]
+

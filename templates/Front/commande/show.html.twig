@@ -2,10 +2,18 @@
 
 {% block title %}Commande{% endblock %}
 
+
+
 {% block section %}
+
     <div class="container">
         <div style="border: 3px solid #ccc; padding: 20px; margin-bottom: 20px;">
             <img src="{{ asset('img/logo1.png') }}" alt="Logo" style="max-width: 100px; margin-bottom: 10px;">
+           
+                            <a href="{{ path('download_pdf', {'idCommande': commande.idCommande}) }}" >
+                                <i class="bi bi-file-pdf"></i> Télécharger PDF
+                            </a>
+                       
             <h1 style="font-size: 24px; font-weight: bold;">Commande #{{ commande.idCommande }}</h1>
 
             <div style="margin-bottom: 15px;">

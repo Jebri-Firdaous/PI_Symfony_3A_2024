@@ -11,10 +11,67 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\CommandeArticle;
+use Doctrine\DBAL\Connection;
+use Knp\Snappy\Pdf;
+
+
+
 
 #[Route('/commande')]
 class CommandeController extends AbstractController
 {
+    public function __construct(private Connection $connection) {}
+    #[Route('/stats', name: 'app_commande_stats', methods: ['GET'])]
+    public function stats(): Response
+    {
+        // Récupérer les statistiques sur les commandes
+        $commandesStats = $this->getCommandesStats();
+
+        // Récupérer les statistiques sur les articles les plus vendus
+        $articlesStats = $this->getArticlesStats();
+
+        $topArticleOfWeek = $this->getTopArticleOfWeek();
+
+        return $this->render('Back/commande/stats.html.twig', [
+            'commandesStats' => $commandesStats,
+            'articlesStats' => $articlesStats,
+            'topArticleOfWeek' => $topArticleOfWeek,
+        ]);
+    }
+
+    private function getTopArticleOfWeek(): array
+{
+    // Ajoutez votre logique pour récupérer l'article le plus vendu de la semaine avec le plus grand prix total ici
+    // Par exemple, vous pourriez utiliser une requête SQL pour le faire
+
+    return [
+        'nom_article' => 'Nom de l\'article',
+        'totalVentes' => 10, // Exemple de nombre de ventes
+        'prixTotal' => 500, // Exemple de prix total
+    ];
+}
+    // Méthode pour récupérer les statistiques des commandes
+    private function getCommandesStats(): array
+    {
+        $query = "SELECT COUNT(*) AS totalCommandes FROM commande";
+        $result = $this->connection->executeQuery($query)->fetchAssociative();
+        return $result;
+    }
+
+    private function getArticlesStats(): array
+    {
+        $query = "
+            SELECT a.nom_article, COUNT(ca.id_article) AS totalVentes
+            FROM article a
+            JOIN commande_article ca ON a.id_article = ca.id_article
+            GROUP BY a.nom_article
+            ORDER BY totalVentes DESC
+            LIMIT 5"; // Limiter aux 5 articles les plus vendus
+        $result = $this->connection->executeQuery($query)->fetchAllAssociative();
+        return $result;
+    }
+    
+    
     #[Route('/', name: 'app_commande_index', methods: ['GET'])]
     public function index(CommandeRepository $commandeRepository): Response
     {
@@ -86,6 +143,35 @@ public function show(Commande $commande, EntityManagerInterface $entityManager):
     ]);
 }
 
+#[Route('/download-pdf/{idCommande}', name: 'download_pdf')]
+public function downloadPdf(Commande $commande, EntityManagerInterface $entityManager, Pdf $knpSnappyPdf): Response
+{
+    $articlesParCommande = [];
+    // Récupérer les articles associés à chaque commande
+    $commandeArticles = $entityManager->getRepository(CommandeArticle::class)->findBy(['idCommande' => $commande->getIdCommande()]);
+        $articles = [];
+        foreach ($commandeArticles as $commandeArticle) {
+            $articles[] = $commandeArticle->getIdArticle();
+        }
+        $articlesParCommande[$commande->getIdCommande()] = $articles;
+
+    // Générer le contenu HTML du PDF
+    $invoiceHtml = $this->renderView('Front/commande/pdf_template.html.twig', [
+        'commande' => $commande,
+        'articlesParCommande' => $articlesParCommande,
+    ]);
+
+    // Générer le PDF à partir du contenu HTML
+    $pdf = $knpSnappyPdf->getOutputFromHtml($invoiceHtml);
+
+    // Créer une réponse pour le PDF à télécharger
+    $response = new Response($pdf);
+    $response->headers->set('Content-Type', 'application/pdf');
+    $response->headers->set('Content-Disposition', 'attachment; filename="commande_'.$commande->getIdCommande().'.pdf"');
+
+    return $response;
+}
+
 #[Route('/back/{idCommande}', name: 'app_commande_show_back', methods: ['GET'])]
 public function showback(Commande $commande, EntityManagerInterface $entityManager): Response
 {
@@ -150,5 +236,6 @@ public function delete(Request $request, Commande $commande, EntityManagerInterf
 
     return $this->redirectToRoute('app_commande_index_back', [], Response::HTTP_SEE_OTHER);
 }
+
 
 }

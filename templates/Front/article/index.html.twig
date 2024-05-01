@@ -1,94 +1,219 @@
 {% extends 'Front/base.html.twig' %}
 
-{% block title %}Boutique{% endblock %}
+{% block title %}
+    Boutique
+{% endblock %}
 
 {% block section %}
     <div class="container d-flex justify-content-between align-items-center">
-        <div class="search-icon" id="searchIcon">
-            <i class="fas fa-search" style="color: #333071; font-size: 40px;"></i>
-        </div>
         <div class="attr-nav">
             <a href="{{ path('cart_index') }}">
-                 <i class="bi bi-cart4" style="color: #333071; font-size: 45px;"> </i>
+                <i class="bi bi-cart4" style="color: #333071; font-size: 45px;"></i>
             </a>
         </div>
+       
     </div>
 
     <!-- Section d'accueil -->
-    
-          <img src="{{ asset('img/article2.png') }}" alt="" data-aos="fade-in" style="width: 100%; max-width: 100%;">
-    
- 
+    <img src="{{ asset('img/article2.png') }}" alt="" data-aos="fade-in" style="width: 100%; max-width: 100%;">
 
-    <div class="row mt-4">
-        
-        <hr style="border-top: 5px solid #333071; width: 100%;">
-        <h2 class="text-center mb-4">Découvrez nos articles uniques</h2>
-       <hr style="border-top: 5px solid #333071; width: 100%;">
     
-
-    </div>
 
     <div class="container">
-    <div class="row">
-        {% for article in articles %}
-            <div class="col-md-3 mb-3">
-                <div class="card article-card border rounded" style="width: 100%; max-width: 400px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); ">
-                    <!-- Image de l'article -->
-                     <img src="{{ asset(article.photoArticle) }}" class="card-img-top article-image" style="width: 200px; height: 200px;">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                        <h4 class="card-title font-weight-bold mb-0">{{ article.nomArticle }}</h4>
-                         <h5 class="card-text mb-0"><span style="color: red; font-weight: bold;">{{ article.prixArticle }} DT</span></h5>
-                          </div>
-                        <p class="card-text mb-2">{{ article.typeArticle }}</p>
-                        <p class="card-text mb-3"><span style="color: grey;">{{ article.descriptionArticle }}</span></p>
-                       
-                        <div class="d-flex justify-content-between align-items-center mt-3">
-                            <div class="btn-group">
-                                <!-- Utilisation d'icônes pour les boutons -->
-                                <a href="{{ path('app_article_show', {'idArticle': article.idArticle}) }}" ><i class="bi bi-eye" style="color: #333071; font-size: 35px;"></i></a>
+        <!-- Formulaire de tri -->
+        <div class="row mb-4 align-items-center">
+            <div class="col-md-6">
+                <form action="{{ path('app_article_index') }}" method="GET" class="form-inline">
+                    <label for="sortOrder" class="mr-2">Trier par :</label>
+                    <div class="input-group">
+                        <select name="sortOrder" id="sortOrder" class="form-control mr-2">
+                            <option value="asc" {% if app.request.query.get('sortOrder') == 'asc' %}selected{% endif %}>Prix croissant</option>
+                            <option value="desc" {% if app.request.query.get('sortOrder') == 'desc' %}selected{% endif %}>Prix décroissant</option>
+                        </select>
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-primary">Trier</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% block top_articles %}
+    <input type="text" id="searchInput" class="form-control mb-3" placeholder="Search...">
+        <div class="container mt-4">
+            <h2 class="text-center mb-4">MEILLEURES VENTES</h2>
+            <div class="row">
+                {% for articleStat in articlesStats %}
+                    <div class="col-md-3 mb-3">
+                        <div class="card article-card border rounded" style="width: 100%; max-width: 400px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);">
+                            <img src="{{ asset(articleStat.photo_article) }}" class="card-img-top article-image" style="width: 200px; height: 200px;">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h4 class="card-title font-weight-bold mb-0">{{ articleStat.nom_article }}</h4>
+                                    <h5 class="card-text mb-0"><span style="color: red; font-weight: bold;">{{ articleStat.prix_article }} DT</span></h5>
+                                </div>
+                                <p class="card-text mb-2">{{ articleStat.type_article }}</p>
+                                <p class="card-text mb-3"><span style="color: grey;">{{ articleStat.description_article }}</span></p>
+                                <p class="card-text">Total ventes: {{ articleStat.totalVentes }}</p>
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <div class="btn-group">
+                                        <a href="{{ path('app_article_show', {'idArticle': articleStat.id_article}) }}"><i class="bi bi-eye" style="color: #333071; font-size: 35px;"></i></a>
+                                    </div>
+                                    <div>
+                                        <a href="{{ path('article_add_to_cart', {'id': articleStat.id_article}) }}"><i class="bi bi-cart4" style="color: #333071; font-size: 35px;"></i></a>
+                                    </div>
+                                </div>
                             </div>
-                            <div>
-                                <!-- Ajout d'une icône pour le bouton "Ajouter au panier" -->
-                                <a href="{{ path('article_add_to_cart', {'id': article.idArticle}) }}"><i class="bi bi-cart4" style="color: #333071; font-size: 35px;"></i></a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endblock %}
+    <div class="row mt-4">
+        
+        <h2 class="text-center mb-4">DECOUVREZ NOS ARTICLES UNIQUES</h2>
+        
+    </div>
+    <div class="container">
+        <div class="row">
+            {% for article in articles %}
+                <div class="col-md-3 mb-3">
+                    <div class="card article-card border rounded" style="width: 100%; max-width: 400px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);">
+                        <img src="{{ asset(article.photoArticle) }}" class="card-img-top article-image" style="width: 200px; height: 200px;">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h4 class="card-title font-weight-bold mb-0">{{ article.nomArticle }}</h4>
+                                <h5 class="card-text mb-0"><span style="color: red; font-weight: bold;">{{ article.prixArticle }} DT</span></h5>
+                            </div>
+                            <p class="card-text mb-2">{{ article.typeArticle }}</p>
+                            <p class="card-text mb-3"><span style="color: grey;">{{ article.descriptionArticle }}</span></p>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <div class="btn-group">
+                                    <a href="{{ path('app_article_show', {'idArticle': article.idArticle}) }}"><i class="bi bi-eye" style="color: #333071; font-size: 35px;"></i></a>
+                                </div>
+                                <div>
+                                    <a href="{{ path('article_add_to_cart', {'id': article.idArticle}) }}"><i class="bi bi-cart4" style="color: #333071; font-size: 35px;"></i></a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        {% endfor %}
-    </div>
-</div>
-    <hr style="border-top: 5px solid #333071; width: 100%;">
-     <img src="{{ asset('img/article3.png') }}" alt="" data-aos="fade-in" style="width: 100%; max-width: 100%;">
+            {% endfor %}
+                             <script>
 
-    <!-- Ajouter des points pour faire défiler vers les autres articles -->
-    {% if articles|length > 8 %}
-        <div class="text-center mt-4">
-            <a class="btn btn-link" href="#scrollToMoreArticles">Voir plus d'articles</a>
+           
+
+            function search() {
+
+                var query = document.getElementById('searchInput').value;
+
+                var xhr = new XMLHttpRequest();
+
+                xhr.open('GET', '{{ path('app_article_search') }}?q=' + query, true);
+
+                xhr.onload = function () {
+
+                    if (xhr.status === 200) {
+
+                        var response = JSON.parse(xhr.responseText);
+
+                        updateTable(response);
+
+                    }
+
+                };
+
+                xhr.send();
+
+            }
+
+        
+
+        
+
+            // Function to update the table with search results
+
+            function updateTable(data) {
+
+                var tableBody = document.querySelector('tbody');
+
+                tableBody.innerHTML = ''; // Clear existing table rows
+
+                if (data.length > 0) {
+
+                    data.forEach(function (article) {
+
+                        var row = '<tr>';
+
+                        row += '<td>' + article.idArticle + '</td>';
+
+                        row += '<td>' + article.nomArticle + '</td>';
+
+                        row += '<td>' + article.prixArticle + '</td>';
+
+                        row += '<td>' + article.descriptionArticle + '</td>';
+
+                        row += '<td>' + article.typeArticle + '</td>';
+
+                        row += '</tr>';
+
+                        tableBody.innerHTML += row;
+
+                    });
+
+                } else {
+
+                    tableBody.innerHTML = '<tr><td colspan="8" class="text-center">No records found</td></tr>';
+
+                }
+
+            }
+
+        
+
+            // Event listener for the search input
+
+            document.getElementById('searchInput').addEventListener('input', function () {
+
+                search();
+
+            });
+
+        </script>
+
+
+
         </div>
+    </div>
+
+    
+
+    {% if articles|length > 0 %}
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {% if page > 1 %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ path('app_article_index', {'page': page - 1, 'sortOrder': app.request.query.get('sortOrder', 'asc')}) }}">Précédent</a>
+                    </li>
+                {% endif %}
+                {% for i in 1..maxPage %}
+                    <li class="page-item {% if page == i %}active{% endif %}">
+                        <a class="page-link" href="{{ path('app_article_index', {'page': i, 'sortOrder': app.request.query.get('sortOrder', 'asc')}) }}">{{ i }}</a>
+                    </li>
+                {% endfor %}
+                {% if page < maxPage %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ path('app_article_index', {'page': page + 1, 'sortOrder': app.request.query.get('sortOrder', 'asc')}) }}">Suivant</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
     {% endif %}
 
-    <!-- Point de défilement vers les autres articles -->
-    <div id="scrollToMoreArticles"></div>
-
-    <!-- Boucle pour afficher les articles restants -->
-    {% for article in articles[8:] %}
-        <!-- Afficher les articles restants ici -->
-    {% endfor %}
-
+    <hr style="border-top: 5px solid #333071; width: 100%;">
+    <img src="{{ asset('img/article3.png') }}" alt="" data-aos="fade-in" style="width: 100%; max-width: 100%;">
 {% endblock %}
 
-{% block javascripts %}
-    <script>
-        document.getElementById("searchIcon").addEventListener("click", function() {
-            var searchBar = document.getElementById("searchBar");
-            if (searchBar.style.display === "none") {
-                searchBar.style.display = "flex";
-            } else {
-                searchBar.style.display = "none";
-            }
-        });
-    </script>
-{% endblock %}
+

@@ -1,0 +1,275 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Invoice</title>
+
+
+
+
+    <style>
+
+        body {
+
+            font-family: Arial, sans-serif;
+
+        }
+
+
+
+
+        .container {
+
+            max-width: 800px;
+
+            margin: 0 auto;
+
+            padding: 20px;
+
+            border: 1px solid #ddd;
+
+            border-radius: 5px;
+
+            background-color: #fff;
+
+        }
+
+
+
+
+        .invoice-title h2 {
+
+            color: #333;
+
+            font-size: 28px;
+
+            margin-bottom: 10px;
+
+        }
+
+
+
+
+        .invoice-title h3 {
+
+            color: #555;
+
+            font-size: 18px;
+
+            margin-top: 10px;
+
+        }
+
+
+
+
+        address {
+
+            margin-top: 10px;
+
+            font-style: normal;
+
+        }
+
+
+
+
+        .panel-heading {
+
+            background-color: #f5f5f5;
+
+            border-bottom: 1px solid #ddd;
+
+            padding: 10px 15px;
+
+        }
+
+
+
+
+        .table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            margin-bottom: 20px;
+
+        }
+
+
+
+
+        .table th,
+
+        .table td {
+
+            border: 1px solid #ddd;
+
+            padding: 8px;
+
+            text-align: left;
+
+        }
+
+
+
+
+        .table th {
+
+            background-color: #f5f5f5;
+
+        }
+
+
+
+
+        .text-center {
+
+            text-align: center;
+
+        }
+
+
+
+
+        .text-right {
+
+            text-align: right;
+
+        }
+
+
+
+
+        .no-line {
+
+            border: none;
+
+        }
+
+
+
+
+        .thick-line {
+
+            border-top-width: 2px;
+
+        }
+
+
+
+
+        .total-row {
+
+            font-weight: bold;
+
+        }
+
+
+
+
+        .establishment {
+
+            text-align: center;
+
+            margin-bottom: 20px;
+
+        }
+
+
+
+
+        .establishment img {
+
+            max-width: 200px;
+
+            margin-bottom: 10px;
+
+        }
+
+
+
+
+        .signature {
+
+            text-align: center;
+
+            margin-top: 50px;
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="establishment">
+    <img src="{{ absolute_url(asset('img/logo1.png')) }}" alt="Logo E-CITY" data-aos="fade-in">
+    <!-- Ajoutez d'autres informations de votre entreprise ici -->
+</div>
+
+        <div class="invoice-title">
+            <h2>Bon de commande</h2>
+            <h3>Commande #{{ commande.idCommande }}</h3>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-xs-6 text-right">
+                <address>
+                    <strong>Date de livrasoin:</strong><br>
+                    {{ commande.delaisCommande ? commande.delaisCommande|date("d/m/Y") : '' }}<br><br>
+                    <!-- Ajoutez d'autres informations ici -->
+                </address>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Résumé de la commande</h3>
+                <h4 class="card-text" style="margin-bottom: 5px;">Prix totale : {{ commande.prixTotale }}</h4>
+            </div>
+            <div class="panel-body">
+
+                    <h4 style="font-size: 20px; font-weight: bold;">Articles dans la commande :</h4>
+            <div class="row">
+                <div class="col-md-12 mb-4">
+                    {% for article in articlesParCommande[commande.idCommande] %}
+                        <div class="col-md-4 mb-4">
+                            <div class="card" style="border: 3px solid #ccc;  border-radius: 0px;">
+                                <div class="row no-gutters">
+                                    <div class="col-md-8">
+                                        <div class="card-body">
+                                        <div class="col-md-4">
+                                        <img src="{{ absolute_url(asset(article.photoArticle)) }}" class="card-img-top article-image" style="width: 150px; height: 150px;">
+                                    </div>
+                                            <h3 class="card-title" style="font-size: 18px; font-weight: bold; margin-bottom: 10px;">Nom d'article : {{ article.nomArticle }}</h3>
+                                            <h4 class="card-text" style="margin-bottom: 5px;">Prix : {{ article.prixArticle }}</h4>
+                                            <h4 class="card-text" style="margin-bottom: 5px;">Type : {{ article.typeArticle }}</h4>
+                                            <h4 class="card-text">Description : {{ article.descriptionArticle }}</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+                </table>
+            </div>
+        </div>
+        <div class="signature">
+            <hr>
+            <p>Signature autorisée : E-City CodeMasters </p>
+        </div>
+    </div>
+</body>
+    </html>
+
+</html>
+
