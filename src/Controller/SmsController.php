@@ -13,12 +13,11 @@ class SmsController extends AbstractController
     public function sendSms(Request $request): Response
     {
         $sid = "ACb7cb10abe726458f2e65c021dede9aa6";
-        $token = "afa4deab04f4fc209cb48a92ae278082";
+        $token = "78ef408c1817ef773effeb57be2ee26f";
         $destination = $request->query->get('destination');
     $dateDepart = $request->query->get('dateDepart');
     $prix = $request->query->get('prix');
     $duree = $request->query->get('duree');
-
 
         $messageContent = "Bonjour, nous vous confirmons la réservation de votre billet :\nDestination: $destination\nDate de départ: $dateDepart\nPrix: $prix\nDurée: $duree";
 

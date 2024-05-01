@@ -30,6 +30,11 @@
     </div><!-- End Page Title -->
 
 
+<div style="margin-top: 50px;"> <!-- Ajustez la marge supérieure selon vos besoins -->
+  <i class="bi bi-search-heart bi-lg"style="margin-left: 30px;"></i>
+  <input type="text" id="search" oninput="search()" placeholder=" destination/station..." style="margin-left: 30px;"> <!-- Ajoutez une marge à gauche -->
+</div>
+
    <!-- Courses List Section -->
 <section id="courses-list" class="section courses-list">
   <div class="container">
@@ -103,6 +108,7 @@
              {% do list.setPageRange(2) %}
              {{ knp_pagination_render(list, 'pagination.html.twig') }}
          </div>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 $(document).ready(function() {
@@ -205,6 +211,25 @@ $(document).on('click', '.btn-annuler-reservation', function() {
 
 });
 </script>
+ 
 
+   		<script src="{{ asset('https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js') }}"></script>
+      	<script>
+$(document).ready(function () {
+    $("#search").on("input", function () {
+        var value = $(this).val().toLowerCase().trim();
+        $(".course-item").each(function () {
+            var destination = $(this).find('.dest.price').text().toLowerCase().trim();
+            if (destination.includes(value)) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    });
+});
+
+
+</script>
 
 {% endblock %}

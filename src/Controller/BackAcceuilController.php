@@ -75,15 +75,12 @@ class BackAcceuilController extends AbstractController
             $data2[] = [$destination['adresse'], $pourcentage];
         }
         
-        
-    
         // Retourner la réponse avec toutes les données nécessaires
         return $this->render('back/dashboard.html.twig', [
             'data1' => $data1,
             'data2' => $data2
         ]);
     }
-    
     
     
     
