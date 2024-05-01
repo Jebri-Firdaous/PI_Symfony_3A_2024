@@ -23,7 +23,8 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Knp\Component\Pager\PaginatorInterface;
 use DateTime;
-
+use Symfony\Component\Mime\Part\DataPart;
+use Symfony\Component\Mime\Part\File;
 
 
 class RendezVousController extends AbstractController
@@ -92,6 +93,9 @@ class RendezVousController extends AbstractController
             // .' and new personne with id: '.$personne->getId()
         );
     }
+
+
+
     #[Route('/addRendezVousFront', name: 'front_rendezVous_add')]
     public function addRendezVous(Request $request, ManagerRegistry $doctrine, 
     ClientRepository $clientRepository, MedecinRepository $medecinRepository, SmsGenerator $smsGenerator,
@@ -105,6 +109,24 @@ class RendezVousController extends AbstractController
         $client = $clientRepository->find($personne);
         dump($client);
         $rendezVous->setIdPersonne($client);
+        $events = $client->getLesRendezVous();
+        $rdvs = [
+        ];
+
+        foreach($events as $event){
+            
+            
+            $rdvs[] = [
+                'id' => $event->getRefRendezVous(),
+                'title' => "Dr ".$event->getIdMedecin()->getNomMedecin(),
+                'start' => $event->getDateRendezVous()->format('Y-m-d H:i:s'),
+                'end' => date_modify($event->getDateRendezVous(),"30 minutes")->format('Y-m-d H:i:s'),
+                'id_personne' => $event->getClient()->getPersonne()->getNomPersonne(),
+
+            ];
+        }
+
+        $data = json_encode($rdvs);
 
         
         // $rendezVous->setIdPersonne($client);
@@ -129,28 +151,49 @@ class RendezVousController extends AbstractController
             $stringDate = $dateRendezVous->format('d/m/Y'); // for example
             $body = "tu auras un rendez-vous le  ". $stringDate;
             $smsGenerator->SendSms("+4915510686794",$medecinNom, $body);
+
             // Mailing -------------------
-            
+           
+            // Define variables
+            $clientName = $client->getPersonne()->getNomPersonne();
+            $doctorName = $rendezVous->getIdMedecin()->getNomMedecin();
+
+            // HTML content with variables
+            $htmlContent = '<html>
+                    <body>
+                        <p>Bonjour Mr/Mme ' . $clientName . '!<br>
+                        Votre réservation a été confirmée avec Dr. ' . $doctorName . '
+                        <br>
+                        <a href="http://127.0.0.1:8000/Rvbyclient/"> Vous pouvez trouver tous vos rendez-vous ici </a>
+                        </p>
+                       
+                        
+                    </body> 
+                </html>';
+
+            // Create email
+            $email = (new Email())
+            ->from('testpi3a8@outlook.com')
+            ->to('benzbibaezzdine@gmail.com')
+            ->subject('Confirmation de réservation .')
+            ->html($htmlContent)
+            ->embed(fopen('img/logoe_city.png', 'r'), 'logo', 'image/png');
+            $mailer->send($email);
 
 
             return $this->redirectToRoute('front_rendezVous_getAll');
         }
 
-        // Send email
-        $email = (new Email())
-        ->from('testpi3a8@outlook.com') // Replace with your email
-        ->to('benzbibaezzdine@gmail.com') // Assuming getClient() returns the email
-        ->subject('Reservation Confirmation')
-        ->text('Your reservation has been confirmed.');
-
-        $mailer->send($email);
+        
 
         return $this->render('Front/rendez_vous/addRendezVous.html.twig', [
             'controller_name' => 'RendezVousController',
             'form' => $form->createView(),
+            'data' => $data,
 
         ]);
     }
+
     #[Route('/Rvbyclient', name: 'front_rendezVous_getAll')]
     public function showAllRendezVousBySession(RendezVousRepository $rendezVousRepository,
     MedecinRepository $medecinRepository ,ClientRepository $clientRepository,
@@ -188,7 +231,8 @@ class RendezVousController extends AbstractController
 
 
     #[Route('/editRVFront/{id}', name: 'front_rendezVous_edit')]
-    public function editRendezVousbyclient(Request $request, ManagerRegistry $doctrine, RendezVous $rendezVous ,RendezVousRepository $rendezVousRepository, int $id): Response
+    public function editRendezVousbyclient(Request $request, ManagerRegistry $doctrine, RendezVous $rendezVous ,
+    SmsGenerator $smsGenerator, MailerInterface $mailer): Response
     {
         $form = $this->createForm(RendezVousType::class, $rendezVous);
         $form->handleRequest($request);
@@ -198,6 +242,33 @@ class RendezVousController extends AbstractController
             // Doctrine is already "watching" your object for changes.
             $entityManager->flush();
             $this->addFlash('success', 'post.updated_successfully');
+             // Define variables
+             $clientName = $rendezVous->getClient()->getPersonne()->getNomPersonne();
+             $doctorName = $rendezVous->getIdMedecin()->getNomMedecin();
+             $dateRendezVous = $rendezVous->getDateRendezVous();
+             $stringDate = $dateRendezVous->format('d/m/Y'); // for example
+            $body = "tu auras un rendez-vous le  ". $stringDate;
+            $smsGenerator->SendSms("+4915510686794",$doctorName, $body);
+ 
+             // HTML content with variables
+             $htmlContent = '<html>
+                     <body>
+                         <p>Bonjour Mr/Mme ' . $clientName . '!<br>
+                         Votre réservation a été confirmée avec Dr. ' . $doctorName . '
+                         <br>
+                         <a href="http://127.0.0.1:8000/Rvbyclient/"> Vous pouvez trouver tous vos rendez-vous ici </a>
+                         </p> 
+                     </body> 
+                 </html>';
+ 
+             // Create email
+             $email = (new Email())
+             ->from('testpi3a8@outlook.com')
+             ->to('benzbibaezzdine@gmail.com')
+             ->subject('Confirmation de modification de réservation .')
+             ->html($htmlContent)
+             ->embed(fopen('img/logoe_city.png', 'r'), 'logo', 'image/png');
+             $mailer->send($email);
 
             return $this->redirectToRoute('front_rendezVous_getAll');
         }
@@ -226,7 +297,7 @@ class RendezVousController extends AbstractController
     #[Route('/addRendezVousBack', name: 'back_rendezVous_add')]
     public function addRendezVousBack(Request $request, ManagerRegistry $doctrine, ClientRepository $clientRepository, 
                                         MedecinRepository $medecinRepository, SmsGenerator $smsGenerator, 
-                                        RendezVousRepository $rendezVousRepository): Response
+                                        RendezVousRepository $rendezVousRepository, MailerInterface $mailer): Response
     {
         $entityManager = $doctrine->getManager();
         // creates a doctor object and initializes some data for this example
@@ -279,6 +350,33 @@ class RendezVousController extends AbstractController
             $stringDate = $dateRendezVous->format('d/m/Y'); // for example
             $body = "tu auras un rendez-vous le  ". $stringDate;
             $smsGenerator->SendSms("+4915510686794",$medecinNom, $body);
+            // mailing 
+            
+            // Define variables
+            $clientName = $rendezVous->getClient()->getPersonne()->getNomPersonne();
+            $doctorName = $rendezVous->getIdMedecin()->getNomMedecin();
+
+            // HTML content with variables
+            $htmlContent = '<html>
+                    <body>
+                        <p>Bonjour Mr/Mme ' . $clientName . '!<br>
+                        Votre réservation a été confirmée avec Dr. ' . $doctorName . '
+                        <br>
+                        <a href="http://127.0.0.1:8000/Rvbyclient/"> Vous pouvez trouver tous vos rendez-vous ici </a>
+                        </p>
+                       
+                        
+                    </body> 
+                </html>';
+
+            // Create email
+            $email = (new Email())
+            ->from('testpi3a8@outlook.com')
+            ->to('benzbibaezzdine@gmail.com')
+            ->subject('Confirmation de réservation .')
+            ->html($htmlContent)
+            ->embed(fopen('img/logoe_city.png', 'r'), 'logo', 'image/png');
+            $mailer->send($email);
             return $this->redirectToRoute('back_rendezVous_getAll');
         }
         // if ($form->isSubmitted() && !$form->isValid()) {
@@ -293,17 +391,50 @@ class RendezVousController extends AbstractController
 
         ]);
     }
+
+
     #[Route('/editRVBack/{id}', name: 'back_rendezVous_edit')]
-    public function editRendezVousBack(Request $request, ManagerRegistry $doctrine, RendezVous $rendezVous ,RendezVousRepository $rendezVousRepository, int $id): Response
+    public function editRendezVousBack(Request $request, ManagerRegistry $doctrine, RendezVous $rendezVous ,
+    SmsGenerator $smsGenerator, MailerInterface $mailer): Response
     {
         $form = $this->createForm(RendezVousBackType::class, $rendezVous);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $doctrine->getManager();
             // $entityManager->persist($product), but it isn't necessary: 
             // Doctrine is already "watching" your object for changes.
             $entityManager->flush();
             $this->addFlash('success', 'post.updated_successfully');
+            // Define variables
+            $clientName = $rendezVous->getClient()->getPersonne()->getNomPersonne();
+            $doctorName = $rendezVous->getIdMedecin()->getNomMedecin();
+
+            $dateRendezVous = $rendezVous->getDateRendezVous();
+
+            $stringDate = $dateRendezVous->format('d/m/Y'); // for example
+            $body = "tu auras un rendez-vous le  ". $stringDate;
+            $smsGenerator->SendSms("+4915510686794",$doctorName, $body);
+
+            // HTML content with variables
+            $htmlContent = '<html>
+                    <body>
+                        <p>Bonjour Mr/Mme ' . $clientName . '!<br>
+                        Votre réservation a été modifiée avec Dr. ' . $doctorName . '
+                        <br>
+                        <a href="http://127.0.0.1:8000/Rvbyclient/"> Vous pouvez trouver tous vos rendez-vous ici </a>
+                        </p>
+                    </body> 
+                </html>';
+
+            // Create email
+            $email = (new Email())
+            ->from('testpi3a8@outlook.com')
+            ->to('benzbibaezzdine@gmail.com')
+            ->subject('Confirmation de modification de réservation .')
+            ->html($htmlContent)
+            ->embed(fopen('img/logoe_city.png', 'r'), 'logo', 'image/png');
+            $mailer->send($email);
 
             return $this->redirectToRoute('back_rendezVous_getAll');
         }
