@@ -11,68 +11,120 @@
             max-width: 800px; /* Largeur maximale du calendrier */
             margin: 0 auto; /* Centrage horizontal */
         }
+        
+
     </style>
 {% endblock %}
 
 {% block main %}
-    <div class="container mt-4">
+
+
+<div class="container mt-4">
+<h1 class="h3 mb-3"><strong>Smart City - E-City</strong> Dashboard shopping</h1>
         <div class="row">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h2>Statistiques des commandes</h2>
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text">Nombre total de commandes : {{ commandesStats.totalCommandes }}</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h2>Articles les plus vendus</h2>
-                    </div>
-                    <div class="card-body">
-                        <ul class="list-group">
-                            {% for articleStat in articlesStats %}
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    {{ articleStat.nom_article }}
-                                    <span class="badge bg-primary rounded-pill">{{ articleStat.totalVentes }} ventes</span>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </div>
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-header d-flex justify-content-center align-items-center">
+    <img src="{{ asset('img/produit.png') }}" width="50" height="50" class="mr-2" alt="Image">
+</div>
+
+            <div class="card-body">
+                <p class="card-text">Nombre total d'articles </p>
+                <h1 class="card-text"> {{ commandesStats.totalArticles }} articles</h1>
             </div>
         </div>
-        <div class="card">
-    <div class="card-header">
-        <h2>Article de la semaine</h2>
     </div>
-    <div class="card-body">
-        <p class="card-text">
-            L'article le plus vendu de la semaine est : {{ topArticleOfWeek.nom_article }}
-            avec {{ topArticleOfWeek.totalVentes }} ventes et un prix total de {{ topArticleOfWeek.prixTotal }} DT.
-        </p>
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-header d-flex justify-content-center align-items-center">
+               <img src="{{ asset('img/commande.png') }}"   width="50" height="50" class="mr-2" alt="Image">
+            </div>
+            <div class="card-body">
+                <p class="card-text">Nombre total de commandes </p>
+                <h1 class="card-text"> {{ commandesStats.totalCommandes }} commandes</h1>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-info text-white" >
+            <div class="card-header d-flex justify-content-center align-items-center">
+                <img src="{{ asset('img/money.png') }}"  width="50" height="50" class="mr-2" alt="Image">
+            </div>
+            <div class="card-body">
+                <p class="card-text">Prix max de commande </p>
+                <h1 class="card-text">{{ commandesStats.prixTotalMax }} DT</h1>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card">
+            <img src="{{ asset('img/statShopp2.png') }}"  class="card-img-top" alt="Image">
+            
+        </div>
     </div>
 </div>
-        <div class="col-12 col-md-6 col-xxl-3 d-flex order-1 order-xxl-1">
-                <div class="card flex-fill">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">Calendrier</h5>
-                    </div>
-                    <div class="card-body d-flex">
-                        <div class="align-self-center w-100">
-                            <div class="chart">
-                                <div id="datetimepicker-dashboard"></div>
+<div >
+                <h2>Liste des articles les plus vendus</h2>
+
+            </div>
+  <div class="row">
+                {% for articleStat in articlesStats %}
+                    <div class="col-md-3 mb-3">
+                        <div class="card article-card border rounded" style="width: 100%; max-width: 400px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);">
+                            <img src="{{ asset(articleStat.photo_article) }}" class="card-img-top article-image" style="width: 200px; height: 200px;">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h4 class="card-title font-weight-bold mb-0">{{ articleStat.nom_article }}</h4>
+                                    <h5 class="card-text mb-0"><span style="color: red; font-weight: bold;">{{ articleStat.prix_article }} DT</span></h5>
+                                </div>
+                                <h3 class="card-text">Total ventes: {{ articleStat.totalVentes }}</h3>
+                                
                             </div>
                         </div>
                     </div>
-                </div>
-                
+                {% endfor %}
             </div>
-            
-            
+   
+        
+        
+
+   <div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h2>Liste des commandes par jour</h2>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Date Commande</th>
+                                <th>Total Commandes</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in commandesParJour %}
+                                <tr>
+                                    <td>{{ item.dateCommande }}</td>
+                                    <td>{{ item.totalCommandes }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
+</div>
+
+
+
+       
+                   
+          
+  
+
 {% endblock %}
 

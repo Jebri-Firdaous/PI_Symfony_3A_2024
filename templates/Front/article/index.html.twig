@@ -40,7 +40,6 @@
     </div>
 
 {% block top_articles %}
-    <input type="text" id="searchInput" class="form-control mb-3" placeholder="Search...">
         <div class="container mt-4">
             <h2 class="text-center mb-4">MEILLEURES VENTES</h2>
             <div class="row">
@@ -102,89 +101,7 @@
                 </div>
             {% endfor %}
                              <script>
-
-           
-
-            function search() {
-
-                var query = document.getElementById('searchInput').value;
-
-                var xhr = new XMLHttpRequest();
-
-                xhr.open('GET', '{{ path('app_article_search') }}?q=' + query, true);
-
-                xhr.onload = function () {
-
-                    if (xhr.status === 200) {
-
-                        var response = JSON.parse(xhr.responseText);
-
-                        updateTable(response);
-
-                    }
-
-                };
-
-                xhr.send();
-
-            }
-
-        
-
-        
-
-            // Function to update the table with search results
-
-            function updateTable(data) {
-
-                var tableBody = document.querySelector('tbody');
-
-                tableBody.innerHTML = ''; // Clear existing table rows
-
-                if (data.length > 0) {
-
-                    data.forEach(function (article) {
-
-                        var row = '<tr>';
-
-                        row += '<td>' + article.idArticle + '</td>';
-
-                        row += '<td>' + article.nomArticle + '</td>';
-
-                        row += '<td>' + article.prixArticle + '</td>';
-
-                        row += '<td>' + article.descriptionArticle + '</td>';
-
-                        row += '<td>' + article.typeArticle + '</td>';
-
-                        row += '</tr>';
-
-                        tableBody.innerHTML += row;
-
-                    });
-
-                } else {
-
-                    tableBody.innerHTML = '<tr><td colspan="8" class="text-center">No records found</td></tr>';
-
-                }
-
-            }
-
-        
-
-            // Event listener for the search input
-
-            document.getElementById('searchInput').addEventListener('input', function () {
-
-                search();
-
-            });
-
         </script>
-
-
-
         </div>
     </div>
 

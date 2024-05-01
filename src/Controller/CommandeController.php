@@ -13,6 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\CommandeArticle;
 use Doctrine\DBAL\Connection;
 use Knp\Snappy\Pdf;
+use Doctrine\ORM\Query\Expr\Func;
 
 
 
@@ -22,20 +23,22 @@ class CommandeController extends AbstractController
 {
     public function __construct(private Connection $connection) {}
     #[Route('/stats', name: 'app_commande_stats', methods: ['GET'])]
-    public function stats(): Response
+    public function stats(EntityManagerInterface $entityManager): Response
     {
         // Récupérer les statistiques sur les commandes
-        $commandesStats = $this->getCommandesStats();
+        $commandesStats = $this->getCommandesStats($entityManager);
 
         // Récupérer les statistiques sur les articles les plus vendus
         $articlesStats = $this->getArticlesStats();
 
         $topArticleOfWeek = $this->getTopArticleOfWeek();
+        $commandesParJour = $this->getCommandesParJour($entityManager);
 
         return $this->render('Back/commande/stats.html.twig', [
             'commandesStats' => $commandesStats,
             'articlesStats' => $articlesStats,
             'topArticleOfWeek' => $topArticleOfWeek,
+            'commandesParJour' => $commandesParJour,
         ]);
     }
 
@@ -50,26 +53,75 @@ class CommandeController extends AbstractController
         'prixTotal' => 500, // Exemple de prix total
     ];
 }
-    // Méthode pour récupérer les statistiques des commandes
-    private function getCommandesStats(): array
-    {
-        $query = "SELECT COUNT(*) AS totalCommandes FROM commande";
-        $result = $this->connection->executeQuery($query)->fetchAssociative();
-        return $result;
-    }
+private function getCommandesStats(EntityManagerInterface $entityManager): array
+{
+    $query = "SELECT COUNT(c.idCommande) AS totalCommandes, MAX(c.prixTotale) AS prixTotalMax FROM App\Entity\Commande c";
+    $result = $entityManager->createQuery($query)->getSingleResult();
+    $result['totalArticles'] = $this->getTotalArticles($entityManager); 
+    $result['totalCommandes'] = $this->getTotalCommandes($entityManager); // Appel à une méthode pour obtenir le total d'articles
+    return $result;
+}
 
+    
     private function getArticlesStats(): array
     {
         $query = "
-            SELECT a.nom_article, COUNT(ca.id_article) AS totalVentes
-            FROM article a
-            JOIN commande_article ca ON a.id_article = ca.id_article
-            GROUP BY a.nom_article
-            ORDER BY totalVentes DESC
-            LIMIT 5"; // Limiter aux 5 articles les plus vendus
+            SELECT 
+                a.id_article,
+                a.nom_article,
+                a.photo_article,
+                a.prix_article,
+                a.type_article,
+                a.description_article,
+                COUNT(ca.id_article) AS totalVentes
+            FROM 
+                article a
+            JOIN 
+                commande_article ca ON a.id_article = ca.id_article
+            GROUP BY 
+                a.id_article,
+                a.nom_article,
+                a.photo_article,
+                a.prix_article,
+                a.type_article,
+                a.description_article
+            ORDER BY 
+                totalVentes DESC
+            LIMIT 4"; // Limiter aux 5 articles les plus vendus
+    
         $result = $this->connection->executeQuery($query)->fetchAllAssociative();
         return $result;
     }
+    private function getCommandesParJour(EntityManagerInterface $entityManager): array
+{
+    $queryBuilder = $entityManager->createQueryBuilder();
+
+    $queryBuilder->select('SUBSTRING(c.delaisCommande, 1, 10) AS dateCommande, COUNT(c.idCommande) AS totalCommandes')
+        ->from(Commande::class, 'c')
+        ->groupBy('dateCommande');
+
+    $query = $queryBuilder->getQuery();
+    $result = $query->getResult();
+
+    // Ajuster les dates pour supprimer 2 jours
+    foreach ($result as &$item) {
+        $item['dateCommande'] = date('Y-m-d', strtotime($item['dateCommande'] . ' -2 days'));
+    }
+
+    return $result;
+}
+private function getTotalArticles(): int
+{
+    $query = "SELECT COUNT(*) AS totalArticles FROM article";
+    $result = $this->connection->executeQuery($query)->fetchOne();
+    return $result;
+}
+private function getTotalCommandes(): int
+{
+    $query = "SELECT COUNT(*) AS totalCommandes FROM commande";
+    $result = $this->connection->executeQuery($query)->fetchOne();
+    return $result;
+}
     
     
     #[Route('/', name: 'app_commande_index', methods: ['GET'])]

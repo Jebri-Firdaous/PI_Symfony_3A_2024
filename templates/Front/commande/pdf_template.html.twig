@@ -232,7 +232,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">Résumé de la commande</h3>
-                <h4 class="card-text" style="margin-bottom: 5px;">Prix totale : {{ commande.prixTotale }}</h4>
+                <h4 class="card-text" style="margin-bottom: 5px;">Prix totale : {{ commande.prixTotale }} DT</h4>
             </div>
             <div class="panel-body">
 
@@ -249,7 +249,7 @@
                                         <img src="{{ absolute_url(asset(article.photoArticle)) }}" class="card-img-top article-image" style="width: 150px; height: 150px;">
                                     </div>
                                             <h3 class="card-title" style="font-size: 18px; font-weight: bold; margin-bottom: 10px;">Nom d'article : {{ article.nomArticle }}</h3>
-                                            <h4 class="card-text" style="margin-bottom: 5px;">Prix : {{ article.prixArticle }}</h4>
+                                            <h4 class="card-text" style="margin-bottom: 5px;">Prix : {{ article.prixArticle }} DT</h4>
                                             <h4 class="card-text" style="margin-bottom: 5px;">Type : {{ article.typeArticle }}</h4>
                                             <h4 class="card-text">Description : {{ article.descriptionArticle }}</h4>
                                         </div>

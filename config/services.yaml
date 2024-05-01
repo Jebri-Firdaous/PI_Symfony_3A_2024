@@ -6,12 +6,11 @@
 parameters:
 
     photos_directory: 'public\img'
-    stripe.api_key: 'sk_test_51OpYQx2NiuGfqOunOniuM3aEnS7CHNRtCYLb2VZv4clC6ze1b6i1VXBAAlDUUpUZ5rrKqjwthZhFtleAjP8vllzp001ZtxoYFJ'
-    
 
 
 services:
     # default configuration for services in *this* file
+   
     
     Knp\Component\Pager\PaginatorInterface: '@knp_paginator'
     _defaults:

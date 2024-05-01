@@ -30,9 +30,8 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use App\Services\QrCodeService;
 use Doctrine\DBAL\Connection;
 use Knp\Snappy\Pdf;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Component\HttpFoundation\ResponseHeaderBag;
-
+use Stripe\Stripe;
+use Stripe\Checkout\Session;
 
 
 
@@ -40,10 +39,7 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 #[Route('/article')]
 class ArticleController extends AbstractController
 {
-    private $session;
-   
- 
-
+    
     private $qrcodeService;
     private $paginator;
 
@@ -52,50 +48,6 @@ class ArticleController extends AbstractController
         $this->qrcodeService = $qrcodeService;
         $this->paginator = $paginator;
     }
-    
-    
-    #[Route('/search', name: 'app_article_search', methods: ['GET'])]
-
-public function search(Request $request, ArticleRepository $ArticleRepository): JsonResponse
-
-{
-
-    $query = $request->query->get('q');
-
-    $results = $ArticleRepository->findBySearchQuery($query); // Implement findBySearchQuery method in your repository
-
-
-
-
-    $formattedResults = [];
-
-    foreach ($results as $result) {
-
-        // Format results as needed
-
-        $formattedResults[] = [
-
-            'idArticle' => $result->getIdArticle(),
-
-            'nomArticle' => $result->getNomArticle(),
-
-            'prixArticle' => $result->getPrixArticle(),
-
-            'descriptionArticle' => $result->getDescriptionArticle(),
-
-            'typeArticle' => $result->getTypeArticle(),
-
-            // Add other fields as needed
-
-        ];
-
-    }
-
-    return new JsonResponse($formattedResults);
-
-}
-
-   
 
     
     #[Route('/back', name: 'app_article_index_back', methods: ['GET'])]
@@ -132,42 +84,6 @@ public function search(Request $request, ArticleRepository $ArticleRepository): 
             'page' => $currentPage, // Ajouter la variable 'page' au contexte
             'maxPage' => $maxPage, // Ajouter la variable 'maxPage' au contexte
         ]);
-    }
-
-
-
-#[Route('/payment', name: 'process_payment')]
-public function processPayment(Request $request, StripeClient $stripeClient): Response
-{
-    $paymentMethodId = json_decode($request->getContent(), true)['payment_method_id'];
-    
-    // Récupérer le total depuis la session
-    $total = $this->session->get('total');
-
-    // Vérifier si le total est défini
-    if (!$total) {
-        // Gérer l'erreur, rediriger ou afficher un message
-        // Par exemple, rediriger vers la page du panier avec un message d'erreur
-        return $this->redirectToRoute('cart_index', ['error' => 'Total not found']);
-    }
-
-    // Créer le paiement avec Stripe
-    $paymentIntent = $stripeClient->paymentIntents->create([
-        'amount' => $total * 100, // Montant en cents
-        'currency' => 'eur', // Devise (EUR dans cet exemple)
-        'payment_method' => $paymentMethodId,
-        'confirm' => true,
-    ]);
-
-    // Le paiement a réussi, rediriger vers une page de confirmation ou afficher un message de succès
-    return new JsonResponse(['message' => 'Paiement réussi', 'paymentIntentId' => $paymentIntent->id]);
-}
-
-
-#[Route('/paymentsucess', name: 'payment_success')]
-public function paymentSuccess(): Response
-    {
-        return $this->render('Front/article/payement.html.twig');
     }
 
     #[Route('/article/{id}/add-to-cart', name: 'article_add_to_cart')]
@@ -308,23 +224,20 @@ public function removeFromCartback(Article $article, SessionInterface $session):
     ]);
     }
 
-    #[Route('/cart/checkout', name: 'cart_checkout')]
-    public function checkout(SessionInterface $session, EntityManagerInterface $entityManager, ArticleRepository $articleRepository, FlashBagInterface $flashBag): Response
-    {
+    #[Route('/cart/checkout', name: 'cart_checkout', methods: ['POST'])]
+    public function checkout(
+        SessionInterface $session,
+        EntityManagerInterface $entityManager,
+        ArticleRepository $articleRepository
+    ): Response {
         // Récupérer le contenu du panier
         $cart = $session->get('cart', []);
 
+        // Calculer le prix total
+        $total = $this->calculateTotal($cart, $articleRepository);
+
         // Créer une nouvelle commande
         $commande = new Commande();
-
-        // Calculer le prix total
-        $total = 0;
-        foreach ($cart as $itemId => $item) {
-            $article = $articleRepository->find($itemId);
-            if ($article) {
-                $total += $article->getPrixArticle() * $item['quantity'];
-            }
-        }
 
         // Calculer la date limite de commande (2 jours à partir d'aujourd'hui)
         $limitDate = new DateTime();
@@ -356,12 +269,77 @@ public function removeFromCartback(Article $article, SessionInterface $session):
         // Exécuter les opérations de base de données
         $entityManager->flush();
 
-        // Ajouter un message flash de confirmation
-        $flashBag->add('success', 'Votre commande a été passée avec succès.');
+        // Créer une session de paiement avec Stripe
+        $checkoutSession = $this->createStripeCheckoutSession($total);
 
-        // Rediriger vers les informations de la commande
-        return $this->redirectToRoute('app_commande_show', ['idCommande' => $commande->getIdCommande()]);
+        // Rediriger l'utilisateur vers la page de paiement Stripe
+        return new RedirectResponse($checkoutSession->url, Response::HTTP_FOUND);
     }
+
+    // Méthode pour créer une session de paiement avec Stripe
+    private function createStripeCheckoutSession($total): Session
+    {
+        // Définir votre clé secrète Stripe
+        Stripe::setApiKey('sk_test_51OpYQx2NiuGfqOunOniuM3aEnS7CHNRtCYLb2VZv4clC6ze1b6i1VXBAAlDUUpUZ5rrKqjwthZhFtleAjP8vllzp001ZtxoYFJ');
+
+        // Créer une session de paiement avec Stripe
+        $checkoutSession = Session::create([
+            'payment_method_types' => ['card'],
+            'line_items' => [
+                [
+                    'price_data' => [
+                        'currency' => 'eur', // Utilisez votre devise
+                        'product_data' => [
+                            'name' => 'Total Payment',
+                        ],
+                        'unit_amount' => $total * 100, // Convertir le montant en cents
+                    ],
+                    'quantity' => 1,
+                ],
+            ],
+            'mode' => 'payment',
+            'success_url' => $this->generateUrl('payment_success', [], UrlGeneratorInterface::ABSOLUTE_URL),
+            'cancel_url' => $this->generateUrl('payment_cancel', [], UrlGeneratorInterface::ABSOLUTE_URL),
+        ]);
+
+        return $checkoutSession;
+    }
+
+    #[Route('/payment/success', name: 'payment_success')]
+public function paymentSuccess(): Response
+{
+    
+
+    // Rediriger vers les informations de la commande
+    return $this->render('Front/article/payment_success.html.twig');
+}
+
+
+    #[Route('/payment/cancel', name: 'payment_cancel')]
+    public function paymentCancel(): Response
+    {
+        // Ajouter un message flash d'erreur
+        $this->addFlash('error', 'Votre paiement a été annulé.');
+
+        // Rediriger vers une page de votre choix
+        return $this->redirectToRoute('home');
+    }
+
+    // Fonction pour calculer le total
+    private function calculateTotal(array $cart, ArticleRepository $articleRepository): float
+    {
+        $total = 0;
+        foreach ($cart as $itemId => $item) {
+            $article = $articleRepository->find($itemId);
+            if ($article) {
+                $total += $article->getPrixArticle() * $item['quantity'];
+            }
+        }
+        return $total;
+    }
+
+
+    
 
     #[Route('/cart/checkout/back', name: 'cart_checkout_back')]
     public function checkout_back(SessionInterface $session, EntityManagerInterface $entityManager, ArticleRepository $articleRepository, FlashBagInterface $flashBag): Response
@@ -595,7 +573,7 @@ public function placeOrderback(SessionInterface $session, EntityManagerInterface
             a.description_article
         ORDER BY 
             totalVentes DESC
-        LIMIT 4"; // Limiter aux 5 articles les plus vendus
+        LIMIT 4"; 
 
     $result = $this->connection->executeQuery($query)->fetchAllAssociative();
     return $result;

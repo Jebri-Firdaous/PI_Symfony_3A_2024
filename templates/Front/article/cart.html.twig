@@ -6,14 +6,14 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h1 class="text-center mb-4">  Mon panier <i class="bi bi-cart4" style="color: #e80368; font-size: 40px;"></i><i class="fas fa-shopping-cart"></i></h1>
+                <h1 class="text-center mb-4">Mon panier <i class="bi bi-cart4" style="color: #e80368; font-size: 40px;"></i><i class="fas fa-shopping-cart"></i></h1>
             </div>
         </div>
 
         {% if cart is not empty %}
             <div class="row">
-                <div class="col-md-12">
-                    <h2 class="text-left mb-4">Articles dans le panier :</h2>
+                <div class="col-md-6">
+                     <h2 class="text-left mb-4">Articles dans le panier :</h2>
                     <table class="table table-striped">
                         <thead>
                             <tr>
@@ -22,7 +22,7 @@
                                 <th scope="col">Quantité</th>
                                 <th scope="col">Prix unitaire</th>
                                 <th scope="col">Prix total</th>
-                                
+                                <th scope="col">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -34,18 +34,16 @@
                                     <td><span style="color: red; font-weight: bold;">{{ item.prixArticle }} DT</span></td>
                                     <td><span style="color: red; font-weight: bold;">{{ item.quantity * item.prixArticle }} DT</span></td>
                                     <td>
-                                        <a href="{{ path('remove_from_cart', {'id': item.id}) }}" ><i class="bi bi-trash" style="color: black; font-size: 25px;"></i></a>
-                                    </td> <!-- Lien pour supprimer l'article -->
+                                        <a href="{{ path('remove_from_cart', {'id': item.id}) }}" class="btn btn-danger"><i class="bi bi-trash"></i></a>
+                                    </td>
                                 </tr>
                             {% endfor %}
                         </tbody>
                     </table>
+               
                 </div>
-            </div>
-
-
-            <div class="row mt-4">
-                <div class="col-md-12">
+                <div class="col-md-6">
+                
                     <h2 class="text-left mb-4">Commande :</h2>
                     <table class="table table-striped">
                         <thead>
@@ -57,7 +55,7 @@
                         <tbody>
                             {% for item in cart %}
                                 <tr>
-                                    <td>{{ item.nomArticle }} </td> 
+                                    <td>{{ item.nomArticle }}</td> 
                                     <td>{{ item.quantity * item.prixArticle }} DT</td>
                                 </tr>
                             {% endfor %}
@@ -69,34 +67,18 @@
                             </tr>
                         </tfoot>
                     </table>
-                </div>
-            </div>
-             <div class="row">
-                <div class="col-md-12 text-center">
-                    <a href="{{ path('cart_checkout') }}" class="btn btn-success">Passer commande</a>
-                </div>
-            </div>
-            <div class="row">
-   
-</div>
-<!-- Formulaire de paiement -->
-    <form id="payment-form">
-        <div class="form-group">
-            <label for="card-number">Numéro de carte</label>
-            <div id="card-number" class="form-control"></div>
-        </div>
-        <div class="form-row">
-            <div id="card-expiry" class="form-control">
-                <label for="card-expiry">Date d'expiration</label>
-            </div>
-            <div id="card-cvc" class="form-control">
-                <label for="card-cvc">Code de sécurité</label>
-            </div>
-        </div>
-        <button id="card-button" class="btn btn-primary mt-3">Procéder au paiement</button>
-    </form>
+                    <div class="text-center">
+                        <!-- Formulaire de paiement -->
+                        <form action="{{ path('cart_checkout') }}" method="POST">
+                           
+                            <button type="submit" class="btn btn-success">Payer {{ total }} DT</button>
+                        </form>
+                    </div>
+                     
 
-            
+            </div>
+               
+            </div>
         {% else %}
             <div class="row">
                 <div class="col-md-12">
@@ -106,64 +88,5 @@
         {% endif %}
         
     </div>
-    {% block javascripts %}
-    <script src="https://js.stripe.com/v3/"></script>
-    <script>
     
-    document.addEventListener('DOMContentLoaded', function () {
-    const stripe = Stripe('pk_test_51OpYQx2NiuGfqOunvHRl6RmyxmMPXOiHh70meuU8o0zkoKk3JMxtphqZRlVDp9TNDxe6IGda5gOfRyHL1YFmB6nP00JKkReQoT'); // Remplacez par votre clé publique Stripe
-    const elements = stripe.elements();
-    
-    // Créer les éléments du formulaire de paiement
-    const cardNumberElement = elements.create('cardNumber');
-    const cardExpiryElement = elements.create('cardExpiry');
-    const cardCvcElement = elements.create('cardCvc');
-
-    // Monter les éléments sur le DOM
-    cardNumberElement.mount('#card-number');
-    cardExpiryElement.mount('#card-expiry');
-    cardCvcElement.mount('#card-cvc');
-
-    // Récupérer le formulaire de paiement
-    const paymentForm = document.getElementById('payment-form');
-
-    // Écouter la soumission du formulaire de paiement
-    paymentForm.addEventListener('submit', async function (event) {
-        event.preventDefault();
-
-        const { paymentMethod, error } = await stripe.createPaymentMethod({
-            type: 'card',
-            card: cardNumberElement,
-        });
-
-        if (error) {
-            // Gérer les erreurs de validation de la carte
-            console.error(error.message);
-        } else {
-            // Soumettre le paiement au backend Symfony
-            const paymentMethodId = paymentMethod.id;
-            fetch('{{ path('process_payment') }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ payment_method_id: paymentMethodId }),
-            }).then(function (response) {
-                // Traiter la réponse du backend
-                if (response.ok) {
-                    // Rediriger ou afficher un message de succès
-                    window.location.href = '{{ path('payment_success') }}?paymentIntentId=' + paymentIntentId;
-                } else {
-                    // Gérer les erreurs de paiement
-                    return response.json().then(function (errorInfo) {
-                        console.error(errorInfo.error);
-                    });
-                }
-            });
-        }
-    });
-});
-    
-</script>
-{% endblock %}
 {% endblock %}
