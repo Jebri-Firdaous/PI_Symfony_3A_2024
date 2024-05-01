@@ -61,23 +61,20 @@
                 <div class="custom-alert">{{ message }}</div>
             {% endfor %}
             {{ form_end(f) }}
+ 
         </div>
     </div>
 </div>
  
 
 
-{# <div class="promo-toggle-wrapper" style="display: flex; justify-content: flex-end; margin-right: 100px;margin-top:-10px">
-    <div style="display: flex; flex-direction: column; align-items: center;">
-        <select  id="promotion-type" style="width: 100px; height: 50px; overflow: hidden; position: relative; background-color: #dc3545; color: #ffffff;" onchange="togglePromotion(this)">
-            <option>PROMO</option>
-            <option value="20">20%</option>
-            <option value="50">50%</option>
-            <!-- Ajoutez d'autres options selon vos besoins -->
-        </select>
+<div class="d-flex align-items-center" style="margin-top: -10px;"> <!-- Ajout de margin-top négatif pour rapprocher l'icône du tableau -->
+    <div style="flex-grow: 1;">
     </div>
-</div> #}
-
+    <a href="{{ path('Extract_data') }}" type="button" style="display: flex; align-items: center; margin-left: 10px;">
+        <i data-feather="file-text" style="width: 32px; height: 32px;"></i>
+    </a>
+</div>
 
 
 <div style="margin-top: 20px;"> <!-- Ajustez la marge supérieure selon vos besoins -->
@@ -171,7 +168,6 @@
         window.togglePromotion50 = togglePromotion50;
     });
 </script>
-
 
 
 

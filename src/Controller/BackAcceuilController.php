@@ -16,6 +16,11 @@ use App\Form\BilletbackType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Dompdf\Options;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+
+use Dompdf\Dompdf;
+
 class BackAcceuilController extends AbstractController
 {
     #[Route('/back/acceuil', name: 'app_back_acceuil')]
@@ -32,7 +37,57 @@ class BackAcceuilController extends AbstractController
             'controller_name' => 'BackAcceuilController',
         ]);
     }
+    #[Route('/back/acceuil/dashboard', name: 'app_dashboard')]
+    public function pieChart(billetRepository $billetRepository): Response
+    {
+        $pricesByStation = $billetRepository->getPricesByStation();
+        
+        // Préparer les données pour le piechart des prix par station
+        $data1 = [];
+        foreach ($pricesByStation as $result) {
+            $data1[] = [
+                'nom' => $result['nom'],
+                'adresse' => $result['adresse'],
+                'type' => $result['type'],
+                'totalPrice' => $result['totalPrice']
+            ];
+        }
+    
+        // Préparer les données pour le deuxième piechart (s'il est nécessaire)
+        $destinations = $billetRepository->getDestinationsByStation();
 
+        $data2 = [];
+        $totalBillets = 0; // Variable pour stocker le nombre total de billets
+        
+        // Calculer le nombre total de billets
+        foreach ($destinations as $destination) {
+            $totalBillets += $destination['count'];
+        }
+        
+        // Préparer les données pour chaque station
+        foreach ($destinations as $destination) {
+            $count = $destination['count']; // Nombre de billets associés à la station
+        
+            // Calculer le pourcentage de billets pour cette station
+            $pourcentage = ($count / $totalBillets) * 100;
+        
+            // Ajouter le pourcentage au tableau de données
+            $data2[] = [$destination['adresse'], $pourcentage];
+        }
+        
+        
+    
+        // Retourner la réponse avec toutes les données nécessaires
+        return $this->render('back/dashboard.html.twig', [
+            'data1' => $data1,
+            'data2' => $data2
+        ]);
+    }
+    
+    
+    
+    
+    
     #[Route('/transportback', name: 'transport_back')]
     public function indexxx(Request $req,ManagerRegistry $Manager,StationRepository $repo,PaginatorInterface $paginator): Response
     {  $entityManager = $Manager->getManager();
@@ -255,5 +310,33 @@ public function deleteBillet(ManagerRegistry $manager, BilletRepository $repo, $
     // Rediriger vers la page des billets après la suppression
     return $this->redirectToRoute('app_billet');
 }
+#[Route('/generate/pdf', name: 'Extract_data', methods: ['GET' , 'POST'])]
+    public function generatePdf(billetRepository $bil): Response
+    { 
+     
+        $billets = $bil->findAll();
+        $currentDate = new \DateTime();
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isPhpEnabled', true);
+        $dompdf = new Dompdf($options);
+        $html = $this->renderView('back/pdf.html.twig', ['billets' => $billets , 'date' => $currentDate]);
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();  
+        $pdfContent = $dompdf->output();
+        $response = new Response();
+        $response->setContent($pdfContent);
+        $response->headers->set('Content-Type', 'application/pdf');
+    
+       
+        $disposition = $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            'les_billets.pdf'
+        );
+        $response->headers->set('Content-Disposition', $disposition);
+        return $response;
+    }
 
 }
