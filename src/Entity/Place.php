@@ -9,6 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 use App\Repository\PlaceRepository;
 use App\Repository\ParkingRepository;
+use ORM\GeneratedValue;
 
 #[ORM\Entity(repositoryClass: PlaceRepository::class)]
 class Place

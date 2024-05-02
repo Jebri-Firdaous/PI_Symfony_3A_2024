@@ -23,6 +23,19 @@
       <i class="align-middle" data-feather="car"></i> <span class="align-middle">Parking</span>
     </a>
             </li>
+
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="{{path('app_parking_stat')}}">
+      <i class="align-middle" data-feather="stat"></i> <span class="align-middle">Statistic</span>
+    </a>
+            </li>
+
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="{{path('app_parking_recy')}}">
+      <i class="align-middle" data-feather="stat"></i> <span class="align-middle">Recycle</span>
+    </a>
+            </li>
+            
         </ul>
     </div>
 </nav>
@@ -31,23 +44,51 @@
 {% block main %}
 <br> <h1>Liste Parking ( <a href="{{ path('app_parking_new') }}"><i class="fas fa-plus"></i></a> )</h1> <br>
 
+<div style="display: grid; grid-template-columns: 1fr 1fr;">
+    <!-- Add the radio button to toggle the visibility of the filter combo box -->
+    {# <div>
+        <input type="radio" id="toggleFilter1" name="filterVisibility" checked>
+        <label for="toggleFilter1">Etat</label>
+        <select id="etatFilter">
+            <option value=""><----------></option>
+            {% for etat in ['Libre', 'Reservée'] %}
+                <option value="{{ etat }}">{{ etat }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div>
+        <input type="radio" id="toggleFilter2" name="filterVisibility">
+        <label for="toggleFilter2">Type</label>
+        <!-- Add the filter combo box -->
+        <select id="typeFilter">
+            <option value=""> <----------> </option>
+            {% for etat in ['Voiture', 'Handicap', 'Camion'] %}
+                <option value="{{ etat }}">{{ etat }}</option>
+            {% endfor %}
+        </select>
+    </div> #}
+</div>
+
     <table class="table" style="text-align: center;">
         <thead>
             <tr>
                 {# <th>Id_parking</th> #}
-                <th>Nom</th>
-                <th>Address</th>
+                <th>Nom<button class="sort-button" data-sort-by="Nom">Trier par nom</button></th>
+                <th>Address<button class="sort-button" data-sort-by="Address">Trier par address</button></th>
                 {# <th>Latitude</th>
                 <th>Longitude</th> #}
                 {# <th>NombrePlaceMax</th>
                 <th>NombrePlaceOcc</th> #}
-                <th>Nombre de plces libres</th>
-                <th>Etat</th>
+                <th>Nombre de plces libres<button class="sort-button" data-sort-by="Nombre">Trier par nb places</button></th>
+                <th>Etat<button class="sort-button" data-sort-by="Etat">Trier par etat</button></th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
-        {% for parking in parkings %}
+        {% set listNom = [] %}
+        {% for parking in pag %}
+        {% set listNom = listNom|merge([parking.nomParking]) %}
             <tr>
                 {# <td>{{ parking.idParking }}</td> #}
                 <td>{{ parking.nomParking }}</td>
@@ -72,5 +113,108 @@
         </tbody>
     </table>
 
+    <!-- Pagination -->
+{# Display pagination controls #}
+{{ knp_pagination_render(pag) }}
+
     {# <a href="{{ path('app_parking_new') }}">Create new</a> #}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sortButtons = document.querySelectorAll('.sort-button');
+            const sortableList = document.querySelector('.table tbody');
+            let ascendingOrder = true;
+
+            sortButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const sortBy = this.dataset.sortBy;
+                    const items = Array.from(sortableList.children);
+
+                    items.sort((a, b) => {
+                        const valueA = a.querySelector('td:nth-child(' + (['Nom', 'Address', 'Nombre', 'Etat'].indexOf(sortBy) + 1) + ')').textContent;
+                        const valueB = b.querySelector('td:nth-child(' + (['Nom', 'Address', 'Nombre', 'Etat'].indexOf(sortBy) + 1) + ')').textContent;
+
+                        if (ascendingOrder) {
+                            return valueA.localeCompare(valueB);
+                        } else {
+                            return valueB.localeCompare(valueA);
+                        }
+                    });
+
+                    ascendingOrder = !ascendingOrder;
+
+                    // Remove existing items
+                    while (sortableList.firstChild) {
+                        sortableList.removeChild(sortableList.firstChild);
+                    }
+
+                    // Append sorted items
+                    items.forEach(item => sortableList.appendChild(item));
+                });
+            });
+            
+            // Filter combo box event listener
+            const etatFilter = document.getElementById('etatFilter');
+            etatFilter.addEventListener('change', function() {
+                const selectedEtat = this.value;
+                const rows = document.querySelectorAll('.table tbody tr');
+
+                rows.forEach(row => {
+                    const etat = row.querySelector('td:nth-child(3)').textContent;
+                    if (!selectedEtat || etat === selectedEtat) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+            
+            // Filter combo box event listener
+            const typeFilter = document.getElementById('typeFilter');
+            typeFilter.addEventListener('change', function() {
+                const selectedType = this.value;
+                const rows = document.querySelectorAll('.table tbody tr');
+
+                rows.forEach(row => {
+                    const type = row.querySelector('td:nth-child(2)').textContent;
+                    if (!selectedType || type === selectedType) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+                
+            const toggleFilter1 = document.getElementById('toggleFilter1');
+            const toggleFilter2 = document.getElementById('toggleFilter2');
+            const rows = document.querySelectorAll('.table tbody tr');
+
+            // Initially hide the combo box
+            // etatFilter.style.display = 'none';
+            typeFilter.style.display = 'none';
+
+            // Toggle visibility of the combo box when the radio button is clicked
+            toggleFilter1.addEventListener('change', function() {
+                if (this.checked) {
+                    // toggleFilter.checked = false;
+                    etatFilter.style.display = '';
+                    typeFilter.style.display = 'none';
+                    etatFilter.selectedIndex = 0;
+                    rows.forEach(row => {
+                        row.style.display = '';
+                    });
+                }
+            });
+            toggleFilter2.addEventListener('change', function() {
+                if (this.checked) {
+                    // toggleFilter.checked = false;
+                    typeFilter.style.display = '';
+                    etatFilter.style.display = 'none';
+                    typeFilter.selectedIndex = 0;
+                    rows.forEach(row => {
+                        row.style.display = '';
+                    });
+                }
+            });
+        });
+    </script>
 {% endblock %}

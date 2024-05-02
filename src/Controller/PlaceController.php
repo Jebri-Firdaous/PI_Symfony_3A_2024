@@ -4,29 +4,55 @@ namespace App\Controller;
 
 use App\Entity\Place;
 use App\Form\PlaceType;
+use Endroid\QrCode\QrCode;
+use Symfony\Component\Mime\Email;
 use App\Repository\PlaceRepository;
-use App\Repository\ParkingRepository;
 use App\Repository\ClientRepository;
+use App\Controller\NotificationEmail;
+use App\Repository\ParkingRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+
+use Symfony\Component\Filesystem\Filesystem;
+use App\Services\QrCodeService;
+use Doctrine\DBAL\Connection;
+
+use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Knp\Component\Pager\PaginatorInterface;
 
 class PlaceController extends AbstractController
 {
+    
+    private $qrcodeService;
+    
+    public function __construct(QrCodeService $qrcodeService,private Connection $connection)
+    {
+        $this->qrcodeService = $qrcodeService;
+    }
     #[Route('front/place/{idP}', name: 'app_place_indexF', methods: ['GET'])]
-    public function indexF(PlaceRepository $placeRepository, $idP): Response
+    public function indexF(PlaceRepository $placeRepository, $idP, Request $request, PaginatorInterface $paginator): Response
     {
         session_start();
 
         // echo $_SESSION['user_id'];
         $result = $placeRepository->findByIdClient($_SESSION['user_id']);
         
+        
         if($result == null){
+            
+    // Paginate the results
+    $places = $paginator->paginate(
+        $placeRepository->findByIdPark($idP), // Query
+        $request->query->getInt('page', 1), // Page number
+        3 // Items per page
+    );
             return $this->render('Front/place/index.html.twig', [
-            'places' => $placeRepository->findByIdPark($idP),
+            'places' => $places,
             'idP' => $idP,
             ]);
         }else{
@@ -40,10 +66,17 @@ class PlaceController extends AbstractController
     }
 
     #[Route('back/place/{idP}', name: 'app_place_indexB', methods: ['GET'])]
-    public function indexB(PlaceRepository $placeRepository, $idP, Request $request): Response
+    public function indexB(PlaceRepository $placeRepository, $idP, Request $request, PaginatorInterface $paginator): Response
     {
+        
+    // Paginate the results
+    $places = $paginator->paginate(
+        $placeRepository->findByIdPark($idP), // Query
+        $request->query->getInt('page', 1), // Page number
+        3 // Items per page
+    );
         return $this->render('Back/place/index.html.twig', [
-            'places' => $placeRepository->findByIdPark($idP),
+            'places' => $places,
             'idP' => $idP,
         ]);
     }
@@ -54,6 +87,30 @@ class PlaceController extends AbstractController
         $place = $placeRepository->find($refP);
         $parking = $parkingRepository->find($idP);
         $tmp = $parking->getNombrePlaceOcc();
+
+        $filename = 'parking/datachart.txt';
+        $file = fopen($filename, 'r+');
+        $lines = file($filename);
+        $test=false;
+
+        // Iterate through each line
+        foreach ($lines as $lineNumber => $line) {
+            // Split the line by comma
+            $parts = explode(',', $line, 2); // Limiting to 2 parts
+
+            if (trim($parts[0]) === $parking->getNomParking()) {
+                $test=true;
+                $nb=$parts[1]+1;
+                $lines[$lineNumber]=$parking->getNomParking().",".$nb. PHP_EOL;
+            }
+        }
+        if(!$test){
+            $lines[count($lines)]=$parking->getNomParking().",1". PHP_EOL;
+        }
+        file_put_contents($filename, implode('', $lines));
+
+        fclose($file);
+
         if($place->getEtat() == 'Libre'){
             $place->setEtat('Reservée');
             $parking->setNombrePlaceOcc($tmp+1);
@@ -78,7 +135,7 @@ class PlaceController extends AbstractController
     }
 
     #[Route('back/place1/{idP}/{refP}', name: 'app_place_reserveF', methods: ['GET'])]
-    public function reserveFront(PlaceRepository $placeRepository, ParkingRepository $parkingRepository, ClientRepository $clientRepository, $idP, $refP, EntityManagerInterface $entityManager): Response
+    public function reserveFront(PlaceRepository $placeRepository, ParkingRepository $parkingRepository, ClientRepository $clientRepository, $idP, $refP, EntityManagerInterface $entityManager, MailerInterface $mailer): Response
     {
         session_start();
 
@@ -95,6 +152,33 @@ class PlaceController extends AbstractController
 
         $entityManager->persist($place, $parking);
         $entityManager->flush();
+
+        $qrContent = "ID de la place: $refP";
+
+        // Génération du code QR
+        $qrCode = new QrCode($qrContent);
+        $qrCode->setSize(300); // Taille du code QR
+        // $qrCodePath = 'qr_codes/place_' . $refP . '.png'; // Chemin où enregistrer le code QR
+
+        // Enregistrement du code QR
+        // $qrCode->writeFile($qrCodePath);
+        // $qrCodeStr=$qrCode->writeString();
+        $qrCodePath = $this->qrcodeService->qrcode($place);
+
+        // $email = (new Email())
+        //     ->from($client->getPersonne()->getMailPersonne())
+        //     ->to('f.felhi2016@gmail.com')
+        //     ->subject('Hello from Symfony!')
+        //     ->text('This is a test email sent from Symfony.');
+
+        // $mailer->send($email);
+
+        $recipientEmail = 'random.felhi2020@gmail.com';
+        $subject = 'Test Email';
+
+        $email = new NotificationEmail($recipientEmail, $subject);
+
+        $mailer->send($email);
 
         return $this->redirectToRoute('app_place_indexF', ['idP' => $idP], Response::HTTP_SEE_OTHER);
     }

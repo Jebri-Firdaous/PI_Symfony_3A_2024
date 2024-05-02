@@ -28,6 +28,12 @@ class ParkingRepository extends ServiceEntityRepository
         ->getSingleScalarResult();
     }
 
+    public function tri($crit){
+        $em = $this->getEntityManager();
+        return $em->createQuery('SELECT p FROM App\Entity\Parking p ORDER BY p.'.$crit)
+        ->getResult();
+    }
+
 //    /**
 //     * @return Parking[] Returns an array of Parking objects
 //     */

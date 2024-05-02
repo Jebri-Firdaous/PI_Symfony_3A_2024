@@ -1,0 +1,101 @@
+{% extends 'Back/base.html.twig' %}
+
+{% block sideBar %}
+<nav id="sidebar" class="sidebar js-sidebar">
+    <div class="sidebar-content js-simplebar">
+        <a class="sidebar-brand" href="index.html">
+  <span class="align-middle">AdminKit</span>
+</a>
+
+        <ul class="sidebar-nav">
+            <li class="sidebar-header">
+                Pages
+            </li>
+
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="index.html">
+      <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
+    </a>
+            </li>
+
+            <li class="sidebar-item ">
+                <a class="sidebar-link" href="{{path('app_parkingB')}}">
+      <i class="align-middle" data-feather="car"></i> <span class="align-middle">Parking</span>
+    </a>
+            </li>
+
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="{{path('app_parking_stat')}}">
+      <i class="align-middle" data-feather="stat"></i> <span class="align-middle">Statistic</span>
+    </a>
+            </li>
+
+            <li class="sidebar-item active">
+                <a class="sidebar-link" href="{{path('app_parking_recy')}}">
+      <i class="align-middle" data-feather="stat"></i> <span class="align-middle">Recycle</span>
+    </a>
+            </li>
+            
+        </ul>
+    </div>
+</nav>
+{% endblock %}
+
+{% block main %}
+{# <br> <h1>Liste Parking ( <a href="{{ path('app_parking_new') }}"><i class="fas fa-plus"></i></a> )</h1> <br> #}
+
+    
+
+    <table class="table" style="text-align: center;">
+        <thead>
+            <tr>
+                {# <th>Id_parking</th> #}
+                <th>Nom</th>
+                <th>Address</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>NombrePlaceMax</th>
+                <th>NombrePlaceOcc</th>
+                {# <th>Nombre de plces libres</th> #}
+                <th>Etat</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {# {% set listNom = [] %} #}
+            {% set i = 0 %}
+        
+        {% for parking in parkings %}
+        {# {% set listNom = listNom|merge([parking.nomParking]) %} #}
+            <tr>
+                {# <td>{{ parking.idParking }}</td> #}
+                <td>{{ parking.nomParking }}</td>
+                <td>{{ parking.addressParking }}</td>
+                <td>{{ parking.latitude }}</td>
+                <td>{{ parking.longitude }}</td>
+                <td>{{ parking.nombrePlaceMax }}</td>
+                <td>{{ parking.nombrePlaceOcc }}</td>
+                {# <td>{{ repo.nbPlaces(parking.idParking)-parking.nombrePlaceOcc }}</td> #}
+                <td>{{ parking.etatParking }}</td>
+                <td>
+                    <a href="{{ path('app_parking_recyBtn', {'id': i}) }}" class="btn btn-primary">Restorer</a>
+                </td>
+            </tr>
+            
+        {% set i = i + 1 %}
+        {% else %}
+            <tr>
+                <td colspan="9">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {{ knp_pagination_render(parkings) }}
+
+    <!-- Pagination -->
+{# Display pagination controls #}
+{# {{ knp_pagination_render(pag) }} #}
+
+    {# <a href="{{ path('app_parking_new') }}">Create new</a> #}
+    
+{% endblock %}

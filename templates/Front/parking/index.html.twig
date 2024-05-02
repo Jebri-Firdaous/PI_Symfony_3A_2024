@@ -37,6 +37,27 @@
 
 <!-- Template Stylesheet -->
 <link href="{{asset('parking/css/style.css')}}" rel="stylesheet">
+
+<!--  MAP -->>
+<style>
+      #map {
+        position: relative;
+        /* top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0; */
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+        color: #323232;
+      }
+    </style>
+    <!-- Load Leaflet from CDN -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+
+    <!-- Load Esri Leaflet from CDN -->
+    <script src="https://unpkg.com/esri-leaflet@3.0.12/dist/esri-leaflet.js"></script>
+    <script src="https://unpkg.com/esri-leaflet-vector@4.2.3/dist/esri-leaflet-vector.js"></script>
 {% endblock %}
 {% block menu %}
 <li><a href="{{ path ('app_acceuil')}}">Acceuil</a></li>
@@ -55,7 +76,7 @@
         <h1 class="mb-0">Liste des Parkings</h1>
         <div class="owl-carousel vegetable-carousel justify-content-center" style="border-color: aqua;">
         {% for p in parkings %}
-            <div class="border border-primary rounded position-relative vesitable-item">
+            <div  id="div{{p.getIdParking}}v2" class="border border-primary rounded position-relative vesitable-item">
                 {% if p.getNombrePlaceOcc() - repo.nbPlaces(p.getIdParking()) == 0  %}
                 <div class="text-white px-3 py-1 rounded position-absolute" style="background-color: rgb(200, 21, 21); top: 10px; right: 10px;">Plein</div>
                 {% else %}
@@ -73,10 +94,14 @@
         {% endfor %}
         </div>
         {% set parkingIds = [] %}
+        {% set parkinglong = [] %}
+        {% set parkinglat = [] %}
         {% for p in parkings %}
             {% set parkingIds = parkingIds|merge([p.getIdParking()]) %}
-            <div id="div{{p.getIdParking}}" style="display: none;" class="border border-primary rounded position-relative">
-                <div class="p-4 rounded-bottom">
+            {% set parkinglong = parkinglong|merge([p.getLongitude()]) %}
+            {% set parkinglat = parkinglat|merge([p.getLatitude()]) %}
+            <div id="div{{p.getIdParking}}" style="display: none; grid-template-columns: 1fr 1fr; gap: 20px;" class="border border-primary rounded position-relative">
+                <div class="p-4 rounded-bottom" style="padding: 10px;">
                     <h4>{{ p.getNomParking() }} Parking</h4>
                     {# <h4>&emsp;Parking</h4> #}
                     <table class="table">
@@ -122,10 +147,12 @@
                     <a href="{{path('app_place_indexF', {idP: p.getIdParking()})}}" class="btn border border-secondary rounded-pill px-3" >Liste Places</a>
                     <br>
                 </div>
+                <div id="map{{p.getIdParking}}" style="padding: 10px; width:650px; height:300px "></div>
             </div>
         {% endfor %}
     </div>
 </div>
+
 <!-- Vesitable Shop End -->
 <!-- JavaScript Libraries -->
     <script src="{{asset('https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js')}}"></script>
@@ -139,13 +166,34 @@
     <script src="{{asset('parking/js/main.js')}}"></script>
     <script>
         var ids= {{ parkingIds|json_encode|raw }} ;
+        var long= {{ parkinglong|json_encode|raw }} ;
+        var lat= {{ parkinglat|json_encode|raw }} ;
+        // var idstri= {{ repo|json_encode|raw }} ;
         for (let i=0; i < ids.length ; i++) {
             document.getElementById('info'.concat(ids[i])).addEventListener('click', function() {
             for (let j=0; j < ids.length ; j++) {
                 document.getElementById('div'.concat(ids[j])).style.display = 'none';
+                // document.getElementById('div'.concat(ids[j]).concat('v2')).style.display = 'none';
             }
-            document.getElementById('div'.concat(ids[i])).style.display = 'block';
+            document.getElementById('div'.concat(ids[i])).style.display = 'grid';
             });
         }
+        for (let i=0; i < ids.length ; i++) {
+        const map = L.map("map".concat(ids[i]), {
+        minZoom: 2
+        })
+
+        map.setView([long[i], lat[i]], 13);
+        const apiKey = "AAPK35cf4b021e7a4c019b63243490179ac2jBL4IBgUxMIrLCpGR5HmtaB-FMYQ85qBAkLF6T5MDlW9AIDXn06SI6mVpyKvGmuy";
+
+        const basemapEnum = "arcgis/navigation";
+
+      L.esri.Vector.vectorBasemapLayer(basemapEnum, {
+        apiKey: apiKey
+      }).addTo(map);
+    //   var marker = L.marker([lat[i], lng[j]]).addTo(map);
+    //   marker.bindPopup("This is a ping!").openPopup();
+    }
     </script>
+    
 {% endblock %}

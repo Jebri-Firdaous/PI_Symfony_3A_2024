@@ -30,7 +30,7 @@
 
 </head>
 
-<body>
+<body style="display: flex; flex-direction: column; min-height: 100vh;">
 	<div class="wrapper">
 		{% block sideBar %}
 		<nav id="sidebar" class="sidebar js-sidebar">
@@ -305,7 +305,7 @@
 			{% endblock %}
 
 			{% block main %}
-			<main class="content">
+			<main class="content" style="flex-grow: 1;">
 				<div class="container-fluid p-0">
 
 					<h1 class="h3 mb-3"><strong>Analytics</strong> Dashboard</h1>
@@ -577,7 +577,7 @@
 			</main>
 			{% endblock %}
 			{% block footer %}
-			<footer class="footer">
+			<footer class="footer" style="margin-top: auto;">
 				<div class="container-fluid">
 					<div class="row text-muted">
 						<div class="col-6 text-start">

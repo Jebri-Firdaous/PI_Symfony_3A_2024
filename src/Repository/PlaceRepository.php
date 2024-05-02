@@ -46,6 +46,12 @@ class PlaceRepository extends ServiceEntityRepository
         ;
     }
 
+    public function tri($crit){
+        $em = $this->getEntityManager();
+        return $em->createQuery('SELECT p FROM App\Entity\Place p ORDER BY p.'.$crit)
+        ->getResult();
+    }
+
 //    public function findOneBySomeField($value): ?Place
 //    {
 //        return $this->createQueryBuilder('p')

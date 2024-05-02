@@ -1,0 +1,118 @@
+{% extends 'Back/base.html.twig' %}
+
+{% block sideBar %}
+<nav id="sidebar" class="sidebar js-sidebar">
+    <div class="sidebar-content js-simplebar">
+        <a class="sidebar-brand" href="index.html">
+  <span class="align-middle">AdminKit</span>
+</a>
+
+        <ul class="sidebar-nav">
+            <li class="sidebar-header">
+                Pages
+            </li>
+
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="index.html">
+      <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
+    </a>
+            </li>
+
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="{{path('app_parkingB')}}">
+      <i class="align-middle" data-feather="car"></i> <span class="align-middle">Parking</span>
+    </a>
+            </li>
+
+            <li class="sidebar-item active">
+                <a class="sidebar-link" href="{{path('app_parking_stat')}}">
+      <i class="align-middle" data-feather="stat"></i> <span class="align-middle">Statistic</span>
+    </a>
+            </li>
+
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="{{path('app_parking_recy')}}">
+      <i class="align-middle" data-feather="stat"></i> <span class="align-middle">Recycle</span>
+    </a>
+            </li>
+            
+        </ul>
+    </div>
+</nav>
+{% endblock %}
+
+{% block main %}
+
+        {% set listNom = [] %}
+        {% for parking in parkings %}
+            {% set listNom = listNom|merge([parking.nomParking]) %}
+        {% endfor %}
+    
+<div class="container-fluid p-0">
+    <div class="col-12 col-lg-6">
+        <div class="card">
+            {# <div class="card-header">
+                <h5 class="card-title">Bar Chart</h5>
+                <h6 class="card-subtitle text-muted">A bar chart provides a way of showing data values represented as vertical bars.</h6>
+            </div> #}
+            <div class="card-body">
+                <div class="chart">
+                    <canvas id="chartjs-bar"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>  
+</div>
+
+    {# <a href="{{ path('app_parking_new') }}">Create new</a> #}
+    
+    <script>
+		document.addEventListener("DOMContentLoaded", function() {
+            var noms= {{ listNom|json_encode|raw }} ;
+
+            var values= {{ values|json_encode|raw }} ;
+			// Bar chart
+			new Chart(document.getElementById("chartjs-bar"), {
+				type: "bar",
+				data: {
+					// labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+					labels: noms,
+					datasets: [{
+						label: "Reservations",
+						backgroundColor: window.theme.primary,
+						borderColor: window.theme.primary,
+						hoverBackgroundColor: window.theme.primary,
+						hoverBorderColor: window.theme.primary,
+						// data: [54, 67, 41, 55, 62, 45, 55, 73, 60, 76, 48, 79],
+						data: values,
+						barPercentage: .75,
+						categoryPercentage: .5
+					}]
+				},
+				options: {
+					maintainAspectRatio: false,
+					legend: {
+						display: false
+					},
+					scales: {
+						yAxes: [{
+							gridLines: {
+								display: false
+							},
+							stacked: false,
+							ticks: {
+								stepSize: 20
+							}
+						}],
+						xAxes: [{
+							stacked: false,
+							gridLines: {
+								color: "transparent"
+							}
+						}]
+					}
+				}
+			});
+		});
+	</script>
+{% endblock %}

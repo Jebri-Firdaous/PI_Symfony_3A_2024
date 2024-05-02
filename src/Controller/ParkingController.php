@@ -12,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Knp\Component\Pager\PaginatorInterface;
 
 use function PHPSTORM_META\type;
 
@@ -30,10 +31,19 @@ class ParkingController extends AbstractController
     }
 
     #[Route('back/parking/', name: 'app_parkingB', methods: ['GET'])]
-    public function indexBack(ParkingRepository $parkingRepository): Response
+    public function indexBack(ParkingRepository $parkingRepository, Request $request, PaginatorInterface $paginator): Response
     {
+        $query = $parkingRepository->findAll();
+
+    // Paginate the results
+    $parkings = $paginator->paginate(
+        $query, // Query
+        $request->query->getInt('page', 1), // Page number
+        3 // Items per page
+    );
         return $this->render('Back/parking/index.html.twig', [
-            'parkings' => $parkingRepository->findAll(),
+            // 'parkings' => $parkingRepository->findAll(),
+            'pag' => $parkings,
             'repo' => $parkingRepository,
             'controller_name' => 'ParkingController',
         ]);
@@ -99,10 +109,134 @@ class ParkingController extends AbstractController
     public function delete(Request $request, Parking $parking, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$parking->getIdParking(), $request->request->get('_token'))) {
+
+            $filename = 'parking/recycle.txt';
+            $lines = file($filename);
+            $new = $parking->getNomParking().','.$parking->getAddressParking().','
+            .$parking->getLatitude().','.$parking->getLongitude().','.$parking->getNombrePlaceMax().','.$parking->getNombrePlaceOcc()
+            .','.$parking->getEtatParking(). PHP_EOL;
+            $lines[] = $new;
+            file_put_contents($filename, implode('', $lines));
+
             $entityManager->remove($parking);
             $entityManager->flush();
         }
 
         return $this->redirectToRoute('app_parkingB', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('back/stat', name: 'app_parking_stat', methods: ['GET', 'POST'])]
+    public function stat(ParkingRepository $parkingRepository): Response
+    {
+        $parkings=$parkingRepository->findAll();
+
+        $filename = 'parking/datachart.txt';
+        $lines = file($filename);
+
+        foreach ($parkings as $parking) {
+            $test=false;
+            foreach($lines as $lineNumber => $line){
+                $parts = explode(',', $line, 2);
+                if (trim($parts[0]) === $parking->getNomParking()) {
+                    $test=true;
+                }
+            }
+            if(!$test){
+                $lines[count($lines)]=$parking->getNomParking().",0". PHP_EOL;
+            }
+            file_put_contents($filename, implode('', $lines));
+        }
+        $lines = file($filename);
+        $val = [];
+        foreach($lines as $lineNumber => $line){
+            $parts = explode(',', $line, 2);
+            $val[] = trim($parts[1]);
+        }
+
+        return $this->render('back/parking/chart.html.twig', [
+            'parkings' => $parkings,
+            'repo' => $parkingRepository,
+            'values' => $val,
+            'controller_name' => 'ParkingController',
+        ]);
+        // return $this->redirectToRoute('app_parkingB', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('back/recycle', name: 'app_parking_recy', methods: ['GET', 'POST'])]
+    public function recycle(ParkingRepository $parkingRepository, EntityManagerInterface $entityManager, Request $request, PaginatorInterface $paginator): Response
+    {
+        $parking = new Parking();
+        $filename = 'parking/recycle.txt';
+        $lines = file($filename);
+        $parkings = [];
+
+
+            foreach($lines as $lineNumber => $line){
+                $parts = explode(',', $line, 7);
+                $parking->setNomParking($parts[0]);
+                $parking->setAddressParking($parts[1]);
+                $parking->setLatitude($parts[2]);
+                $parking->setLongitude($parts[3]);
+                $parking->setNombrePlaceMax($parts[4]);
+                $parking->setNombrePlaceOcc($parts[5]);
+                $parking->setEtatParking($parts[6]);
+
+                array_push($parkings, $parking);
+        }
+
+    // Paginate the results
+    $pag = $paginator->paginate(
+        $parkings, // Query
+        $request->query->getInt('page', 1), // Page number
+        3 // Items per page
+    );
+
+        return $this->render('back/parking/recycle.html.twig', [
+            'parkings' => $pag,
+            'repo' => $parkingRepository,
+            'controller_name' => 'ParkingController',
+        ]);
+        // return $this->redirectToRoute('app_parkingB', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('back/recycle/{id}', name: 'app_parking_recyBtn', methods: ['GET', 'POST'])]
+    public function recycleBtn(ParkingRepository $parkingRepository, EntityManagerInterface $entityManager, $id): Response
+    {
+        $parking = new Parking();
+        $filename = 'parking/recycle.txt';
+        $lines = file($filename);
+        $parkings = [];
+        $i = 0;
+
+            foreach($lines as $lineNumber => $line){
+                $parts = explode(',', $line, 7);
+                $parking->setNomParking($parts[0]);
+                $parking->setAddressParking($parts[1]);
+                $parking->setLatitude($parts[2]);
+                $parking->setLongitude($parts[3]);
+                $parking->setNombrePlaceMax($parts[4]);
+                $parking->setNombrePlaceOcc($parts[5]);
+                $parking->setEtatParking($parts[6]);
+                $new = $parking->getNomParking().','.$parking->getAddressParking().','
+            .$parking->getLatitude().','.$parking->getLongitude().','.$parking->getNombrePlaceMax().','.$parking->getNombrePlaceOcc()
+            .','.$parking->getEtatParking(). PHP_EOL;
+                if($i == $id){
+                //     $lines[$i] = $new;
+                //     array_push($parkings, $parking);
+                // }else{
+                    $entityManager->persist($parking);
+                    $entityManager->flush();
+                    $i--;
+                }
+                $i++;
+        }
+        // unset($parkings[$id]);
+        unset($lines[$id - 1]);
+
+        // file_put_contents($filename, '');
+        file_put_contents($filename, implode('', $lines));
+
+        return $this->redirectToRoute('app_parking_recy', [], Response::HTTP_SEE_OTHER);
+        // return $this->redirectToRoute('app_parkingB', [], Response::HTTP_SEE_OTHER);
     }
 }
