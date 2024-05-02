@@ -257,7 +257,8 @@ class RendezVousController extends AbstractController
                          Votre réservation a été confirmée avec Dr. ' . $doctorName . '
                          <br>
                          <a href="http://127.0.0.1:8000/Rvbyclient/"> Vous pouvez trouver tous vos rendez-vous ici </a>
-                         </p> 
+                         </p>
+ 
                      </body> 
                  </html>';
  
@@ -446,39 +447,102 @@ class RendezVousController extends AbstractController
 
       
     }
+    #[Route('/rendezvous/searchFront', name: 'front_app_rv_search')]
+    public function searchFront(Request $request,ClientRepository $clientRepository ,RendezVousRepository $rendezVousRepository, PaginatorInterface $paginator): Response
+    {
+        $query = $request->query->get('query');
+        $client = $clientRepository->find(55);
+        if ($query) {
+            $qb = $rendezVousRepository->createQueryBuilder('r');
+            $qb->leftJoin('r.id_medecin', 'm')
+                ->where($qb->expr()->like("DATE_FORMAT(r.dateRendezVous, '%d/%m/%Y')", ':date'))
+                ->orWhere($qb->expr()->like('m.nomMedecin', ':nomMedecin'))
+                ->andWhere($qb->expr()->eq('r.id_personne', ':idPersonne'))
+                ->setParameter('date', '%' . $query . '%') 
+                ->setParameter('nomMedecin', $query . '%') 
+                ->setParameter('idPersonne', $client ) 
+                ->getQuery()
+                ->getResult();
+
+
+            // $listrendezVous = $rendezVousRepository->createQueryBuilder('r')
+            //     ->join('r.id_medecin', 'm')
+            //     ->where('m.nomMedecin LIKE :query')
+            //     ->setParameter('query', $query . '%')
+            //     ->getQuery()
+            //     ->getResult();
+
+
+
+            $lesRVdeClient = $paginator->paginate(
+                // $listrendezVous, 
+                $qb,
+                $request->query->getInt('page', 1), 
+                10 
+            );
+
+        } else {
+            return $this->redirectToRoute('front_rendezVous_getAll');
+
+            // $query = $rendezVousRepository->findAll(); // Assuming you have a custom query method in your repository
+            // $lesRVdeClient = $paginator->paginate(
+            //     $query,
+            // $request->query->getInt('page', 1), // Current page number
+            // 4 // Items per page
+            //  );
+        }
+        return $this->render('Front/rendez_vous/showRV.html.twig', [
+            'lesRVdeClient' => $lesRVdeClient,
+        ]);
+    }
+
     #[Route('/rendezvous/search', name: 'app_rv_search')]
     public function search(Request $request, RendezVousRepository $rendezVousRepository, PaginatorInterface $paginator): Response
     {
         $query = $request->query->get('query');
         if ($query) {
-            $listrendezVous = $rendezVousRepository->createQueryBuilder('r')
-                ->join('r.id_medecin', 'm')
-                ->where('m.nomMedecin LIKE :query')
-                ->setParameter('query', '%' . $query . '%')
+            $qb = $rendezVousRepository->createQueryBuilder('r');
+            $qb->leftJoin('r.id_medecin', 'm')
+                ->where($qb->expr()->like("DATE_FORMAT(r.dateRendezVous, '%d/%m/%Y')", ':date'))
+                ->orWhere($qb->expr()->like('m.nomMedecin', ':nomMedecin'))
+                ->setParameter('date', '%' . $query . '%') 
+                ->setParameter('nomMedecin', $query . '%') 
                 ->getQuery()
                 ->getResult();
 
 
+            // $listrendezVous = $rendezVousRepository->createQueryBuilder('r')
+            //     ->join('r.id_medecin', 'm')
+            //     ->where('m.nomMedecin LIKE :query')
+            //     ->setParameter('query', $query . '%')
+            //     ->getQuery()
+            //     ->getResult();
+
+
 
             $lesRVdeClient = $paginator->paginate(
-                $listrendezVous, 
+                // $listrendezVous, 
+                $qb,
                 $request->query->getInt('page', 1), 
                 10 
             );
         } else {
+            return $this->redirectToRoute('back_rendezVous_getAll');
 
-            $query = $rendezVousRepository->findAll(); // Assuming you have a custom query method in your repository
-            $lesRVdeClient = $paginator->paginate(
-                $query,
-            $request->query->getInt('page', 1), // Current page number
-            4 // Items per page
-        );
+            // $query = $rendezVousRepository->findAll(); // Assuming you have a custom query method in your repository
+            // $lesRVdeClient = $paginator->paginate(
+            //     $query,
+            // $request->query->getInt('page', 1), // Current page number
+            // 4 // Items per page
+            //  );
         }
 
         return $this->render('Back/rendezVous/showAllRvInOtherForm.html.twig', [
             'lesRVdeClient' => $lesRVdeClient,
         ]);
     }
+
+    
     #[Route('/rv/tri', name: 'app_rv_tri')]
     public function tri(Request $request, MedecinRepository $medecinRepository , PaginatorInterface $paginator): Response
     {

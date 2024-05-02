@@ -2,10 +2,57 @@
 
 {% block main %}
     <h1>{{ 'List de tous les rendez-vous'|trans }}</h1>
-<form action="{{ path('app_medecins_search') }}" method="GET">
+    {# search static => with button #}
+{# <form action="{{ path('app_rv_search') }}" method="GET">
         <input type="text" id="query" name="query">
         <button type="submit">Search</button>
+    </form> #}
+
+    {# search dynamic  #}
+    <form id="searchForm" action="{{ path('app_rv_search') }}" method="GET">
+    <input type="text" id="query" name="query">
     </form>
+
+     {# AJAX script to handle dynamic search #}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+   <script>
+    
+    $(document).ready(function(){
+         let original = $(".appointments-grid");
+    $("#query").on("input", function(){
+        var input = $(this).val();
+       if(input!=""){
+            $.ajax({
+                url: '{{ path('app_rv_search')}}', // Ensure this path is correctly defined in your Twig template
+                type: 'GET',
+                data: { query: input },
+                success: function(response) {
+                    // Assuming the response is HTML that can be directly inserted
+                    original.hide(); // This line empties the content of the div
+                    
+                
+                let responseHTML = $(response).find(".appointments-grid");
+                console.log(responseHTML);
+                $('.search-appointments').html(responseHTML); // This line inserts the new content
+                    
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error(textStatus, errorThrown);
+                }
+            });
+     }
+     else {
+       // original.hidden = false ; 
+      original.show() ; 
+      $('.search-appointments').empty() ; 
+     }
+       
+    });
+});
+
+</script>
+
+
     {# ------------------------- #}
       <form action="{{ path('app_rv_tri') }}" method="GET">
         <label for="order">Ordre :</label>
@@ -23,6 +70,7 @@
 
         <button type="submit" class="btn btn-primary">Trier</button>
     </form>
+    <div class="search-appointments"></div>
     <div class="appointments-grid">
         {% for rv in lesRVdeClient %}
             <div class="appointment-item">
