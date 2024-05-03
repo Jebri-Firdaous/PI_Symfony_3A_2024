@@ -1,0 +1,57 @@
+{% extends 'Back/base.html.twig' %}
+{% block main %}
+    <h1>{{ 'List des medecins'|trans }}</h1>
+
+  <style>
+    table {
+        margin: 10px;
+        width: 30px; /* Adjust this value as needed */
+    } 
+</style>
+
+    <table class="table table-striped table-middle-aligned table-borderless" style=" width: 70%;">
+        <thead>
+            <tr>
+                <th scope="col">{{ 'Nom'|trans }}</th>
+                <th scope="col"><i class="fa fa-calendar" aria-hidden="true"></i> {{ 'Prenom'|trans }}</th>
+                <th scope="col"><i class="fa fa-calendar" aria-hidden="true"></i> {{ 'Numero Tel'|trans }}</th>
+                <th scope="col"><i class="fa fa-calendar" aria-hidden="true"></i> {{ 'Adresse'|trans }}</th>
+                <th scope="col"><i class="fa fa-calendar" aria-hidden="true"></i> {{ 'Specialité'|trans }}</th>
+                <th scope="col"><i class="fa fa-calendar" aria-hidden="true"></i>    Actions </th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for doctor in doctors %}
+            <tr>
+                <td>{{ doctor.nomMedecin }}</td>
+                {# it's not mandatory to set the timezone in localizeddate(). This is done to
+                   avoid errors when the 'intl' PHP extension is not available and the application
+                   is forced to use the limited "intl polyfill", which only supports UTC and GMT #}
+                <td>{{ doctor.prenomMedecinMedecin }}</td>
+                <td>{{ doctor.numeroTelephoneMedecin }}</td>
+                <td>{{ doctor.addressMedecin }}</td>
+                <td>{{ doctor.specialiteMedecin }}</td>
+                <td class="text-right">
+                    <div class="item-actions">
+                        <a href="{{ path('app_medecin_delete', {id: doctor.idMedecin}) }}" class="btn btn-sm btn-secondary">
+                            <i class="fa fa-eye" aria-hidden="true"></i> {{ 'delete'|trans }}
+                        </a>
+
+                        <a href="{{ path('app_medecin_edit', {id: doctor.idMedecin}) }}" class="btn btn-sm btn-primary">
+                            <i class="fa fa-edit" aria-hidden="true"></i> {{ 'edit'|trans }}
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4" align="center">{{ 'post.no_posts_found'|trans }}</td>
+           </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+     <a href="{{ path('app_medecin_add') }}" class="btn btn-sm btn-primary">
+    <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Ajouter Medecin'|trans }}
+        </a>
+
+{% endblock %}

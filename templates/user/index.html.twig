@@ -1,0 +1,72 @@
+{% extends 'Back/base.html.twig' %}
+
+{% block main %}
+<div class="row" style="margin-left: 2px; margin-right: 2px;">
+    <div class="card flex-fill">
+        <div class="card-header">
+				<h2 style="font-weight: bold; color: #2f64b1; text-align: center;">Liste des Clients</h2>
+        </div>
+        <table class="table table-hover my-0">
+            <thead>
+                <tr>
+                                    
+
+                    <th>Nom</th>
+                    <th class="d-none d-xl-table-cell">Prénom</th>
+                    <th>Numéro Téléphone</th>
+                                        <th class="d-none d-md-table-cell">Adresse email</th>
+
+                      <th class="d-none d-md-table-cell">age</th>
+    <th class="d-none d-md-table-cell">genre</th>
+                    <th class="d-none d-md-table-cell">Image</th>
+                    <th class="d-none d-md-table-cell">Etat verification</th>
+                    
+                    <th class="d-none d-md-table-cell">Etat ban</th>
+
+                    <th class="d-none d-md-table-cell">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                {% if 'CLIENT' in user.roles %}
+
+                <tr>
+                    <td>{{ user.nomPersonne }}</td>
+                    <td>{{ user.prenomPersonne }}</td>
+                                        <td>{{ user.numeroTelephone }}</td>
+
+                    <td>{{ user.email }}</td>
+                     
+               
+ <td>{{ user.age }}</td> <td>{{ user.genre }}</td>
+
+
+      <td>
+                        <img src="{{ asset('img/image_compte/' ~ user.imagePersonne) }}" alt="{{ user.nomPersonne }}" width="50" height="50">
+                    </td>
+                                     {% if user.isVerified == 1 %}
+
+                     <td>✅</td>
+    {% else %}
+                     <td>❌</td>
+                     {% endif %}
+
+                                      {% if user.isBanned == 1 %}
+
+                     <td>⛔</td>
+ {% else %}
+                     <td>🟢</td>
+                     {% endif %}
+                    <td>
+                        <a href="{{ path('app_user_edit', {'id': user.id}) }}"><span class="icon">Banner</span> </a>
+                                            <a href="{{path('app_user_delete', {id:user.getId()})}}"><span class="icon">🗑️</span></a>
+                    </td>
+                </tr>
+            {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<a href="{{ path('app_user_new') }}" class="btn-primary">Ajouter </a>
+{% endblock %}

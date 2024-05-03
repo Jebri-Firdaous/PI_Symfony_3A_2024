@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Reset your password{% endblock %}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            max-width: 600px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            color: #57C0DD;
+            margin-bottom: 20px;
+        }
+
+        /* Modifier le style du champ de saisie */
+     .form-control {
+    text-align: left; /* Aligner le texte à gauche */
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+/* Style lorsque le champ est actif */
+.form-control:focus {
+    border-color: #57C0DD; /* Couleur de la bordure lorsque le champ est actif */
+}
+
+/* Style lorsque le champ est survolé */
+.form-control:hover {
+    border-color: #57C0DD; /* Couleur de la bordure lorsqu'il est survolé */
+}
+
+        button {
+            padding: 10px 20px;
+            background-color: #57C0DD;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+	<main class="d-flex w-100">
+		<div class="container d-flex flex-column">
+			<div class="row vh-100">
+				<div class="col-sm-10 col-md-8 col-lg-6 mx-auto d-table h-100">
+					<div class="d-table-cell align-middle">
+
+						<div class="text-center mt-4">
+	<a href="{{ path ('app_acceuil')}}">
+		<h1 style="color: #37423b; font-size: 35px;">
+			<strong>E-CITY</strong>
+		</h1>
+	</a>
+</div>
+
+						<div class="card">
+							<div class="card-body">
+								<div class="m-sm-4">
+<div class="container">
+    {% block section %}
+        <h1>Réinitialisation mot de passe</h1>
+
+        {{ form_start(resetForm) }}
+            {{ form_widget(resetForm.plainPassword, { 'attr': {'class': 'form-control', 'placeholder': 'Enter your new password'} }) }}
+            <button>Réinitialiser le mot de passe</button>
+        {{ form_end(resetForm) }}
+    {% endblock %}
+</div>
+</div>
+							</div>
+						</div>
+			<div class="card">
+                     <div >
+                        <div class="m-sm-4">
+                        
+                          
+                           <div style="text-align: center;">
+                             
+                           </div>
+                        </div>
+						
+                     </div>
+					</div>
+		
+				</div>
+			</div>
+		</div>
+
+	</main>
+</body>
+</html>

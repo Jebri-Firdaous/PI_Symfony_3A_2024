@@ -1,0 +1,56 @@
+{% extends 'Back/base.html.twig' %}
+{% block main %}
+    <h1>{{ 'List de tous les rendez-vous'|trans }}</h1>
+
+  <style>
+    table {
+        margin: 10px;
+        width: 30px; /* Adjust this value as needed */
+    } 
+</style>
+
+    <table class="table table-striped table-middle-aligned table-borderless" style=" width: 70%;">
+        <thead>
+            <tr>
+                <th scope="col"><i class="fa fa-calendar" aria-hidden="true"></i> {{ 'Client'|trans }}</th>
+                <th scope="col"><i class="fa fa-calendar" aria-hidden="true"></i> {{ 'Dr.Nom'|trans }}</th>
+                <th scope="col"><i class="fa fa-calendar" aria-hidden="true"></i> {{ 'Specialite'|trans }}</th>
+                <th scope="col"><i class="fa fa-calendar" aria-hidden="true"></i> {{ 'Date RV'|trans }}</th>
+                <th scope="col"><i class="fa fa-calendar" aria-hidden="true"></i> {{ 'Adresse'|trans }}</th>
+                <th scope="col"><i class="fa fa-calendar" aria-hidden="true"></i>    Actions </th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for rv in lesRVdeClient %}
+            <tr>
+                <td>{{ rv.getClient().getPersonne().getNomPersonne() ~ " " ~ rv.getClient().getPersonne().getPrenomPersonne() }}</td>
+                <td>{{ "Dr." ~ rv.getIdMedecin().getNomMedecin }}</td>
+                <td>{{ "Dr." ~ rv.getIdMedecin().specialiteMedecin }}</td>
+                <td>{{ rv.getDateRendezVous().format('d/m/Y H:i')  }}</td>
+                <td>{{ rv.getIdMedecin().getAddressMedecin() }}</td>
+                
+                
+                <td class="text-right">
+                    <div class="item-actions">
+                        <a href="{{ path('back_rendezVous_delete', {id: rv.getRefRendezVous()}) }}" class="btn btn-sm btn-secondary">
+                            <i class="fa fa-eye" aria-hidden="true"></i> {{ 'delete'|trans }}
+                        </a>
+
+                        <a href="{{ path('back_rendezVous_edit', {id:  rv.getRefRendezVous()}) }}" class="btn btn-sm btn-primary">
+                            <i class="fa fa-edit" aria-hidden="true"></i> {{ 'edit'|trans }}
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4" align="center">{{ 'post.no_posts_found'|trans }}</td>
+           </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+     <a href="{{ path('back_rendezVous_add') }}" class="btn btn-sm btn-primary">
+    <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Ajouter RendezVous'|trans }}
+        </a>
+
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends 'Back/base.html.twig' %}
+{# templates/task/new.html.twig #}
+{% block main %}
+<div style="display: flex; align-items: center;">
+    <div style="margin-right: 159px;">
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'style': 'margin: 90px;'}}) }}
+    <table>
+    <tr>{{form_label(form.id)}}</tr>
+    <tr>{{form_widget(form.id)}}</tr>
+    <tr>{{form_errors(form.id)}}</tr>
+
+    <tr>{{form_label(form.specialiteMedecin)}}</tr>
+    <tr>{{form_widget(form.specialiteMedecin)}}</tr>
+    <tr>{{form_errors(form.specialiteMedecin)}}</tr>
+
+    {# Check if idMedecin field exists before rendering it #}
+{% if form.idMedecin is defined %}
+    <tr>{{ form_label(form.idMedecin) }}</tr>
+    <tr>{{ form_widget(form.idMedecin) }}</tr>
+    <tr>{{ form_errors(form.idMedecin) }}</tr>
+{% endif %}
+</br>
+    <tr>{{form_label(form.dateRendezVous)}}</tr>
+    <tr>{{form_widget(form.dateRendezVous)}}</tr>
+    <tr>{{form_errors(form.dateRendezVous)}}</tr>
+    </table>
+
+
+    {{form_widget(form.save)}}
+    {{form_end(form)}}
+    <script>
+var $specialiteMedecin = $('#rendezvous_specialiteMedecin');
+$specialiteMedecin.change(function() {
+    var $form = $(this).closest('form');
+    var data = {};
+    data[$specialiteMedecin.attr('name')] = $specialiteMedecin.val();
+    $.ajax({
+        url : $form.attr('action'),
+        type: $form.attr('method'),
+        data : data,
+        complete: function(html) {
+            $('#rendezvous_idMedecin').replaceWith(
+                $(html.responseText).find('#rendezvous_idMedecin')
+            );
+        }
+    });
+});
+</script>
+    </div>
+    <img src="{{ asset('img/imgGM/rendezVous.png') }}" alt="Image Description" style="width: 500px; height: auto;">
+</div>
+{% endblock %}
