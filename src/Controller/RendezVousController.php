@@ -544,32 +544,81 @@ class RendezVousController extends AbstractController
 
     
     #[Route('/rv/tri', name: 'app_rv_tri')]
-    public function tri(Request $request, MedecinRepository $medecinRepository , PaginatorInterface $paginator): Response
-    {
-        $order = $request->query->get('order', 'asc'); 
-        $field = $request->query->get('field', 'nomMedecin'); 
+public function tri(Request $request, RendezVousRepository $rendezVousRepository, PaginatorInterface $paginator): Response
+{
+    $order = $request->query->get('order', 'asc');
+    $field = $request->query->get('field', 'date');
 
-        if (!in_array(strtolower($order), ['asc', 'desc'])) {
-            $order = 'asc'; 
-        }
-
-        if (!in_array($field, ['nomMedecin', 'date'])) {
-            $field = 'nomMedecin'; 
-        }
-
-        $queryBuilder = $medecinRepository->createQueryBuilder('a')
-            ->orderBy('a.' . $field, $order);
-
-        $doctors = $paginator->paginate(
-            $queryBuilder->getQuery(),
-            $request->query->getInt('page', 1),
-            10 
-        );
-        return $this->render('Back/medecin/showDoctors.html.twig', [
-            'doctors' => $doctors,
-
-        ]);
+    if (!in_array(strtolower($order), ['asc', 'desc'])) {
+        $order = 'asc';
     }
+
+    if (!in_array($field, ['date', 'nomMedecin'])) {
+        $field = 'date';
+    }
+
+    $queryBuilder = $rendezVousRepository->createQueryBuilder('r');
+    $queryBuilder->leftJoin('r.id_medecin', 'm');
+
+    if ($field === 'date') {
+        $queryBuilder->orderBy('r.dateRendezVous', $order);
+    } else {
+        $queryBuilder->orderBy('m.nomMedecin', $order);
+    }
+
+    $rendezvous = $queryBuilder->getQuery()->getResult();
+
+    return $this->render('Back/rendezVous/showAllRvInOtherForm.html.twig', [
+        'lesRVdeClient' => $rendezvous,
+    ]);
+}
+
+#[Route('/rv/triclient', name: 'front_app_rv_tri')]
+public function triforClient(Request $request, RendezVousRepository $rendezVousRepository, 
+ ClientRepository $clientRepository ,PaginatorInterface $paginator): Response
+{
+    $order = $request->query->get('order', 'asc');
+    $field = $request->query->get('field', 'date');
+    $client = $clientRepository->find(55);
+    // $idPersonne = $request->query->get('idPersonne'); // Récupération de l'ID de la personne
+
+    if (!in_array(strtolower($order), ['asc', 'desc'])) {
+        $order = 'asc';
+    }
+
+    if (!in_array($field, ['date', 'nomMedecin'])) {
+        $field = 'date';
+    }
+
+    $queryBuilder = $rendezVousRepository->createQueryBuilder('r');
+    $queryBuilder->leftJoin('r.id_medecin', 'm')
+                 ->where($queryBuilder->expr()->eq('r.id_personne', ':idPersonne')) // Ajout de la condition sur l'ID de la personne
+                 ->setParameter('idPersonne', $client); // Passage de la valeur du paramètre
+
+    if ($field === 'date') {
+        $queryBuilder->orderBy('r.dateRendezVous', $order);
+    } else {
+        $queryBuilder->orderBy('m.nomMedecin', $order);
+    }
+
+    $rendezvous = $queryBuilder->getQuery()->getResult();
+    $lesRVdeClient = $paginator->paginate(
+        // $listrendezVous, 
+        $rendezvous,
+        $request->query->getInt('page', 1), 
+        6
+    );
+
+    return $this->render('Front/rendez_vous/showRV.html.twig', [
+        'lesRVdeClient' => $lesRVdeClient,
+    ]);
+}
+
+
+
+    
+
+
     #[Route('/deleteRVBack/{id}', name: 'back_rendezVous_delete')]
     public function deleteRendezVousfromAdmin(Request $request, ManagerRegistry $doctrine, RendezVousRepository $rendezVousRepository, int $id): Response
     {
