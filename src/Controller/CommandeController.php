@@ -14,6 +14,7 @@ use App\Entity\CommandeArticle;
 use Doctrine\DBAL\Connection;
 use Knp\Snappy\Pdf;
 use Doctrine\ORM\Query\Expr\Func;
+use Knp\Component\Pager\PaginatorInterface;
 
 
 
@@ -21,7 +22,14 @@ use Doctrine\ORM\Query\Expr\Func;
 #[Route('/commande')]
 class CommandeController extends AbstractController
 {
-    public function __construct(private Connection $connection) {}
+
+  
+    private $paginator;
+
+    
+    public function __construct(private Connection $connection, PaginatorInterface $paginator) {
+        $this->paginator = $paginator;
+    }
     #[Route('/stats', name: 'app_commande_stats', methods: ['GET'])]
     public function stats(EntityManagerInterface $entityManager): Response
     {
@@ -33,6 +41,7 @@ class CommandeController extends AbstractController
 
         $topArticleOfWeek = $this->getTopArticleOfWeek();
         $commandesParJour = $this->getCommandesParJour($entityManager);
+       
 
         return $this->render('Back/commande/stats.html.twig', [
             'commandesStats' => $commandesStats,
@@ -132,10 +141,23 @@ private function getTotalCommandes(): int
         ]);
     }
     #[Route('/back', name: 'app_commande_index_back', methods: ['GET'])]
-public function indexBack(CommandeRepository $commandeRepository, EntityManagerInterface $entityManager): Response
+public function indexBack(CommandeRepository $commandeRepository, Request $request, EntityManagerInterface $entityManager, PaginatorInterface $paginator): Response
 {
-    // Récupérer toutes les commandes
-    $commandes = $commandeRepository->findAll();
+  
+    // Récupérer toutes les commandes avec une requête de base
+    $commandesQuery = $commandeRepository->createQueryBuilder('c')
+        ->getQuery();
+
+    // Paginer les commandes
+    $commandes = $paginator->paginate(
+        $commandesQuery, // Requête à paginer
+        $request->query->getInt('page', 1), // Numéro de page par défaut
+        4 // Limiter à 8 commandes par page
+    );
+     // Récupérer le numéro de page actuel
+     $currentPage = $request->query->getInt('page', 1);
+     $totalCommandesCount = $commandeRepository->createQueryBuilder('c')->select('COUNT(c.idCommande)')->getQuery()->getSingleScalarResult();
+     $maxPage = ceil($totalCommandesCount / 2); // 2 commandes par page
 
     // Récupérer les articles associés à chaque commande
     $articlesParCommande = [];
@@ -151,8 +173,11 @@ public function indexBack(CommandeRepository $commandeRepository, EntityManagerI
     return $this->render('Back/commande/index.html.twig', [
         'commandes' => $commandes,
         'articlesParCommande' => $articlesParCommande,
+        'page' => $currentPage, // Ajouter la variable 'page' au contexte
+        'maxPage' => $maxPage, // Ajouter la variable 'maxPage' au contexte
     ]);
 }
+
 
     
     #[Route('/new', name: 'app_commande_new', methods: ['GET', 'POST'])]

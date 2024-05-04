@@ -32,6 +32,9 @@ use Doctrine\DBAL\Connection;
 use Knp\Snappy\Pdf;
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
+
 
 
 
@@ -39,7 +42,10 @@ use Stripe\Checkout\Session;
 #[Route('/article')]
 class ArticleController extends AbstractController
 {
-    
+    private $session;
+   
+ 
+
     private $qrcodeService;
     private $paginator;
 
@@ -48,6 +54,38 @@ class ArticleController extends AbstractController
         $this->qrcodeService = $qrcodeService;
         $this->paginator = $paginator;
     }
+    
+    
+    #[Route('/search', name: 'app_article_search', methods: ['GET'])]
+    public function search(Request $request, ArticleRepository $articleRepository): Response
+    {
+        $query = $request->query->get('q'); // Terme de recherche
+
+        // Créez une requête pour récupérer les articles avec un filtre de recherche
+        $queryBuilder = $articleRepository->createQueryBuilder('a');
+        if ($query) {
+            $queryBuilder->andWhere('a.nomArticle LIKE :search')
+                ->setParameter('search', '%' . $query . '%');
+        }
+
+        $articles = $queryBuilder->getQuery()->getResult();
+
+        // Formattez les données pour la réponse JSON
+        $formattedArticles = [];
+        foreach ($articles as $article) {
+            $formattedArticles[] = [
+                'nomArticle' => $article->getNomArticle(),
+                'prixArticle' => $article->getPrixArticle(),
+                'descriptionArticle' => $article->getDescriptionArticle(),
+                'typeArticle' => $article->getTypeArticle(),
+            ];
+        }
+
+        // Retournez la réponse JSON
+        return $this->json($formattedArticles);
+    }
+
+   
 
     
     #[Route('/back', name: 'app_article_index_back', methods: ['GET'])]
@@ -228,7 +266,8 @@ public function removeFromCartback(Article $article, SessionInterface $session):
     public function checkout(
         SessionInterface $session,
         EntityManagerInterface $entityManager,
-        ArticleRepository $articleRepository
+        ArticleRepository $articleRepository,
+       
     ): Response {
         // Récupérer le contenu du panier
         $cart = $session->get('cart', []);
@@ -251,6 +290,7 @@ public function removeFromCartback(Article $article, SessionInterface $session):
 
         // Enregistrer la commande dans la base de données
         $entityManager->persist($commande);
+        
 
         // Enregistrer les articles associés à cette commande dans la table commande_article
         foreach ($cart as $itemId => $item) {
@@ -573,7 +613,7 @@ public function placeOrderback(SessionInterface $session, EntityManagerInterface
             a.description_article
         ORDER BY 
             totalVentes DESC
-        LIMIT 4"; 
+        LIMIT 4"; // Limiter aux 5 articles les plus vendus
 
     $result = $this->connection->executeQuery($query)->fetchAllAssociative();
     return $result;
@@ -600,6 +640,7 @@ public function new(Request $request): Response
 
     if ($form->isSubmitted() && $form->isValid()) {
         // Gérer le téléchargement de l'image
+        /** @var UploadedFile $file */
         $file = $form->get('photoArticle')->getData();
         if ($file) {
             $fileName = md5(uniqid()) . '.' . $file->guessExtension();
@@ -607,28 +648,26 @@ public function new(Request $request): Response
                 $this->getParameter('photos_directory'),
                 $fileName
             );
-            
-            // Construire le chemin complet de l'image
-            $photoArticleFullPath = $this->getParameter('photos_directory') . DIRECTORY_SEPARATOR . $fileName;
-            
-    
-            // Enregistrer le chemin complet dans l'entité
+
+            // Construire l'URL complète de l'image
+            $photoArticleFullPath = $request->getSchemeAndHttpHost() . '/img/' . $fileName;
+
+            // Enregistrer l'URL complète dans l'entité
             $article->setPhotoArticle($photoArticleFullPath);
-            
+
             // Enregistrer l'article dans la base de données
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($article);
             $entityManager->flush();
-    
+
+            // Redirection ou rendu de la page selon votre logique
             return $this->redirectToRoute('app_article_index_back', [
                 'photoArticleFullPath' => $photoArticleFullPath,
             ]);
         }
     }
-    
 
     return $this->render('Back/article/new.html.twig', [
-        
         'form' => $form->createView(),
     ]);
 }
@@ -651,41 +690,43 @@ public function new(Request $request): Response
     }
 
     #[Route('/{idArticle}/edit', name: 'app_article_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Article $article, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(ArticleType::class, $article);
-        $form->handleRequest($request);
-    
-        if ($form->isSubmitted() && $form->isValid()) {
-            $file = $form->get('photoArticle')->getData();
-            if ($file) {
-                $fileName = md5(uniqid()) . '.' . $file->guessExtension();
-                $file->move(
-                    $this->getParameter('photos_directory'),
-                    $fileName
-                );
-                
-                // Construire le chemin complet de l'image
-                $photoArticleFullPath = $this->getParameter('photos_directory') . DIRECTORY_SEPARATOR . $fileName;
-                
-        
-                // Enregistrer le chemin complet dans l'entité
-                $article->setPhotoArticle($photoArticleFullPath);
-            }
-    
-            // Enregistrer les modifications dans la base de données
-            $entityManager->flush();
-    
-            // Rediriger vers la page d'index des articles
-            return $this->redirectToRoute('app_article_index_back');
+public function edit(Request $request, Article $article, EntityManagerInterface $entityManager): Response
+{
+    $form = $this->createForm(ArticleType::class, $article);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        // Gérer le téléchargement de la nouvelle image
+        /** @var UploadedFile $file */
+        $file = $form->get('photoArticle')->getData();
+        if ($file) {
+            $fileName = md5(uniqid()) . '.' . $file->guessExtension();
+            $file->move(
+                $this->getParameter('photos_directory'),
+                $fileName
+            );
+
+            // Construire l'URL complète de la nouvelle image
+            $photoArticleFullPath = $request->getSchemeAndHttpHost() . '/img/' . $fileName;
+
+            // Mettre à jour l'URL complète de l'image dans l'entité
+            $article->setPhotoArticle($photoArticleFullPath);
         }
-    
-        // Rendre le formulaire d'édition de l'article
-        return $this->renderForm('Back/article/edit.html.twig', [
-            'article' => $article,
-            'form' => $form,
-        ]);
+
+        // Enregistrer les modifications dans la base de données
+        $entityManager->flush();
+
+        // Redirection ou rendu de la page selon votre logique
+        return $this->redirectToRoute('app_article_index_back');
     }
+
+    // Rendre le formulaire d'édition de l'article
+    return $this->renderForm('Back/article/edit.html.twig', [
+        'article' => $article,
+        'form' => $form,
+    ]);
+}
+
     
 #[Route('/{idArticle}', name: 'app_article_delete', methods: ['POST'])]
 public function delete(Request $request, Article $article, EntityManagerInterface $entityManager): Response
