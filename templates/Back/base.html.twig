@@ -8,13 +8,15 @@
 	<meta name="description" content="Responsive Admin &amp; Dashboard Template based on Bootstrap 5">
 	<meta name="author" content="AdminKit">
 	<meta name="keywords" content="adminkit, bootstrap, bootstrap 5, admin, dashboard, template, responsive, css, sass, html, theme, front-end, ui kit, web">
-
+  <!-- Favicons -->
+  <link href="{{ asset ('img/icone.png') }}" rel="icon">
+    <link href="{{ asset ('img/apple-touch-icon.png') }}" rel="apple-touch-icon">
 	<link rel="preconnect" href="https://fonts.gstatic.com">
 	<link rel="shortcut icon" href="img/icons/icon-48x48.png" />
 
 	<link rel="canonical" href="https://demo-basic.adminkit.io/" />
 
-	<title>AdminKit Demo - Bootstrap 5 Admin Template</title>
+	<title>E-city Back</title>
 
 	<link href="{{asset('css/app.css')}}" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
@@ -28,17 +30,17 @@
 
 	<div class="wrapper">
 		{% block sideBar %}
+{% if app.user %}
+
 		<nav id="sidebar" class="sidebar js-sidebar">
 			<div class="sidebar-content js-simplebar">
-				<a class="sidebar-brand" href="index.html">
-          <span class="align-middle">AdminKit</span>
+				<a class="sidebar-brand" href="{{ path ('app_back_acceuil')}}">
+		   <img src="{{ asset('img/logo2.png') }}" class="img-fluid" alt="Logo" style="max-width: 100px;"> 
         </a>
 
 				<ul class="sidebar-nav">
-					<li class="sidebar-header">
-						Pages
-					</li>
 
+<<<<<<< HEAD
 					<li class="sidebar-item active">
 						<a class="sidebar-link" href="index.html">
               <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
@@ -90,71 +92,141 @@
               <i class="align-middle" data-feather="book"></i> <span class="align-middle">Blank</span>
             </a>
 					</li>
+=======
+>>>>>>> 37caec1e37e945f6c482a8a42503aea11ab64dea
 
 					<li class="sidebar-header">
-						Tools & Components
+
+					 <i class="align-middle" data-feather="heart"></i>
+						Gestion Santé
 					</li>
 
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="ui-buttons.html">
-              <i class="align-middle" data-feather="square"></i> <span class="align-middle">Buttons</span>
-            </a>
-					</li>
-
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="ui-forms.html">
-              <i class="align-middle" data-feather="check-square"></i> <span class="align-middle">Forms</span>
-            </a>
-					</li>
-
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="ui-cards.html">
-              <i class="align-middle" data-feather="grid"></i> <span class="align-middle">Cards</span>
-            </a>
-					</li>
-
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="ui-typography.html">
-              <i class="align-middle" data-feather="align-left"></i> <span class="align-middle">Typography</span>
-            </a>
-					</li>
-
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="icons-feather.html">
-              <i class="align-middle" data-feather="coffee"></i> <span class="align-middle">Icons</span>
-            </a>
-					</li>
-
+					<li class="sidebar-item {% if app.request.attributes.get('_route') == 'app_medecin_getAll' %}active{% endif %}">
+    <a class="sidebar-link" href="{{ path('app_medecin_getAll') }}">
+       <span class="align-middle">Gestion Medecin</span>
+    </a>
+</li>
+							<li class="sidebar-item {% if app.request.attributes.get('_route') == 'back_rendezVous_getAll' %}active{% endif %}">
+    <a class="sidebar-link" href="{{ path('back_rendezVous_getAll') }}">
+       <span class="align-middle">Gestion RendezVous</span>
+    </a>
+</li>
 					<li class="sidebar-header">
-						Plugins & Addons
+					<i class="align-middle" data-feather="shopping-cart"></i>
+						Gestion Shopping
 					</li>
 
 					<li class="sidebar-item">
-						<a class="sidebar-link" href="charts-chartjs.html">
-              <i class="align-middle" data-feather="bar-chart-2"></i> <span class="align-middle">Charts</span>
+						<a class="sidebar-link" href="{{ path ('app_article_index_back')}}">
+               <span class="align-middle">Gestion articles</span>
             </a>
+					</li>
+					<li class="sidebar-item ">
+						<a class="sidebar-link" href="{{ path ('app_commande_index_back')}}">
+               <span class="align-middle">Gestion commandes</span>
+            </a>
+					</li>
+					<li class="sidebar-header">
+					<i class="align-middle" data-feather="map"></i>
+						Gestion Transport
 					</li>
 
 					<li class="sidebar-item">
-						<a class="sidebar-link" href="maps-google.html">
-              <i class="align-middle" data-feather="map"></i> <span class="align-middle">Maps</span>
+						<a class="sidebar-link" href="{{ path ('app_article_index_back')}}">
+               <span class="align-middle">Gestion billets</span>
             </a>
 					</li>
-				</ul>
+					<li class="sidebar-item ">
+						<a class="sidebar-link" href="{{ path ('app_article_index_back')}}">
+           <span class="align-middle">Gestion stations</span>
+            </a>
+					</li>
+					<li class="sidebar-header">
+					<i class="align-middle" data-feather="map-pin"></i> 
+						Gestion Parking
+					</li>
 
-				<div class="sidebar-cta">
-					<div class="sidebar-cta-content">
-						<strong class="d-inline-block mb-2">Upgrade to Pro</strong>
-						<div class="mb-3 text-sm">
-							Are you looking for more components? Check out our premium version.
-						</div>
-						<div class="d-grid">
-							<a href="upgrade-to-pro.html" class="btn btn-primary">Upgrade to Pro</a>
-						</div>
-					</div>
-				</div>
+					<li class="sidebar-item">
+						<a class="sidebar-link"href="{{ path ('app_place_index_back')}}">
+              <span class="align-middle">Gestion places</span>
+            </a>
+					</li>
+					<li class="sidebar-item ">
+						<a class="sidebar-link" href="{{ path ('app_place_index_back')}}">
+               <span class="align-middle">Gestion parking</span>
+            </a>
+					</li>
+					<li class="sidebar-header">
+					 <i class="align-middle" data-feather="briefcase"></i>
+						Gestion Tourisme
+					</li>
+
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="{{ path ('app_article_index_back')}}">
+              <span class="align-middle">Gestion hotels</span>
+            </a>
+					</li>
+					<li class="sidebar-item ">
+					
+						<a class="sidebar-link" href="{{ path ('app_article_index_back')}}">
+               <span class="align-middle">Gestion reservations</span>
+            </a>
+					</li>
+					<li class="sidebar-header">
+					<i class="align-middle" data-feather="users"></i> 
+						Gestion Utilisateurs
+					</li>
+
+      <li class="sidebar-item {% if app.request.attributes.get('_route') in ['app_user_new', 'app_user_index'] %}active{% endif %}">
+    <a class="sidebar-link" href="{{ path ('app_user_index')}}">
+        <span class="align-middle">Gestion clients</span>
+    </a>
+</li>
+
+<li class="sidebar-item {% if app.request.attributes.get('_route') in ['app_user_new_admin', 'app_user_index_admin', 'app_user_edit'] %}active{% endif %}">
+    <a class="sidebar-link" href="{{ path ('app_user_index_admin')}}">
+        <span class="align-middle">Gestion administrateurs</span>
+    </a>
+</li>
+
+
+     
+
+					</ul>
+
+				
 			</div>
 		</nav>
+		 {% else %}
+		 <nav id="sidebar" class="sidebar js-sidebar">
+			<div class="sidebar-content js-simplebar">
+				<a class="sidebar-brand" href="{{ path ('app_back_acceuil')}}">
+				   <img src="{{ asset('img/logo2.png') }}" class="img-fluid" alt="Logo" style="max-width: 100px;"> 
+   				     </a>
+
+				<ul class="sidebar-nav">
+
+
+			     
+					 <li class="sidebar-item {% if app.request.attributes.get('_route') == 'app_login_admin' %}active{% endif %}">
+								<a class="sidebar-link" href="{{ path ('app_login_admin')}}">
+
+            							 <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Se Connecter</span>
+          							  </a>
+					</li>
+
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="{{ path ('app_register_admin')}}">
+           									   <i class="align-middle" data-feather="user-plus"></i> <span class="align-middle">S'Inscrire</span>
+        					    </a>
+					</li>
+     
+
+					</ul>
+
+				</div>
+		</nav>
+		{% endif %}
 		{% endblock %}
 
 		<div class="main">
@@ -297,25 +369,40 @@
 									<a href="#" class="text-muted">Show all messages</a>
 								</div>
 							</div>
+              </a> 
 						</li>
-						<li class="nav-item dropdown">
-							<a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-bs-toggle="dropdown">
-                <i class="align-middle" data-feather="settings"></i>
-              </a>
 
-							<a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
-                <img src="{{asset('img/avatars/avatar.jpg')}}" class="avatar img-fluid rounded me-1" alt="Charles Hall" /> <span class="text-dark">Charles Hall</span>
-              </a>
-							<div class="dropdown-menu dropdown-menu-end">
-								<a class="dropdown-item" href="pages-profile.html"><i class="align-middle me-1" data-feather="user"></i> Profile</a>
-								<a class="dropdown-item" href="#"><i class="align-middle me-1" data-feather="pie-chart"></i> Analytics</a>
-								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="index.html"><i class="align-middle me-1" data-feather="settings"></i> Settings & Privacy</a>
-								<a class="dropdown-item" href="#"><i class="align-middle me-1" data-feather="help-circle"></i> Help Center</a>
-								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="#">Log out</a>
-							</div>
-						</li>
+			{% if app.user %}
+    <li class="nav-item dropdown">
+        <a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-bs-toggle="dropdown">
+            <i class="align-middle" data-feather="settings"></i>
+        </a>
+
+        <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
+    <img src="{{ asset('img/image_compte/' ~ app.user.imagePersonne) }}" style="width:40px" alt="Profile Image" />
+        </a>
+
+        <div class="dropdown-menu dropdown-menu-end">
+            <a class="dropdown-item" href="{{ path('app_profile') }}">
+                <i class="align-middle me-1" data-feather="user"></i> Profile
+            </a>
+            <a class="dropdown-item" href="#">
+                <i class="align-middle me-1" data-feather="pie-chart"></i> Analytics
+            </a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="index.html">
+                <i class="align-middle me-1" data-feather="settings"></i> Settings & Privacy
+            </a>
+            <a class="dropdown-item" href="#">
+                <i class="align-middle me-1" data-feather="help-circle"></i> Help Center
+            </a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{{ path('app_logout') }}">Se déconnecter</a>
+        </div>
+    </li>
+{% endif %}
+
+						
 					</ul>
 				</div>
 			</nav>

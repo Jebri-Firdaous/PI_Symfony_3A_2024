@@ -115,6 +115,7 @@ class MedecinController extends AbstractController
     #[Route('/doctorList', name: 'app_medecin_getAll')]
     public function showDoctors(MedecinRepository $medecinRepository, Request $request, PaginatorInterface $paginator): Response
     {
+<<<<<<< HEAD
         $query = $medecinRepository->findAll(); // Assuming you have a custom query method in your repository
         $doctors = $paginator->paginate(
             $query,
@@ -124,6 +125,14 @@ class MedecinController extends AbstractController
     
         return $this->render('Back/medecin/showDoctors.html.twig', [
             'doctors' => $doctors,
+=======
+        $doctors = $medecinRepository->findAll();
+        
+
+        return $this->render('Back/medecin/showDoctors.html.twig', [
+            'controller_name' => 'MedecinController',
+            'doctors'  => $doctors,
+>>>>>>> 37caec1e37e945f6c482a8a42503aea11ab64dea
         ]);
     }
 

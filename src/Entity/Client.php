@@ -6,11 +6,22 @@ use App\Repository\ClientRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+<<<<<<< HEAD
+=======
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+
+>>>>>>> 37caec1e37e945f6c482a8a42503aea11ab64dea
 
 
 
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
+<<<<<<< HEAD
 class Client
+=======
+class Client implements UserInterface
+>>>>>>> 37caec1e37e945f6c482a8a42503aea11ab64dea
 {
     // #[ORM\Id]
     // #[ORM\GeneratedValue]
@@ -20,12 +31,30 @@ class Client
     #[ORM\Id]
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(name: 'id_personne', referencedColumnName: 'id_personne', nullable: true)]
+<<<<<<< HEAD
     private ?Personne $personne = null;
+=======
+    #[Assert\Valid] // Ajout de la validation pour le champ personne
+    private ?Personne $personne = null;
+
+    #[ORM\Column(length: 30)]
+    #[Assert\NotBlank(message: "Le genre ne peut pas être vide.")]
+    private ?string $genre = null;
+
+    #[ORM\Column]
+    #[Assert\NotBlank(message: "L'age ne peut pas être vide.")]
+    #[Assert\Positive(message: "L'âge doit être un nombre positif.")]
+>>>>>>> 37caec1e37e945f6c482a8a42503aea11ab64dea
 
     #[ORM\Column(length: 30)]
     private ?string $genre = null;
 
+<<<<<<< HEAD
     #[ORM\Column]
+=======
+    #[Assert\Range(min: 15, max: 100, minMessage: "L'âge minimum est 15 ans.", maxMessage: "L'âge maximum est 100 ans.")]
+    #[Assert\Regex(pattern: "/^\d+$/", message: "L'âge doit contenir uniquement des chiffres.")]
+>>>>>>> 37caec1e37e945f6c482a8a42503aea11ab64dea
     private ?int $age = null;
 
     #[ORM\OneToMany(mappedBy: "id_personne", targetEntity: RendezVous::class, cascade: ['persist', 'remove'])]
@@ -111,5 +140,37 @@ class Client
     {
         return $this->getPersonne();
     }
+<<<<<<< HEAD
 }
 
+=======
+    public function getPassword() {
+        // Check if Personne is set before accessing its properties
+        if ($this->personne) {
+            return $this->personne->getMdpPersonne(); 
+        }
+        return null; // Return null if Personne is not set
+     }
+
+    public function getSalt() {
+        return null;
+    }
+
+    public function getUserIdentifier() {
+        return $this->getPersonne()->getMailPersonne();
+    }
+
+    public function getUsername() {
+        return $this->getPersonne()->getMailPersonne();
+    }
+
+    public function getRoles() {
+        return [];
+    }
+
+    public function eraseCredentials(){
+
+    }
+}
+
+>>>>>>> 37caec1e37e945f6c482a8a42503aea11ab64dea

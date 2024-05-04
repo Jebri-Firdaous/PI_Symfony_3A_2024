@@ -34,6 +34,7 @@ class RendezVous
     #[AcmeAssert\ContainsRVWithSameDoctorInTheSameDate(mode: 'loose', message:'Le docteur a un rendez-vous à ce moment-là')]
     private ?DateTime $dateRendezVous;
 
+<<<<<<< HEAD
     #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: "lesRendezVous")]
     #[ORM\JoinColumn(name: 'id_personne', referencedColumnName: 'id_personne')]
     #[Assert\NotBlank(
@@ -41,6 +42,15 @@ class RendezVous
     )]
     public Client $id_personne;
     // private Client $id_personne;
+=======
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "lesRendezVous")]
+    #[ORM\JoinColumn(name: 'id', referencedColumnName: 'id')]
+    #[Assert\NotBlank(
+        message:'Cette valeur ne doit pas être vide'
+    )]
+    public User $id;
+    // private User $id;
+>>>>>>> 37caec1e37e945f6c482a8a42503aea11ab64dea
     
 
     #[ORM\ManyToOne(targetEntity: Medecin::class, inversedBy: "rendezVous")]
@@ -83,14 +93,24 @@ class RendezVous
         return $this;
     }
 
+<<<<<<< HEAD
     public function getClient(): ?Client
     {
         return $this->id_personne;
+=======
+    public function getUser(): ?User
+    {
+        return $this->id;
+>>>>>>> 37caec1e37e945f6c482a8a42503aea11ab64dea
     }
 
-    public function setIdPersonne(?Client $idPersonne): static
+    public function setIdPersonne(?User $idPersonne): static
     {
+<<<<<<< HEAD
         $this->id_personne = $idPersonne;
+=======
+        $this->id = $idPersonne;
+>>>>>>> 37caec1e37e945f6c482a8a42503aea11ab64dea
 
         return $this;
     }

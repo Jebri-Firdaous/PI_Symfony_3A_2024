@@ -1,0 +1,66 @@
+{% extends 'Back/base.html.twig' %}
+
+{% block main %}
+<div class="container">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+				<h2 style="font-weight: bold; color: #2f64b1; text-align: center;">Ajouter un Administrateur</h2>
+
+                    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                    {{ form_errors(form) }}
+
+                    <div class="mb-3">
+                        <label class="form-label">Nom</label>
+                        {{ form_widget(form.nom_personne, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.nom_personne) }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Prénom</label>
+                        {{ form_widget(form.prenom_personne, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.prenom_personne) }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Numéro de téléphone</label>
+                        {{ form_widget(form.numero_telephone, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.numero_telephone) }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form_label(form.roleAdmin, 'role') }}
+                        {{ form_widget(form.roleAdmin, {'attr': {'class': 'form-select'}}) }}
+                        {{ form_errors(form.roleAdmin) }}
+                    </div>
+        
+                    <div class="mb-3">
+                        <label class="form-label">Adresse Mail</label>
+                        {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.email) }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Mot de passe</label>
+                        {{ form_widget(form.plainPassword, {'attr': {'class': 'form-control', 'autocomplete': 'new-password'}}) }}
+                        {{ form_errors(form.plainPassword) }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Image de profil</label>
+                        {{ form_widget(form.image_personne, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.image_personne) }}
+                    </div>
+
+      <div class="d-flex justify-content-center">
+    <a class="btn">
+        {{ form_widget(form.Submit, {'attr': {'class': 'btn btn-primary'}, 'label': 'Ajouter'}) }}
+    </a>
+</div>                <div class="text-center">
+
+                                                            <a href="{{ path('app_user_index_admin') }}">Retour à la liste</a>
+</div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

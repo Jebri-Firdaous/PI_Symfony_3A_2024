@@ -4,12 +4,21 @@ namespace App\Entity;
 
 use App\Repository\PersonneRepository;
 use Doctrine\ORM\Mapping as ORM;
+<<<<<<< HEAD
 
+=======
+use Symfony\Component\Validator\Constraints as Assert;
+
+/**
+ * @ORM\Entity(repositoryClass=PersonneRepository::class)
+ */
+>>>>>>> 37caec1e37e945f6c482a8a42503aea11ab64dea
 #[ORM\Entity(repositoryClass: PersonneRepository::class)]
 class Personne
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
+<<<<<<< HEAD
     #[ORM\Column]
     private ?int $id_personne = null;
 
@@ -27,10 +36,79 @@ class Personne
 
     #[ORM\Column(length: 50)]
     private ?string $mdp_personne = null;
+=======
+    #[ORM\Column]
+    private ?int $id_personne = null;
 
+    /*--------------------------------------------------------------------------------------------------------------------------- */
+    /*nom de la personne */
+    #[ORM\Column(length: 30, nullable: true)]
+    #[Assert\NotBlank(message: "Le nom est requis")]
+    #[Assert\Length(max: 30, maxMessage: "Le nom ne peut pas dépasser 30 caractères")]
+    #[Assert\Regex(
+    pattern: '/^[a-zA-Z]*$/',
+    message: "Le nom ne peut contenir que des lettres."
+    )]
+    private ?string $nom_personne = null;
+
+     /*--------------------------------------------------------------------------------------------------------------------------- */
+    /*prenom de la personne */
+    #[ORM\Column(length: 30)]
+    #[Assert\NotBlank(message: "Le prenom est requis")]
+    #[Assert\Length(max: 30, maxMessage: "Le prenom ne peut pas dépasser 30 caractères")]
+    #[Assert\Regex(
+    pattern: '/^[a-zA-Z]*$/',
+    message: "Le prenom ne peut contenir que des lettres."
+    )]    
+    private ?string $prenom_personne = null;
+>>>>>>> 37caec1e37e945f6c482a8a42503aea11ab64dea
+
+    /*--------------------------------------------------------------------------------------------------------------------------- */
+    /*telphone de la personne */
+    #[ORM\Column]
+    #[Assert\NotBlank(message: "Le numero de telephone ne peut pas être vide.")]
+    #[Assert\Regex(    pattern: '/^\d{8}$/', message: "L'âge doit contenir uniquement des chiffres (exactement 8).")]
+    private ?int $numero_telephone = null;
+
+    /*--------------------------------------------------------------------------------------------------------------------------- */
+    /*mail de la personne */
+    #[ORM\Column(length: 50)]
+    #[Assert\NotBlank(message: "L'adresse e-mail est requise")]
+    #[Assert\Regex(
+        pattern: '/^(.+)@(gmail|esprit|yahoo|hotmail)\.(tn|com)$/',
+        message: "Veuillez saisir une adresse e-mail valide (@gmail, @esprit, @yahoo, @hotmail) avec une extension .tn ou .com."
+    )]
+    private ?string $email = null;
+
+    /*--------------------------------------------------------------------------------------------------------------------------- */
+    /*mdp_personne de la personne */
+    #[ORM\Column(length: 50)]
+    #[Assert\NotBlank(message: "Le mot de passe est requis")]
+    #[Assert\Length(
+        min: 10,
+        minMessage: "Le mot de passe doit contenir au moins 10 caractères."
+    )]
+    #[Assert\Regex(
+        pattern: '/^(?=.*[!@#$%^&*(),.?":{}|<>])(?=.*[A-Z])(?=.*\d).*$/',
+        message: "(doit contenir au moins une lettre majuscule, un chiffre et un caractère spécial)."
+    )]
+    private ?string $mdp_personne = null;
+    
+    /*--------------------------------------------------------------------------------------------------------------------------- */
+    /* image de la personne */
     #[ORM\Column(length: 255)]
+<<<<<<< HEAD
     private ?string $image_personne = null;
 
+=======
+    #[Assert\NotBlank(message: "L'image ne peut pas être vide.")]
+    #[Assert\File(mimeTypes:["image/png", "image/jpeg", "image/jpg"], mimeTypesMessage:"Veuillez télécharger un fichier d'image valide (PNG, JPEG, JPG).")]
+
+    private ?string $image_personne = null;
+
+    /*--------------------------------------------------------------------------------------------------------------------------- */
+    /* ****************************** getter et setter ****************************************************************************/
+>>>>>>> 37caec1e37e945f6c482a8a42503aea11ab64dea
     public function getId(): ?int
     {
         return $this->id_personne;
@@ -74,12 +152,21 @@ class Personne
 
     public function getMailPersonne(): ?string
     {
+<<<<<<< HEAD
         return $this->mail_personne;
     }
 
     public function setMailPersonne(string $mail_personne): static
     {
         $this->mail_personne = $mail_personne;
+=======
+        return $this->email;
+    }
+
+    public function setMailPersonne(string $email): static
+    {
+        $this->email = $email;
+>>>>>>> 37caec1e37e945f6c482a8a42503aea11ab64dea
 
         return $this;
     }
@@ -111,5 +198,9 @@ class Personne
     {
         return $this->getNomPersonne()  ." ". $this->getPrenomPersonne()  ;
     }
+<<<<<<< HEAD
+=======
+    
+>>>>>>> 37caec1e37e945f6c482a8a42503aea11ab64dea
 }
 

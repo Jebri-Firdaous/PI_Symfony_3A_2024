@@ -2,9 +2,13 @@ framework:
     notifier:
         chatter_transports:
         texter_transports:
+<<<<<<< HEAD
             postmark: '%env(MAILER_DSN)%'
             sendgrid: '%env(MAILER_DSN)%'
             twilio: '%env(TWILIO_DSN)%'
+=======
+            sendgrid: '%env(MAILER_DSN)%'
+>>>>>>> 37caec1e37e945f6c482a8a42503aea11ab64dea
         channel_policy:
             # use chat/slack, chat/telegram, sms/twilio or sms/nexmo
             urgent: ['email']
