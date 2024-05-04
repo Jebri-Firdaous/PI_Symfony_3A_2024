@@ -55,21 +55,23 @@
 
     {# ------------------------- #}
       <form action="{{ path('app_rv_tri') }}" method="GET">
-        <label for="order">Ordre :</label>
-        <select name="order" id="order">
-            <option value="asc">Croissant</option>
-            <option value="desc">Décroissant</option>
-        </select>
+    <label for="order">Ordre :</label>
+    <select name="order" id="order">
+        <option value="asc">Croissant</option>
+        <option value="desc">Décroissant</option>
+    </select>
 
-        <label for="field">Champ de tri :</label>
-        <select name="field" id="field">
-            <option value="nom medecin">nom medecin</option>
-          {# <option value="date">Date</option> #}
-            <!-- Ajoutez d'autres options pour les champs de tri si nécessaire -->
-        </select>
+    <label for="field">Champ de tri :</label>
+    <select name="field" id="field">
+        <option value="date">Date</option>
+        <option value="nomMedecin">Nom Médecin</option>
+        <!-- Ajoutez d'autres options pour les champs de tri si nécessaire -->
+    </select>
 
-        <button type="submit" class="btn btn-primary">Trier</button>
-    </form>
+    <button type="submit" class="btn btn-primary">Trier</button>
+</form>
+
+
     <div class="search-appointments"></div>
     <div class="appointments-grid">
         {% for rv in lesRVdeClient %}
