@@ -34,13 +34,16 @@ class RendezVous
     #[AcmeAssert\ContainsRVWithSameDoctorInTheSameDate(mode: 'loose', message:'Le docteur a un rendez-vous à ce moment-là')]
     private ?DateTime $dateRendezVous;
 
-    #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: "lesRendezVous")]
-    #[ORM\JoinColumn(name: 'id_personne', referencedColumnName: 'id_personne')]
+
+
+
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "lesRendezVous")]
+    #[ORM\JoinColumn(name: 'id_personne', referencedColumnName: 'id')]
     #[Assert\NotBlank(
         message:'Cette valeur ne doit pas être vide'
     )]
-    public Client $id_personne;
-    // private Client $id_personne;
+    public User $user;
+   
     
 
     #[ORM\ManyToOne(targetEntity: Medecin::class, inversedBy: "rendezVous")]
@@ -83,14 +86,14 @@ class RendezVous
         return $this;
     }
 
-    public function getClient(): ?Client
+    public function getUser(): ?User
     {
-        return $this->id_personne;
+        return $this->user;
     }
 
-    public function setIdPersonne(?Client $idPersonne): static
+    public function setUser(?User $user): static
     {
-        $this->id_personne = $idPersonne;
+        $this->user = $user;
 
         return $this;
     }

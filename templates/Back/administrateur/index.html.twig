@@ -1,0 +1,65 @@
+{% extends 'Back/base.html.twig' %}
+
+
+{% block main %}
+<div class="row" style="margin-left: 2px; margin-right: 2px;">
+		<div class="card flex-fill">
+        			<div class="card-header">
+                    				<h2 style="font-weight: bold; color: #2f64b1; text-align: center;">Liste des Administrateurs</h2>
+			</div>
+
+
+
+			<table class="table table-hover my-0" >
+            				<thead>
+
+<tr>
+<th>Nom</th>
+					<th class="d-none d-xl-table-cell">Prénom</th>
+                    					<th class="d-none d-xl-table-cell">Role</th>
+
+		<th class="d-none d-md-table-cell">Adresse email</th>
+
+<th>Numéro Téléphone</th>
+
+					<th class="d-none d-md-table-cell">Image</th>
+
+
+					<th class="d-none d-md-table-cell">Actions</th>
+</tr>
+				</thead>
+                				<tbody>
+
+
+{%  for admin in list %}
+<tr>
+<td>{{admin.personne.getNomPersonne()}}</td>
+<td>{{admin.personne.getPrenomPersonne()}}</td>
+<td>{{admin.role}}</td>
+<td>{{admin.personne.getMailPersonne()}}</td>
+
+<td>{{admin.personne.getNumeroTelephone()}}</td>
+
+<td>
+						<img src="{{ asset('img/image_compte/' ~ admin.personne.getImagePersonne()) }}" alt="{{ admin.personne.getNomPersonne() }}" width="50" height="50">
+
+</td>
+
+
+
+<td>
+                    <a href="{{path('app_administrateur_edit', {id:admin.personne.getId()})}}"><span class="icon">✏️</span> </a>
+                    
+          
+              
+                    <a href="{{path('app_administrateur_delete', {id:admin.personne.getId()})}}"><span class="icon">🗑️</span></a>
+</tr>
+{% endfor %}
+				</tbody>
+			</table>
+		</div>
+</div>
+                <a href="{{path('app_administrateur_add')}}"  class="btn-primary">Ajouter Admin</a>
+
+
+{% endblock %}

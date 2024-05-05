@@ -1,5 +1,6 @@
 {% extends 'Back/base.html.twig' %}
 {# templates/task/new.html.twig #}
+<<<<<<< HEAD
 {% block main %}
 <div style="display: flex; align-items: center;">
     <div style="margin-right: 159px;">
@@ -46,6 +47,15 @@ $specialiteMedecin.change(function() {
     });
 });
 </script>
+=======
+
+{% block main %}
+<div style="display: flex; align-items: center;">
+    <div style="margin-right: 159px;">
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'style': 'margin: 90px;'}}) }}
+        {{ form_widget(form) }}
+        {{ form_end(form) }}
+>>>>>>> 37caec1e37e945f6c482a8a42503aea11ab64dea
     </div>
     <img src="{{ asset('img/imgGM/rendezVous.png') }}" alt="Image Description" style="width: 500px; height: auto;">
 </div>

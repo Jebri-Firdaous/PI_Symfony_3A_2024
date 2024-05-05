@@ -39,18 +39,28 @@
     </script>
 <div style="display: flex; align-items: center;">
     <div style="margin-right: 159px;">
+<<<<<<< HEAD
          {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'style': 'margin: 143px;'}}) }}
+=======
+         {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'style': 'margin: 90px;'}}) }}
+>>>>>>> 37caec1e37e945f6c482a8a42503aea11ab64dea
     <table>
    
     <tr>{{form_label(form.specialiteMedecin)}}</tr>
     <tr>{{form_widget(form.specialiteMedecin)}}</tr>
     <tr>{{form_errors(form.specialiteMedecin)}}</tr>
 
+<<<<<<< HEAD
    {% if form.idMedecin is defined %}
     <tr>{{ form_label(form.idMedecin) }}</tr>
     <tr>{{ form_widget(form.idMedecin) }}</tr>
     <tr>{{ form_errors(form)}}</tr>
 {% endif %}
+=======
+    <tr>{{form_label(form.idMedecin)}}</tr>
+    <tr>{{form_widget(form.idMedecin)}}</tr>
+    <tr>{{form_errors(form)}}</tr> 
+>>>>>>> 37caec1e37e945f6c482a8a42503aea11ab64dea
 </br>
     <tr>{{form_label(form.dateRendezVous)}}</tr>
     <tr>{{form_widget(form.dateRendezVous)}}</tr>
@@ -60,9 +70,13 @@
     {{form_widget(form.save)}}
     {{form_end(form)}}
     </div>
+<<<<<<< HEAD
     <img src="{{ asset('img/imgGM/rendezVous.png') }}" alt="Image Description" style="width: 412px; height: auto;">
 
     
+=======
+    <img src="{{ asset('img/imgGM/rendezVous.png') }}" alt="Image Description" style="width: 500px; height: auto;">
+>>>>>>> 37caec1e37e945f6c482a8a42503aea11ab64dea
 </div>
 <div id="calendrier">
         </div>
