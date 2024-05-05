@@ -17,8 +17,8 @@ class AcceuilController extends AbstractController
             'container' => $container,
         ]);
     }
-    #[Route('/profile', name: 'app_profile')]
 
+    #[Route('/profile', name: 'app_profile')]
     public function profile(ContainerInterface $container): Response
     {
         return $this->render('user/profile.html.twig', [

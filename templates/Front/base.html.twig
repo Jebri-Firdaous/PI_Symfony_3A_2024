@@ -70,7 +70,7 @@
 
     <ul>
         <li><a href="{{ path ('app_sante')}}">Les Medecins</a></li>
-        <li><a href="#">Les Rendez-Vous</a></li>
+        <li><a href="{{ path ('front_rendezVous_getAll')}}">Les Rendez-Vous</a></li>
     </ul>
    </li>
 <li><a href="{{ path ('app_shopping')}}" {% if currentRoute == 'app_shopping' %}class="active"{% endif %}>Shopping</a></li>
