@@ -23,6 +23,8 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use App\Entity\User;
+use App\Repository\UserRepository;
 
 #[Route('/reservation')]
 class ReservationController extends AbstractController
@@ -168,11 +170,11 @@ $pagination = $paginator->paginate(
 
 
  #[Route('/addReservation', name: 'app_tourisme')]
- public function tourismeHome(Request $request, EntityManagerInterface $entityManager,Pdf $knpSnappyPdf, MailerInterface $mailer): Response
+ public function tourismeHome(Request $request, EntityManagerInterface $entityManager,Pdf $knpSnappyPdf, MailerInterface $mailer, UserRepository $userRepository): Response
  {
      $idHotel = $request->get('idHotel');
      $hotel = $entityManager->getRepository(Hotel::class)->find($idHotel);
-     
+  
      //dd($hotel);
      $hotelChoices = [];
     //  foreach ($hotels as $hotel) {
@@ -182,13 +184,24 @@ $pagination = $paginator->paginate(
      // Sérialiser les prix des hôtels en JSON pour les passer à la vue
      $selectedHotelNames = array_keys($hotelChoices);
  
+     
+
+     $user = $userRepository->find(65); // Remplacez 55 par l'ID de l'utilisateur que vous souhaitez récupérer
+
+     // Vérifier si l'utilisateur existe
+     if (!$user) {
+      throw $this->createNotFoundException('Utilisateur non trouvé');
+     }
      $reservation = new Reservation();
+     // Définir l'utilisateur pour le rendez-vous
+      $reservation->setIdPersonne($user);
 
      $form = $this->createForm(HotelReservationType::class, $reservation, [
          'hotel' => $hotel
      ]);
      
      $form->handleRequest($request);
+    
      
      if ($form->isSubmitted() && $form->isValid()) {
          $reservation->setIdHotel($hotel);
@@ -224,9 +237,10 @@ $emailBody .= "<p>Votre réservation à l'hôtel <strong> $hotel</strong> est co
 
      
 
-  
+     
          
          return $this->redirectToRoute('app_reservation_index');
+         
      }
      
      return $this->render('Front/reservation/addReservation.html.twig', [
@@ -459,7 +473,7 @@ $pagination = $paginator->paginate(
 }
 
 #[Route('/addReservationBack', name: 'app_tourisme_back')]
-public function tourismeBack(Request $request, EntityManagerInterface $entityManager): Response
+public function tourismeBack(Request $request, EntityManagerInterface $entityManager , UserRepository $userRepository): Response
 {
     $hotels = $entityManager->getRepository(Hotel::class)->findAll();
     
@@ -471,7 +485,16 @@ public function tourismeBack(Request $request, EntityManagerInterface $entityMan
     // Sérialiser les prix des hôtels en JSON pour les passer à la vue
     $selectedHotelNames = array_keys($hotelChoices);
 
+    $user = $userRepository->find(65); // Remplacez 55 par l'ID de l'utilisateur que vous souhaitez récupérer
+
+    // Vérifier si l'utilisateur existe
+    if (!$user) {
+     throw $this->createNotFoundException('Utilisateur non trouvé');
+    }
+
     $reservation = new Reservation();
+
+    $reservation->setIdPersonne($user);
     $form = $this->createForm(ReservationType::class, $reservation, [
         'hotelChoices' => $hotelChoices,
     ]);

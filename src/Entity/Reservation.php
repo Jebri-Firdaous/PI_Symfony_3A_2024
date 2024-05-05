@@ -5,7 +5,7 @@ use App\Entity\Hotel;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use App\Entity\Client;
+use App\Entity\User;
 use App\Repository\ReservationRepository;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -57,14 +57,16 @@ class Reservation
 
  
 
-    #[ORM\ManyToOne(targetEntity: client::class)]
-    #[ORM\JoinColumn(name: 'id_personne', referencedColumnName: 'id_personne')]
-    private ?Client $idPersonne=null;
    
-    
    
 
-  
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "lesReservatoin")]
+    #[ORM\JoinColumn(name: 'id_personne', referencedColumnName: 'id')]
+    #[Assert\NotBlank(
+        message:'Cette valeur ne doit pas être vide'
+    )]
+    public User $id;
+    // private User $id;
   
 
     #[ORM\ManyToOne(targetEntity: Hotel::class)]
@@ -154,15 +156,15 @@ class Reservation
         return $this;
     }
 
-    public function getIdPersonne(): ?Client
+    public function getUser(): ?User
     {
-        return $this->idPersonne;
+        return $this->id;
     }
     
 
-    public function setIdPersonne(?Client $idPersonne): static
+    public function setIdPersonne(?User $idPersonne): static
     {
-        $this->idPersonne = $idPersonne;
+        $this->id = $idPersonne;
 
         return $this;
     }
