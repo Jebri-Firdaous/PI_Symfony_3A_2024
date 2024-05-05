@@ -37,7 +37,7 @@ class RendezVousBackType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-        ->add('id_personne', EntityType::class, [
+        ->add('user', EntityType::class, [
             'class' => User::class,
             // 'choice_label' => 'personne.getNomPersonne()', // Assuming 'nom' is the property you want to display in the choice list
             

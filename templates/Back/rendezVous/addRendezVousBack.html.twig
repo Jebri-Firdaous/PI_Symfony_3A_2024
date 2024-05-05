@@ -1,5 +1,4 @@
 {% extends 'Back/base.html.twig' %}
-<<<<<<< HEAD
 
 {% block main %}
 {# {{dump(data)}} #}
@@ -43,20 +42,9 @@
     <div style="margin-right: 159px;">
     {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'style': 'margin: 90px;'}}) }}
     <table>
-    <tr>{{form_label(form.id_personne)}}</tr>
-    <tr>{{form_widget(form.id_personne)}}</tr>
-    <tr>{{form_errors(form.id_personne)}}</tr>
-=======
-{# templates/task/new.html.twig #}
-{% block main %}
-<div style="display: flex; align-items: center;">
-    <div style="margin-right: 159px;">
-    {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'style': 'margin: 90px;'}}) }}
-    <table>
-    <tr>{{form_label(form.id)}}</tr>
-    <tr>{{form_widget(form.id)}}</tr>
-    <tr>{{form_errors(form.id)}}</tr>
->>>>>>> 37caec1e37e945f6c482a8a42503aea11ab64dea
+    <tr>{{form_label(form.user)}}</tr>
+    <tr>{{form_widget(form.user)}}</tr>
+    <tr>{{form_errors(form.user)}}</tr>
 
     <tr>{{form_label(form.specialiteMedecin)}}</tr>
     <tr>{{form_widget(form.specialiteMedecin)}}</tr>
@@ -66,11 +54,7 @@
 {% if form.idMedecin is defined %}
     <tr>{{ form_label(form.idMedecin) }}</tr>
     <tr>{{ form_widget(form.idMedecin) }}</tr>
-<<<<<<< HEAD
     <tr>{{ form_errors(form) }}</tr>
-=======
-    <tr>{{ form_errors(form.idMedecin) }}</tr>
->>>>>>> 37caec1e37e945f6c482a8a42503aea11ab64dea
 {% endif %}
 </br>
     <tr>{{form_label(form.dateRendezVous)}}</tr>
@@ -100,7 +84,6 @@ $specialiteMedecin.change(function() {
 });
 </script>
     </div>
-<<<<<<< HEAD
     <img src="{{ asset('img/imgGM/rendezVous.png') }}" alt="Image Description" style="width: 400px; height: auto;">
 </div>
 
@@ -118,8 +101,4 @@ $specialiteMedecin.change(function() {
             margin: auto;
         }
     </style>
-=======
-    <img src="{{ asset('img/imgGM/rendezVous.png') }}" alt="Image Description" style="width: 500px; height: auto;">
-</div>
->>>>>>> 37caec1e37e945f6c482a8a42503aea11ab64dea
 {% endblock %}

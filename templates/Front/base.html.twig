@@ -44,13 +44,10 @@
 </head>
 <body  >
 
-<<<<<<< HEAD
 
 
 <body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-=======
->>>>>>> 37caec1e37e945f6c482a8a42503aea11ab64dea
 {% block header %}
 {% set currentRoute = app.request.attributes.get('_route') %}
  <header id="header" class="header d-flex align-items-center sticky-top">
@@ -58,25 +55,14 @@
 
       <a href="{{ path ('app_acceuil')}}"  class="logo d-flex align-items-center me-auto">
         <!-- Uncomment the line below if you also wish to use an image logo -->
-<<<<<<< HEAD
-         {# <img src="{{ asset ('/img/loge_city.png') }}" alt="">  #}
-        <h1 class="">Mentor</h1>
-=======
          <img src="{{ asset ('img/logo.png') }}" alt="">
 <h1 style="color: #37423b;">E-CITY</h1>
         <!--<img src="{{ asset ('logo_city.png') }}" alt="">-->
->>>>>>> 37caec1e37e945f6c482a8a42503aea11ab64dea
       </a>
       
  {% block menu %}
       <nav id="navmenu" class="navmenu">
         <ul>
-<<<<<<< HEAD
-          {% block menu %}
-          <li><a href="index.html" class="active">Acceuil</a></li>
-          <li class="dropdown has-dropdown" ><a href="{{ path ('front_rendezVous_getAll')}}" >Santé</a>
-          </li>
-=======
         {% if app.user%}
    <li> <a href="{{ path ('app_acceuil')}}" {% if currentRoute == 'app_acceuil' %}class="active"{% endif %}>Accueil</a></li>
 
@@ -106,7 +92,6 @@
     </li>
         
                 <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
->>>>>>> 37caec1e37e945f6c482a8a42503aea11ab64dea
 
       </nav>
             {% else %}
@@ -119,13 +104,10 @@
     </div>
   </header>
     {% endblock %}
-<<<<<<< HEAD
 
 
 {% block body %}
 {% endblock %}
-=======
->>>>>>> 37caec1e37e945f6c482a8a42503aea11ab64dea
 
 
 

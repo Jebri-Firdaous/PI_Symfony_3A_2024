@@ -77,7 +77,7 @@
         {% for rv in lesRVdeClient %}
             <div class="appointment-item">
                 <div class="appointment-details">
-                    <div class="appointment-client">{{ rv.getClient().getPersonne().getNomPersonne() ~ " " ~ rv.getClient().getPersonne().getPrenomPersonne() }}</div>
+                    <div class="appointment-client">{{ rv.getUser().getNomPersonne() ~ " " ~ rv.getUser().getPrenomPersonne() }}</div>
                     <div class="appointment-doctor">Dr. {{ rv.getIdMedecin().getNomMedecin }}</div>
                     <div class="appointment-specialty">{{ rv.getIdMedecin().specialiteMedecin }}</div>
                     <div class="appointment-date">{{ rv.getDateRendezVous().format('d/m/Y H:i') }}</div>
@@ -125,6 +125,15 @@
         h1{
             margin-left: 10px;
         }
+        .appointment-actions a {
+                background-color: #3B7DDD;
+                border-radius: 5px;
+                width: 63px;
+                height: 28px;
+                margin-left: auto;
+                margin-top: 5px;
+        }
+
     </style>
 
 {% endblock %}
