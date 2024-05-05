@@ -2,18 +2,55 @@
 {# templates/task/new.html.twig #}
 
 {% block body %}
+{# calendar #}
+ <script src='https://cdn.jsdelivr.net/npm/fullcalendar/index.global.min.js'></script>
+<script>
+
+      document.addEventListener('DOMContentLoaded', function() {
+        const calendarEl = document.getElementById('calendrier')
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+          initialView: 'dayGridMonth',
+           headerToolbar: {
+                start: 'prev,next today',
+                center: 'title',
+                end: 'dayGridMonth,timeGridWeek'
+            },
+          events: {{ data|raw }},
+          editable: true,
+          eventResizableFromStart: true
+        })
+         calendar.on('eventChange', (e) => {
+            let url = `/api/${e.event.id}/edit`
+            let donnees = {
+                "id" : e.event.id,
+                "title": e.event.title,
+                "start": e.event.start,
+                "end": e.event.end,
+            }
+            
+            let xhr = new XMLHttpRequest
+
+            xhr.open("PUT", url)
+            xhr.send(JSON.stringify(donnees))
+        })
+
+        calendar.render()
+      })
+    </script>
 <div style="display: flex; align-items: center;">
     <div style="margin-right: 159px;">
-         {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'style': 'margin: 90px;'}}) }}
+         {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'style': 'margin: 143px;'}}) }}
     <table>
    
     <tr>{{form_label(form.specialiteMedecin)}}</tr>
     <tr>{{form_widget(form.specialiteMedecin)}}</tr>
     <tr>{{form_errors(form.specialiteMedecin)}}</tr>
 
-    <tr>{{form_label(form.idMedecin)}}</tr>
-    <tr>{{form_widget(form.idMedecin)}}</tr>
-    <tr>{{form_errors(form)}}</tr> 
+   {% if form.idMedecin is defined %}
+    <tr>{{ form_label(form.idMedecin) }}</tr>
+    <tr>{{ form_widget(form.idMedecin) }}</tr>
+    <tr>{{ form_errors(form)}}</tr>
+{% endif %}
 </br>
     <tr>{{form_label(form.dateRendezVous)}}</tr>
     <tr>{{form_widget(form.dateRendezVous)}}</tr>
@@ -23,6 +60,26 @@
     {{form_widget(form.save)}}
     {{form_end(form)}}
     </div>
-    <img src="{{ asset('img/imgGM/rendezVous.png') }}" alt="Image Description" style="width: 500px; height: auto;">
+    <img src="{{ asset('img/imgGM/rendezVous.png') }}" alt="Image Description" style="width: 412px; height: auto;">
+
+    
 </div>
+<div id="calendrier">
+        </div>
+
+<style>
+    button{
+        margin-top: 8px;
+    }
+</style>
+{% endblock %}
+{% block stylesheets %}
+    <style>
+        #calendrier{
+            margin-top : 10px;
+            width: 60%;
+            margin: auto;
+            margin-bottom : 10px;
+        }
+    </style>
 {% endblock %}

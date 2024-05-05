@@ -38,9 +38,16 @@
    {% endblock %}
       {% endblock %}
   ======================================================== -->
+  {# calender #}
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.css" integrity="sha256-uq9PNlMzB+1h01Ij9cx7zeE2OR2pLAfRw3uUUOOPKdA=" crossorigin="anonymous">
+        {% block stylesheets %}{% endblock %}
 </head>
 <body  >
 
+
+
+<body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 {% block header %}
 {% set currentRoute = app.request.attributes.get('_route') %}
  <header id="header" class="header d-flex align-items-center sticky-top">
@@ -63,7 +70,7 @@
 
     <ul>
         <li><a href="{{ path ('app_sante')}}">Les Medecins</a></li>
-        <li><a href="#">Les Rendez-Vous</a></li>
+        <li><a href="{{ path ('front_rendezVous_getAll')}}">Les Rendez-Vous</a></li>
     </ul>
    </li>
 <li><a href="{{ path ('app_shopping')}}" {% if currentRoute == 'app_shopping' %}class="active"{% endif %}>Shopping</a></li>
@@ -97,6 +104,12 @@
     </div>
   </header>
     {% endblock %}
+
+
+{% block body %}
+{% endblock %}
+
+
 
   <main class="main">
 {% block section %}

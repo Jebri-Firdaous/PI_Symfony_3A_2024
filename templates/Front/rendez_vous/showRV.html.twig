@@ -2,7 +2,10 @@
 {# templates/task/new.html.twig #}
 
 {% block body %}
-      <h1>{{ 'Mes RendezVous'|trans }}</h1>
+     {# AJAX script to handle dynamic search #}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+      <h1 style="margin-left: 39px; margin-top: 10px;">{{ 'Mes RendezVous'|trans }}</h1>
 
   <style>
     table {
@@ -10,8 +13,68 @@
         width: 30px; /* Adjust this value as needed */
     } 
 </style>
+     {# search dynamic  #}
+    <form id="searchForm" action="{{ path('front_app_rv_search') }}" method="GET">
+    <input style="margin-left: 40px;" type="text" id="query" name="query">
+    </form>
 
-    <table class="table table-striped table-middle-aligned table-borderless" style=" width: 70%;">
+     <script>
+    
+    $(document).ready(function(){
+         let original = $("table");
+        $("#query").on("input", function(){
+        var input = $(this).val();
+       if(input!=""){
+            $.ajax({
+                url: '{{ path('front_app_rv_search')}}', // Ensure this path is correctly defined in your Twig template
+                type: 'GET',
+                data: { query: input },
+                success: function(response) {
+                    // Assuming the response is HTML that can be directly inserted
+                    original.hide(); // This line empties the content of the div
+                    
+                let responseHTML = $(response).find("table");
+                // console.log(responseHTML);
+               $('.search-appointments').html(responseHTML); // This line inserts the new content 
+                    
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error(textStatus, errorThrown);
+                    }
+                });
+        }
+        else {
+        // original.hidden = false ; 
+        original.show() ; 
+        $('.search-appointments').empty() ; 
+        }
+        
+        });
+});
+
+</script>
+      {# ------------------------- #}
+      <form style="margin-left: 40px;" action="{{ path('front_app_rv_tri') }}" method="GET">
+    <label for="order">Ordre :</label>
+    <select name="order" id="order">
+        <option value="asc">Croissant</option>
+        <option value="desc">Décroissant</option>
+    </select>
+
+    <label for="field">Champ de tri :</label>
+    <select name="field" id="field">
+        <option value="date">Date</option>
+        <option value="nomMedecin">Nom Médecin</option>
+        <!-- Ajoutez d'autres options pour les champs de tri si nécessaire -->
+    </select>
+
+    <button type="submit" class="btn btn-primary tributton">Trier</button>
+</form>
+
+
+    <div class="search-appointments"></div>
+    <div class"firstsearch"> 
+        <table  class="table table-striped table-middle-aligned table-borderless" style=" width: 95%; margin : auto;">
         <thead>
             <tr>
                 {# <th scope="col">{{ 'Nom'|trans }}</th> #}
@@ -23,9 +86,11 @@
                 <th scope="col"><i class="fa fa-calendar" aria-hidden="true"></i>    Actions </th>
             </tr>
         </thead>
+         
         <tbody>
-        {% for rv in lesRVdeClient %}
-            <tr>
+            {# <div class="tablerv"> #}
+                {% for rv in lesRVdeClient %}
+              <tr>
                 {# <td>{{ dump(rv.getIdMedecin.addressMedecin()) }}</td> #}
                 <td>{{ rv.getIdMedecin.getNomMedecin() }}</td>
                 <td>{{ rv.getIdMedecin().getSpecialiteMedecin() }}</td>
@@ -48,15 +113,38 @@
                         </a> 
                     </div>
                 </td>
-            </tr>
-        {% else %}
-            <tr>
+                </tr>
+
+              
+             {% else %}
+             <tr>
                 <td colspan="6" align="center">{{ 'post.no_posts_found'|trans }}</td>
-           </tr>
-        {% endfor %}
+             </tr>
+               {% endfor %}
+             {# </div> #}
         </tbody>
     </table>
-    <a href="{{ path('front_rendezVous_add') }}" class="btn btn-sm btn-primary">
+    </div>
+    <a style="margin-left: 39px; margin-top: 10px;" href="{{ path('front_rendezVous_add') }}" class="btn btn-sm btn-primary">
              <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Ajouter Rendez Vous'|trans }}
     </a>
+
+     <div class="container py-5">
+  <div class="d-flex justify-content-center">
+    {{ knp_pagination_render(lesRVdeClient) }}
+
+    </div>
+    </div>
+    <style>
+        .item-actions a {
+            margin-top : 5px;
+        }
+        .tributton {
+            width: 81px;
+            border-radius: 18px;
+            margin-left: 7px;
+            height: 40 px;
+        }
+    </style>
+
 {% endblock %}

@@ -79,8 +79,14 @@
   --default-color-rgb: 68, 68, 68;
   --heading-color: #37423b;
   --heading-color-rgb: 55, 66, 59;
+<<<<<<< HEAD
+  --accent-color: ##57C0DD;
+  ;
+  --accent-color-rgb: 95, 207, 128;
+=======
   --accent-color: #57C0DD;
   --accent-color-rgb: 166,222,237;
+>>>>>>> 37caec1e37e945f6c482a8a42503aea11ab64dea
   --contrast-color: #ffffff;
   --contrast-color-rgb: 255, 255, 255;
 }
@@ -88,9 +94,17 @@
 /* Nav Menu Colors */
 :root {
   --nav-color: #272828;
+<<<<<<< HEAD
+  --nav-hover-color: ##57C0DD;
+  ;
+  --nav-dropdown-color: #272828;
+  --nav-dropdown-hover-color: ##57C0DD;
+;
+=======
   --nav-hover-color: #57C0DD;
   --nav-dropdown-color: #272828;
   --nav-dropdown-hover-color: #57C0DD;
+>>>>>>> 37caec1e37e945f6c482a8a42503aea11ab64dea
   --nav-dropdown-background-color: #ffffff;
 }
 /* Smooth scroll */
