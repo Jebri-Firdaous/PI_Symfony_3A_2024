@@ -37,7 +37,7 @@ class Article
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "La type de l'article est requise")]
-    #[Assert\Choice(choices: ["Electronique", "Vêtements", "Livres", "Appareils ménagers", "Équipements sportifs", "Produits de beauté", "Meubles", "Jouets", "Alimentation et boissons", "Bijoux"], message: "Veuillez choisir un type valide")]
+    #[Assert\Choice(choices: ["Electronique", "Vetements", "Livres", "Appareils_menagers", "Equipements_sportifs", "Produits_de_beaute", "Meubles", "Jouets", "Alimentation_et_boissons", "Bijoux"], message: "Veuillez choisir un type valide")]
     private ?string $typeArticle = null;
 
     #[ORM\Column(length: 255)]
