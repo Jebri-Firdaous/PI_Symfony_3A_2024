@@ -342,6 +342,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
     
+
     /**
      * @return Collection|RendezVous[]
      */
@@ -382,5 +383,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->getNomPersonne();
     }
+
 
 }
