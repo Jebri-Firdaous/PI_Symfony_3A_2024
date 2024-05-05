@@ -192,9 +192,9 @@ class UserController extends AbstractController
        // Vérifier si le jeton CSRF est valide
        $entityManager = $manager->getManager();
 
-       $administrateur= $repo->find($id);    
+       $user= $repo->find($id);    
       
-       $entityManager->remove($administrateur);
+       $entityManager->remove($user);
        $entityManager->flush();
    
        // Rediriger vers la page d'index des utilisateurs après la suppression
@@ -207,9 +207,9 @@ class UserController extends AbstractController
        // Vérifier si le jeton CSRF est valide
        $entityManager = $manager->getManager();
 
-       $administrateur= $repo->find($id);    
+       $user= $repo->find($id);    
       
-       $entityManager->remove($administrateur);
+       $entityManager->remove($user);
        $entityManager->flush();
    
        // Rediriger vers la page d'index des utilisateurs après la suppression
