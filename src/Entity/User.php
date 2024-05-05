@@ -349,7 +349,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->lesRendezVous;
     }
-    #[ORM\OneToMany(mappedBy: "id", targetEntity: RendezVous::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: "user", targetEntity: RendezVous::class, cascade: ['persist', 'remove'])]
     private $lesRendezVous;
 
     public function __construct()
@@ -361,7 +361,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->lesRendezVous->contains($rendezVous)) {
             $this->lesRendezVous[] = $rendezVous;
-            $rendezVous->setIdPersonne($this);
+            $rendezVous->setUser($this);
         }
 
         return $this;
@@ -372,7 +372,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         if ($this->lesRendezVous->removeElement($rendezVous)) {
             // set the owning side to null (unless already changed)
             if ($rendezVous->getUser() === $this) {
-                $rendezVous->setIdPersonne(null);
+                $rendezVous->setUser(null);
             }
         }
 

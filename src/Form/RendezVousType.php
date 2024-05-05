@@ -14,12 +14,9 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-<<<<<<< HEAD
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 
-=======
->>>>>>> 37caec1e37e945f6c482a8a42503aea11ab64dea
 use Symfony\Component\Form\ChoiceList\Loader\CallbackChoiceLoader;
 
  
@@ -62,7 +59,6 @@ class RendezVousType extends AbstractType
                     "Urology" => "Urology"
                 ],
             ])
-<<<<<<< HEAD
             // ->add('idMedecin', EntityType::class, [
             //     'class' => Medecin::class,
             //     'choice_label' => 'nomMedecin', // Assuming 'nom' is the property you want to display in the choice list
@@ -70,15 +66,6 @@ class RendezVousType extends AbstractType
             //     'placeholder' => 'Choisissez un médecin', // Optional: Adds a placeholder option to the select
                 
             // ])
-=======
-            ->add('idMedecin', EntityType::class, [
-                'class' => Medecin::class,
-                'choice_label' => 'nomMedecin', // Assuming 'nom' is the property you want to display in the choice list
-                'label' => 'Nom Medecin',
-                'placeholder' => 'Choisissez un médecin', // Optional: Adds a placeholder option to the select
-                
-            ])
->>>>>>> 37caec1e37e945f6c482a8a42503aea11ab64dea
             
             ->add('dateRendezVous')
             

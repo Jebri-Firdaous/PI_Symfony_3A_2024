@@ -29,10 +29,7 @@
         "symfony/google-mailer": "5.4.*",
         "symfony/http-client": "^5.4",
         "symfony/intl": "^5.4",
-<<<<<<< HEAD
         "symfony/mailchimp-mailer": "5.4.*",
-=======
->>>>>>> 37caec1e37e945f6c482a8a42503aea11ab64dea
         "symfony/mailer": "5.4.*",
         "symfony/mime": "^5.4",
         "symfony/monolog-bundle": "^3.0",
@@ -58,11 +55,8 @@
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/intl-extra": "^3.8",
         "twig/twig": "^2.12|^3.0",
-<<<<<<< HEAD
-        "twilio/sdk": "^8.0"
-=======
+        "twilio/sdk": "^8.0",
         "vich/uploader-bundle": "^2.3"
->>>>>>> 37caec1e37e945f6c482a8a42503aea11ab64dea
     },
     "config": {
         "allow-plugins": {
