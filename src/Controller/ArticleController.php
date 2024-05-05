@@ -645,7 +645,7 @@ public function new(Request $request): Response
         if ($file) {
             $fileName = md5(uniqid()) . '.' . $file->guessExtension();
             $file->move(
-                $this->getParameter('photos_directory'),
+                $this->getParameter('photos_directory_shopping'),
                 $fileName
             );
 
@@ -702,7 +702,7 @@ public function edit(Request $request, Article $article, EntityManagerInterface 
         if ($file) {
             $fileName = md5(uniqid()) . '.' . $file->guessExtension();
             $file->move(
-                $this->getParameter('photos_directory'),
+                $this->getParameter('photos_directory_shopping'),
                 $fileName
             );
 
