@@ -1,60 +1,162 @@
 {% extends 'Back/base.html.twig' %}
 
 {% block title %}Hotel index{% endblock %}
+
+
+
+
 {% block main %}
 
-    <div class="row">
-                                <div class="card-header">
-<h2 style="font-weight: bold; color: #2f64b1; text-align: center;">Liste des Hotels</h2>
-      </div>
-        <table class="table table-hover my-0">
-        <thead>
-            <tr>
-                <th>IdHotel</th>
-                <th>NomHotel</th>
-                <th>AdressHotel</th>
-                <th>Prix1</th>
-                <th>Prix2</th>
-                <th>Prix3</th>
-                <th>Numero1</th>
-                <th>Numero2</th>
-                <th>Numero3</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for hotel in hotels %}
-            <tr>
-                <td>{{ hotel.idHotel }}</td>
-                <td>{{ hotel.nomHotel }}</td>
-                <td>{{ hotel.adressHotel }}</td>
-                <td>{{ hotel.prix1 }}</td>
-                <td>{{ hotel.prix2 }}</td>
-                <td>{{ hotel.prix3 }}</td>
-                <td>{{ hotel.numero1 }}</td>
-                <td>{{ hotel.numero2 }}</td>
-                <td>{{ hotel.numero3 }}</td>
-                <td>
-                    <a href="{{ path('app_hotel_delete', {'idHotel': hotel.idHotel}) }}">
-                    <span class="icon">🗑️</span>
-                    </a>
-                      &nbsp;
-                    <a href="{{ path('app_hotel_edit', {'idHotel': hotel.idHotel}) }}">
-                    <span class="icon">✏️</span>
-                    </a>
+<style>
 
-                    
-                </td>
-            </tr>
+/* custom_pagination_styles.css */
+.pagination {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+}
+
+.pagination li {
+    margin: 0 5px;
+}
+
+.pagination li a {
+    display: inline-block;
+    padding: 5px 10px;
+    text-decoration: none;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    color: #333;
+}
+
+.pagination li.active a {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+.pagination li.disabled a {
+    pointer-events: none;
+    background-color: #eee;
+    color: #888;
+    border-color: #ccc;
+}
+
+</style>
+
+    <input type="text" id="searchInput" class="form-control mb-3" placeholder="Search...">
+{#
+    <div style="display: inline-block;">
+        <a href="{{ path('triBackHotel') }}">
+            <button type="button" style="padding: 10px; margin-right: 10px;" class="btn btn-outline-info">tri croissant</button>
+        </a>
+
+        <a href="{{ path('tridBackHotel') }}">
+            <button type="button" style="padding: 10px;" class="btn btn-outline-info">tri décroissant</button>
+        </a>
+    </div>
+#}
+    <div class="card-container row">
+        {% for hotel in hotels %}
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ hotel.nomHotel }}</h5>
+                        <p class="card-text">Address: {{ hotel.adressHotel }}</p>
+                        <p class="card-text">Prix 1: {{ hotel.prix1 }}</p>
+                        <p class="card-text">Prix 2: {{ hotel.prix2 }}</p>
+                        <p class="card-text">Prix 3: {{ hotel.prix3 }}</p>
+                        <p class="card-text">Numero 1: {{ hotel.numero1 }}</p>
+                        <p class="card-text">Numero 2: {{ hotel.numero2 }}</p>
+                        <p class="card-text">Numero 3: {{ hotel.numero3 }}</p>
+                    </div>
+                     {% if qrCodes[hotel.idHotel] is defined %}
+                            <img src="{{ asset(qrCodes[hotel.idHotel]) }}"  style="width: 80px; height: 80px;" alt="QR Code">
+                        {% endif %}
+                    <div class="card-footer">
+                        <a href="{{ path('app_hotel_delete', {'idHotel': hotel.idHotel}) }}">
+                            <span class="icon">🗑️</span>
+                        </a>
+                        &nbsp;
+                        <a href="{{ path('app_hotel_edit', {'idHotel': hotel.idHotel}) }}">
+                            <span class="icon">✏️</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
         {% else %}
-            <tr>
-                <td colspan="10">no records found</td>
-            </tr>
+            <p class="text-center">No records found</p>
         {% endfor %}
-        </tbody>
-    </table>
+    </div>
 
     <a href="{{ path('app_hotel_new') }}">Créer un hotel</a>
-    {% block body %}
-{% endblock %}
+
+    <script>
+        // JavaScript code for searching and updating the cards
+        function search() {
+            var query = document.getElementById('searchInput').value;
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '{{ path('app_hotel_search') }}?q=' + query, true);
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    updateCards(response);
+                }
+            };
+            xhr.send();
+        }
+
+        function updateCards(data) {
+            var cardContainer = document.querySelector('.card-container');
+            cardContainer.innerHTML = ''; // Clear existing cards
+            if (data.length > 0) {
+                data.forEach(function (hotel) {
+                    var card = '<div class="col-md-4 mb-3">';
+                    card += '<div class="card">';
+                    card += '<div class="card-body">';
+                    card += '<h5 class="card-title">' + hotel.nomHotel + '</h5>';
+                    card += '<p class="card-text">Address: ' + hotel.adressHotel + '</p>';
+                    card += '<p class="card-text">Prix 1: ' + hotel.prix1 + '</p>';
+                    card += '<p class="card-text">Prix 2: ' + hotel.prix2 + '</p>';
+                    card += '<p class="card-text">Prix 3: ' + hotel.prix3 + '</p>';
+                    card += '<p class="card-text">Numero 1: ' + hotel.numero1 + '</p>';
+                    card += '<p class="card-text">Numero 2: ' + hotel.numero2 + '</p>';
+                    card += '<p class="card-text">Numero 3: ' + hotel.numero3 + '</p>';
+                    card += '</div>';
+                    card += '<div class="card-footer">';
+                    card += '&nbsp;';
+                    card += '</div>';
+                    card += '</div>';
+                    card += '</div>';
+                    cardContainer.innerHTML += card;
+                });
+            } else {
+                cardContainer.innerHTML = '<p class="text-center">No records found</p>';
+            }
+        }
+
+        document.getElementById('searchInput').addEventListener('input', function () {
+            search();
+        });
+    </script>
+
+
+
+     <script>
+        $(document).ready(function(){
+            $(".btn1").click(function(){
+                $("h1").slideUp();
+            });
+            $(".btn2").click(function(){
+                $("h1").slideDown();
+            });
+            $(".btn3").click(function(){
+                $("h1").slideToggle();
+            });
+        });
+    </script>
+   {{ knp_pagination_render(hotels, 'Back/bootstrap_4_pagination.html.twig') }}
+
+
 {% endblock %}

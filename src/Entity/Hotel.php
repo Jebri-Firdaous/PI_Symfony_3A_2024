@@ -37,17 +37,23 @@ class Hotel
     
      #[ORM\Column]
      #[Assert\NotBlank(message:"Le prix normal  de hotel est requise")]
+     #[Assert\Positive(message: "Le prix de type normal doit être un nombre entier positif")]
+
      #[Assert\Type(type: "float", message: "Le prix de type normal doit être un nombre")]
     private  ?float $prix1 = null;
 
    
     #[ORM\Column]
     #[Assert\NotBlank(message:"Le prix standard  de hotel est requise")]
+    #[Assert\Positive(message: "Le prix de type standard doit être un nombre entier positif")]
+
     #[Assert\Type(type: "float", message: "Le prix de type standard doit être un nombre")]
 
     private ?float $prix2 = null;
 
     #[ORM\Column]
+    #[Assert\Positive(message: "Le prix de type luxe doit être un nombre entier positif")]
+
     #[Assert\Type(type: "float", message: "Le prix de type luxe doit être un nombre")]
 
     #[Assert\NotBlank(message:"Le prix luxe  de hotel est requise")]

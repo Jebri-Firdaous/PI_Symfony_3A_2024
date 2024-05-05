@@ -8,13 +8,15 @@
     </header>
 
     <div class="container">
-            <h1 class="text-center">Entrer nouvel Hotel</h1>
+            <h1 class="text-center" , style="font-weight: bold; color: #2f64b1; text-align: center;">Entrer nouvel Hotel</h1>
 
         <div class="form-container">
             {{ include('Back/hotel/_form.html.twig') }}
         </div>
 
-        <a href="{{ path('app_hotel_index') }}">retour au liste</a>
+        <a href="{{ path('app_hotel_index') }}">List
+        <i class="align-middle" data-feather="list"></i>
+        </a>
     </div>
     
 {% endblock %}

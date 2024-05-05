@@ -27,6 +27,7 @@ class HotelType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Hotel::class,
+            
         ]);
     }
 }

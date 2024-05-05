@@ -4,11 +4,14 @@
 {% block section %}
 
     
-            <h1 class="text-center">modifier Reservation</h1>
+            <h1 class="text-center" , style="font-weight: bold; color: #2f64b1; text-align: center;">modifier Reservation</h1>
 
     {{ include('Front/reservation/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('app_reservation_index') }}">retour au Tableau</a>
+    <a href="{{ path('app_reservation_index') }}">
+    
+   <span class="icon"> retour au list ➡ </span> 
+     </a>
 
 
 {% block body %}

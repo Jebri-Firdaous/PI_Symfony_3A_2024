@@ -17,14 +17,48 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Validator\Constraints as Assert;
+use Knp\Snappy\Pdf;
+use Knp\Bundle\SnappyBundle\KnpSnappyBundle;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
+use Knp\Component\Pager\Pagination\PaginationInterface;
+use Knp\Component\Pager\PaginatorInterface;
+
 #[Route('/reservation')]
 class ReservationController extends AbstractController
 {
     #[Route('/listReservation', name: 'app_reservation_index', methods: ['GET'])]
-    public function index(ReservationRepository $reservationRepository): Response
+    public function index(Request $request , ReservationRepository $reservationRepository , PaginatorInterface $paginator ,  EntityManagerInterface $entityManager): Response
     {
+       // Récupérer les statistiques sur les hôtels les plus réservés
+       $hotelsStats = $entityManager->createQueryBuilder()
+       ->select('h.idHotel, h.nomHotel, h.adressHotel, h.prix1, h.prix2, h.prix3, COUNT(r.refReservation) AS totalReservations')
+       ->from('App\Entity\Hotel', 'h')
+       ->leftJoin('App\Entity\Reservation', 'r', 'WITH', 'r.idHotel = h.idHotel')
+       ->groupBy('h.idHotel, h.nomHotel, h.adressHotel, h.prix1, h.prix2, h.prix3')
+       ->orderBy('totalReservations', 'DESC')
+       ->setMaxResults(4)
+       ->getQuery()
+       ->getResult();
+
+        $reservations = $reservationRepository->findAll();
+
+        ////////////////////////////*******************pagination***************///////////////////////////////////////
+    
+$pagination = $paginator->paginate(
+    $reservations,
+    $request->query->getInt('page', 1), // Current page number
+    10 // Number of items per page
+);
+
+
+        
         return $this->render('Front/reservation/index.html.twig', [
             'reservations' => $reservationRepository->findAll(),
+            'reservations' => $pagination,
+            'hotelsStats' => $hotelsStats,
+
+
         ]);
     }
 
@@ -134,7 +168,7 @@ class ReservationController extends AbstractController
 
 
  #[Route('/addReservation', name: 'app_tourisme')]
- public function tourismeHome(Request $request, EntityManagerInterface $entityManager): Response
+ public function tourismeHome(Request $request, EntityManagerInterface $entityManager,Pdf $knpSnappyPdf, MailerInterface $mailer): Response
  {
      $idHotel = $request->get('idHotel');
      $hotel = $entityManager->getRepository(Hotel::class)->find($idHotel);
@@ -162,6 +196,35 @@ class ReservationController extends AbstractController
          
          $entityManager->persist($reservation);
          $entityManager->flush();
+
+         $invoiceHtml = $this->renderView('Front/reservation/pdf_template.html.twig', [
+            'reservation' => $reservation,
+        ]);
+
+        // Generate PDF from HTML
+        $pdf = $knpSnappyPdf->getOutputFromHtml($invoiceHtml);
+        
+         //$emailTemplate = 'Front/mailer/index.html.twig';
+         $hotel= $reservation->getIdHotel()->getNomHotel();
+$emailBody="";
+$emailBody .= "<p>Votre réservation à l'hôtel <strong> $hotel</strong> est confirmée pour les dates indiquées. </p> ";
+//$emailBody .= "<p>Votre réservation à l'hôtel <strong>$hotel </strong> est confirmée pour les dates indiquées. <img src='{$this->getParameter('kernel.project_dir')}/public/img/verifier.png' style='width: 20px; height: 20px;' </p>";
+
+// Envoi d'un e-mail de confirmation
+           $email = (new Email())
+           ->from('dhifallahdarine@gmail.com')
+           ->to('dhifallahdarine@gmail.com')
+           ->subject('Confirmation de réservation')
+           ->html($emailBody)
+           ->attach($pdf, 'invoice.pdf', 'application/pdf'); // Attachement du PDF
+
+    ;
+
+       $mailer->send($email);
+
+     
+
+  
          
          return $this->redirectToRoute('app_reservation_index');
      }
@@ -326,7 +389,51 @@ public function delete($refReservation, ManagerRegistry $manager, ReservationRep
 }
 
 
+#[Route('Front/reservation/tricroi', name: 'triFront', methods: ['GET','POST'])]
+public function triCroissantFront( \App\Repository\ReservationRepository $reservationRepository): Response
+{
+    $reservation = $reservationRepository->findAllSorted();
 
+    return $this->render('Front/reservation/index.html.twig', [
+        'reservations' => $reservation,
+        
+    ]);
+}
+
+#[Route('Front/reservation/tridesc', name: 'tridFront', methods: ['GET','POST'])]
+public function triDescroissantFront( \App\Repository\ReservationRepository $reservationRepository): Response
+{
+    $reservation = $reservationRepository->findAllSorted1();
+
+    return $this->render('Front/reservation/index.html.twig', [
+        'reservations' => $reservation,
+    ]);
+}
+
+
+
+
+#[Route('Front/reservation/search', name: 'app_reservation_search_Front', methods: ['GET'])]
+public function searchReservationFront(Request $request, ReservationRepository $reservationRepository): JsonResponse
+{
+    $query = $request->query->get('q');
+    $results = $reservationRepository->findBySearchQuery($query); 
+
+    $formattedResults = [];
+    foreach ($results as $result) {
+        $formattedResults[] = [
+            'refReservation' => $result->getRefReservation(),
+            'dureeReservation' => $result->getDureeReservation(),
+            'prixReservation' => $result->getPrixReservation(),
+            'dateReservation' => $result->getDateReservation(),
+            'typeChambre' => $result->getTypeChambre(),
+            'nomHotel' => $result->getIdHotel()->getNomHotel(), // Accédez au nom de l'hôtel via la relation
+            // Ajoutez d'autres champs au besoin
+        ];
+    }
+
+    return new JsonResponse($formattedResults);
+}
 
 //////////////////////****BAck ****//////////////////////////
 
@@ -334,10 +441,20 @@ public function delete($refReservation, ManagerRegistry $manager, ReservationRep
 
 
 #[Route('/listReservationBack', name: 'app_reservation_index_back', methods: ['GET'])]
-public function indexBack(ReservationRepository $reservationRepository): Response
+public function indexBack(Request $request , ReservationRepository $reservationRepository , PaginatorInterface $paginator): Response
 {
+    $reservations = $reservationRepository->findAll();
+            ////////////////////////////*******************pagination***************///////////////////////////////////////
+    
+$pagination = $paginator->paginate(
+    $reservations,
+    $request->query->getInt('page', 1), // Current page number
+    10 // Number of items per page
+);
+
     return $this->render('Back/reservation/index.html.twig', [
         'reservations' => $reservationRepository->findAll(),
+        'reservations' => $pagination,
     ]);
 }
 
@@ -452,6 +569,56 @@ public function deleteBack($refReservation, ManagerRegistry $manager, Reservatio
     
     return $this->redirectToRoute('app_reservation_index_back');
 }
+
+
+
+#[Route('Back/reservation/tricroi', name: 'tri', methods: ['GET','POST'])]
+public function triCroissant( \App\Repository\ReservationRepository $reservationRepository): Response
+{
+    $reservation = $reservationRepository->findAllSorted();
+
+    return $this->render('Back/reservation/index.html.twig', [
+        'reservations' => $reservation,
+    ]);
+}
+
+#[Route('Back/reservation/tridesc', name: 'trid', methods: ['GET','POST'])]
+public function triDescroissant( \App\Repository\ReservationRepository $reservationRepository): Response
+{
+    $reservation = $reservationRepository->findAllSorted1();
+
+    return $this->render('Back/reservation/index.html.twig', [
+        'reservations' => $reservation,
+    ]);
+}
+
+
+#[Route('/reservation/search', name: 'app_reservation_search', methods: ['GET'])]
+public function searchReservation(Request $request, ReservationRepository $reservationRepository): JsonResponse
+{
+    $query = $request->query->get('q');
+    $results = $reservationRepository->findBySearchQuery($query); 
+
+    $formattedResults = [];
+    foreach ($results as $result) {
+        $formattedResults[] = [
+            'refReservation' => $result->getRefReservation(),
+            'dureeReservation' => $result->getDureeReservation(),
+            'prixReservation' => $result->getPrixReservation(),
+            'dateReservation' => $result->getDateReservation(),
+            'typeChambre' => $result->getTypeChambre(),
+            'nomHotel' => $result->getIdHotel()->getNomHotel(), // Accédez au nom de l'hôtel via la relation
+            // Ajoutez d'autres champs au besoin
+        ];
+    }
+
+    return new JsonResponse($formattedResults);
+}
+
+
+
+
+
 
 
 }

@@ -23,6 +23,11 @@ document.addEventListener('DOMContentLoaded', function() {
         <div class="col-md-6">
             {{ form_start(form , {'attr': {'class': 'reservation-form' ,'novalidate': 'novalidate'}}) }}
             {{form_errors(form)}}
+            
+ <div class="form-group">
+    <label for="hotelName" class="form-label text-center">Hotel</label>
+    <input type="text" id="hotelName" class="form-control " value="{{ hotel.getNomHotel }}" readonly>
+</div>
 
             <div class="form-group">
                 {{ form_label(form.dureeReservation, 'Durée de la réservation', {'label_attr': {'class': 'form-label'}}) }}
@@ -48,9 +53,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 {{ form_errors(form.prixReservation, {'attr': {'class': 'error-message'}}) }}
             </div>
             
-            <div class="form-group text-center">
-                <button type="submit" class="btn btn-primary">Enregistrer</button>
-            </div>
+        <div class="form-group text-center mt-2">
+  <div class="text-center">
+    <button type="submit" class="btn btn-primary btn-block" style="background-color: #57C0DD; border: none; margin-right: 10px;">Enregistrer</button>
+
+    <a href="{{ path('app_paiement', {'id': hotel.idHotel}) }}" style="margin-left: 10px;"> <img src="{{ asset('img/paiement.png') }}" style="width: 50px; height: 50px;"> Payer</a>
+</div>
+
+</div>
+
+
             {{ form_end(form) }}
 
             <!-- Inclure le script JavaScript à la fin du fichier -->

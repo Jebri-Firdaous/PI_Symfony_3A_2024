@@ -2,12 +2,16 @@
 
 {% block title %}new Reservation{% endblock %}
 {% block main %}
-            <h1 class="text-center">Entrer une  Reservation</h1>
+            <h1 class="text-center" , style="font-weight: bold; color: #2f64b1; text-align: center;">Entrer une  Reservation</h1>
 
 
     {{ include('Back/reservation/_form.html.twig') }}
 
-    <a href="{{ path('app_reservation_index_back') }}">retour au Tableau </a>
+    <a href="{{ path('app_reservation_index_back') }}"> List
+     <i class="align-middle" data-feather="list"></i>
+    </a>
+  
+
 {% endblock %}
 {% block body %}
    
