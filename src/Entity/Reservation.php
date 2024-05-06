@@ -65,7 +65,7 @@ class Reservation
     #[Assert\NotBlank(
         message:'Cette valeur ne doit pas être vide'
     )]
-    public User $id;
+    public User $user;
     // private User $id;
   
 
@@ -158,13 +158,13 @@ class Reservation
 
     public function getUser(): ?User
     {
-        return $this->id;
+        return $this->user;
     }
     
 
-    public function setIdPersonne(?User $idPersonne): static
+    public function setUser(?User $user): static
     {
-        $this->id = $idPersonne;
+        $this->user = $user;
 
         return $this;
     }
@@ -180,6 +180,9 @@ class Reservation
 
         return $this;
     }
+
+
+    
 
 
   

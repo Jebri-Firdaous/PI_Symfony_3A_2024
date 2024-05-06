@@ -186,7 +186,7 @@ $pagination = $paginator->paginate(
  
      
 
-     $user = $userRepository->find(65); // Remplacez 55 par l'ID de l'utilisateur que vous souhaitez récupérer
+     $user = $this->getUser(); // Remplacez 55 par l'ID de l'utilisateur que vous souhaitez récupérer
 
      // Vérifier si l'utilisateur existe
      if (!$user) {
@@ -194,7 +194,7 @@ $pagination = $paginator->paginate(
      }
      $reservation = new Reservation();
      // Définir l'utilisateur pour le rendez-vous
-      $reservation->setIdPersonne($user);
+      $reservation->setUser($user);
 
      $form = $this->createForm(HotelReservationType::class, $reservation, [
          'hotel' => $hotel
@@ -455,11 +455,13 @@ public function searchReservationFront(Request $request, ReservationRepository $
 
 
 #[Route('/listReservationBack', name: 'app_reservation_index_back', methods: ['GET'])]
-public function indexBack(Request $request , ReservationRepository $reservationRepository , PaginatorInterface $paginator): Response
+public function indexBack(Request $request , ReservationRepository $reservationRepository , PaginatorInterface $paginator  , UserRepository $userRepository): Response
 {
+    $user = $this->getUser(); // Remplacez 55 par l'ID de l'utilisateur que vous souhaitez récupérer
+   // $query =  $user->getLesReservations();
     $reservations = $reservationRepository->findAll();
             ////////////////////////////*******************pagination***************///////////////////////////////////////
-    
+   
 $pagination = $paginator->paginate(
     $reservations,
     $request->query->getInt('page', 1), // Current page number
@@ -481,11 +483,12 @@ public function tourismeBack(Request $request, EntityManagerInterface $entityMan
     foreach ($hotels as $hotel) {
         $hotelChoices[$hotel->getNomHotel()] = $hotel;
     }
+    $client = $this->getUser();
     
     // Sérialiser les prix des hôtels en JSON pour les passer à la vue
     $selectedHotelNames = array_keys($hotelChoices);
 
-    $user = $userRepository->find(65); // Remplacez 55 par l'ID de l'utilisateur que vous souhaitez récupérer
+    $user = $this->getUser(); // Remplacez 55 par l'ID de l'utilisateur que vous souhaitez récupérer
 
     // Vérifier si l'utilisateur existe
     if (!$user) {
@@ -494,7 +497,7 @@ public function tourismeBack(Request $request, EntityManagerInterface $entityMan
 
     $reservation = new Reservation();
 
-    $reservation->setIdPersonne($user);
+    $reservation->setUser($user);
     $form = $this->createForm(ReservationType::class, $reservation, [
         'hotelChoices' => $hotelChoices,
     ]);

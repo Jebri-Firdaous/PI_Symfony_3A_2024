@@ -341,6 +341,53 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+
+    #[ORM\OneToMany(mappedBy: "user", targetEntity: Reservation::class, cascade: ['persist', 'remove'])]
+    private $LesReservations;
+    
+     /**
+     * @return Collection|Reservations[]
+     */
+    public function getLesReservations(): Collection
+    {
+        return $this->LesReservations;
+    }
+
+
+    public function __construct()
+    {
+        $this->LesReservations = new ArrayCollection();
+    }
+
+
+    public function addLesReservations(Reservation $reservation): self
+    {
+        if (!$this->LesReservations->contains($reservation)) {
+            $this->LesReservations[] = $reservation;
+            $reservation->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLesReservations(Reservation $reservation): self
+    {
+        if ($this->LesReservations->removeElement($reservation)) {
+            // set the owning side to null (unless already changed)
+            if ($reservation->getUser() === $this) {
+                $reservation->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->getNomPersonne() . ' ' . $this->getPrenomPersonne();
+    }
     
 
+  
 }
