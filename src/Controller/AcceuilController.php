@@ -17,7 +17,7 @@ class AcceuilController extends AbstractController
         // $_SESSION['user'] = $c->find(48);
 
         // Adding a variable to the session
-        $_SESSION['user_id'] = 48;
+        $_SESSION['user_id'] = 65;
 
         return $this->render('Front/index.html.twig', [
             'controller_name' => 'AcceuilController',

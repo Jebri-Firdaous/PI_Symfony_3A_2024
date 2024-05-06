@@ -32,7 +32,7 @@ class RendezVous
     private ?Medecin $idMedecin;
 
 
-    #[ORM\ManyToOne(targetEntity: client::class)]
+    #[ORM\ManyToOne(targetEntity: Client::class)]
     #[ORM\JoinColumn(name: 'id_personne', referencedColumnName: 'id_personne')]
     private ?Client $idPersonne;
 

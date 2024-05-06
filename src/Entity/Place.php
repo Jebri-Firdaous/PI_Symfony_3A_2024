@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use App\Entity\Client;
+use App\Entity\User;
 use App\Entity\Parking;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -38,9 +38,9 @@ class Place
 
     // #[ORM\OneToOne(targetEntity: Client::class)]
     // #[ORM\JoinColumn(name: 'idUser', referencedColumnName: 'idPersonne')]
-    #[ORM\OneToOne(targetEntity: Client::class, inversedBy: "place")]
-    #[ORM\JoinColumn(name: "id_personne", referencedColumnName: "id_personne")]
-    private ?Client $id_personne;
+    #[ORM\OneToOne(targetEntity: User::class, inversedBy: "place")]
+    #[ORM\JoinColumn(name: "id_personne", referencedColumnName: "id")]
+    private ?User $id_personne;
 
     public function getRefPlace(): ?int
     {
@@ -95,12 +95,12 @@ class Place
         return $this;
     }
 
-    public function getIdPersonne(): ?Client
+    public function getIdPersonne(): ?User
     {
         return $this->id_personne;
     }
 
-    public function setIdPersonne(?Client $idUser): static
+    public function setIdPersonne(?User $idUser): static
     {
         $this->id_personne = $idUser;
 

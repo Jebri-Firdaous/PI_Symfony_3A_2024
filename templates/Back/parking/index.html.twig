@@ -42,6 +42,7 @@
 {% endblock %}
 
 {% block main %}
+<div class="content">
 <br> <h1>Liste Parking ( <a href="{{ path('app_parking_new') }}"><i class="fas fa-plus"></i></a> )</h1> <br>
 
 <div style="display: grid; grid-template-columns: 1fr 1fr;">
@@ -115,8 +116,47 @@
 
     <!-- Pagination -->
 {# Display pagination controls #}
-{{ knp_pagination_render(pag) }}
+<style>
+    .pagination {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    justify-content: center;
+}
 
+.page-item {
+    margin-right: 5px;
+}
+
+.page-link {
+    display: inline-block;
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: #fff;
+    border: 1px solid #007bff;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+}
+
+.page-link:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+.page-item.active .page-link {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+.page-link:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+</style>
+{{ knp_pagination_render(pag) }}
+</div>
     {# <a href="{{ path('app_parking_new') }}">Create new</a> #}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -217,4 +257,7 @@
             });
         });
     </script>
+    
+
+
 {% endblock %}

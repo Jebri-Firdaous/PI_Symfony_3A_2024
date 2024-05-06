@@ -13,9 +13,10 @@
 {% endblock %}
 
 {% block body %}
+<div class="container">
 <h1>Place déja reservée</h1>
 
-<a href="{{  path('app_parkingF') }}">back to parkings</a><br>
+{# <a href="{{  path('app_parkingF') }}">back to parkings</a><br> #}
 
 <title>Place</title>
 
@@ -39,18 +40,8 @@
             </tr>
         </tbody>
     </table>
-    
-    <a href="{{  path('app_place_annulerRes', {'idP': idP, 'refP': place.refplace}) }}" class="btn" style ="width: 150px;"><h4>Annuler Reservation</h4></a>
+    {# <h3><a href="{{  path('app_place_annulerRes', {'idP': idP, 'refP': place.refplace}) }}">Annuler Reservation</a></h3> #}
+    <div style="text-align: center;"><h4><a href="{{  path('app_place_annulerRes', {'idP': idP, 'refP': place.refplace}) }}" >Annuler Reservation</a></h4></div>
+</div>
 
-<!-- Vesitable Shop End -->
-<!-- JavaScript Libraries -->
-    <script src="{{asset('https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js')}}"></script>
-    <script src="{{asset('https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js')}}"></script>
-    <script src="{{asset('parking/lib/easing/easing.min.js')}}"></script>
-    <script src="{{asset('parking/lib/waypoints/waypoints.min.js')}}"></script>
-    <script src="{{asset('parking/lib/lightbox/js/lightbox.min.js')}}"></script>
-    <script src="{{asset('parking/lib/owlcarousel/owl.carousel.js')}}"></script>
-    
-    <!-- Template Javascript -->
-    <script src="{{asset('parking/js/main.js')}}"></script>
 {% endblock %}
