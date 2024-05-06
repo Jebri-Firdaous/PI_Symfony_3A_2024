@@ -5,7 +5,7 @@ use repository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Station; 
-use App\Entity\Client;
+use App\Entity\User;
 use DateTime;
 use App\Repository\billetRepository ;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -69,9 +69,9 @@ public function validateDateTime(ExecutionContextInterface $context)
     #[Assert\NotBlank(message:"La station est obligatoire")] 
     private ?Station $station;
 
-    #[ORM\ManyToOne(targetEntity: client::class)]
-    #[ORM\JoinColumn(name: 'id_personne', referencedColumnName: 'id_personne')]
-    private ?Client $idPersonne;
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'id_personne', referencedColumnName: 'id')]
+    private ?User $idPersonne;
 
 
     public function getRefVoyage(): ?int
@@ -136,7 +136,7 @@ public function validateDateTime(ExecutionContextInterface $context)
     }
 
 
-    public function setIdPersonne(?Client $idPersonne): static
+    public function setIdPersonne(?User $idPersonne): static
     {
         $this->idPersonne = $idPersonne;
 
@@ -148,7 +148,7 @@ public function validateDateTime(ExecutionContextInterface $context)
         return $this->station;
     }
 
-    public function getIdPersonne(): ?Client
+    public function getIdPersonne(): ?User
     {
         return $this->idPersonne;
     }

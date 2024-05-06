@@ -66,7 +66,7 @@
               
               <!-- Bouton de réservation -->
               <div class="trainer-rank d-flex align-items-center">
-                <a href="#" id="reservation-button" class="category btn-reserver"> Réserver</a>
+                <a href="{{path('app_reserver',{'id':billet.refVoyage})}}" id="reservation-button" class="category btn-reserver"> Réserver</a>
                 <!-- Nombre de réservations -->
                 <i id="numberOfReservations" class="bi bi-person user-icon" data-reservations="0">&nbsp;0</i>
 
@@ -139,7 +139,7 @@ $('.btn-reserver').click(function(e) {
     var duree = btnReserver.closest('.course-item').find('.trainer-link').text().trim();
 
     // Envoyer une demande AJAX à votre contrôleur Symfony
-    $.ajax({
+ /* $.ajax({
         url: '{{ path('send_sms') }}', // Remplacez 'send_sms' par le nom de votre route Symfony
         type: 'GET',
         data: {
@@ -149,7 +149,7 @@ $('.btn-reserver').click(function(e) {
             duree: duree
         },
         success: function(response) {
-            alert('SMS envoyé avec succès!');
+            alert('SMS envoyé avec succès!');*/
             
             // Créer un élément HTML pour le billet réservé
             var billetReserveHTML = '<tr>'; // Ouvrir une nouvelle ligne
@@ -172,12 +172,12 @@ $('.btn-reserver').click(function(e) {
                 var newNumberOfReservations = currentNumberOfReservations + 1;
                 numberOfReservationsElement.text(newNumberOfReservations).attr('data-reservations', newNumberOfReservations);
             }
-        },
+       /* },
         error: function(xhr, status, error) {
             console.error(error);
             alert('Erreur lors de l\'envoi du SMS.');
         }
-    });
+    });*/
 });
 
 

@@ -12,8 +12,10 @@ class SmsController extends AbstractController
      
     public function sendSms(Request $request): Response
     {
-        $sid = "ACb7cb10abe726458f2e65c021dede9aa6";
-        $token = "78ef408c1817ef773effeb57be2ee26f";
+      
+
+        $sid = "ACc5b8e3232904a11512056aa13f6835e2";
+        $token = "10a8da026e162d7b36820eb5259a33db";
         $destination = $request->query->get('destination');
     $dateDepart = $request->query->get('dateDepart');
     $prix = $request->query->get('prix');
@@ -26,12 +28,14 @@ class SmsController extends AbstractController
         $message = $client->messages->create(
             "+21692701943", // Destinataire
             [
-                "from" => "+12183664547", // Votre numéro Twilio
+                "from" => "+12562429649", // Votre numéro Twilio
                 "body" => $messageContent
             ]
         );
     
-        return new Response('SMS sent with Twilio! SID: ' . $message->sid);
+        // return new Response('SMS sent with Twilio! SID: ' . $message->sid);
+        return $this->redirectToRoute('app_transport');
+
 }
 
 }

@@ -145,7 +145,7 @@
 							<a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown" data-bs-toggle="dropdown">
 								<div class="position-relative">
 									<i class="align-middle" data-feather="bell"></i>
-									<span class="indicator">4</span>
+									<span class="indicator">0</span>
 								</div>
 							</a>
 							<div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="alertsDropdown">
@@ -177,6 +177,7 @@
 											</div>
 										</div>
 									</a>
+									
 									<a href="#" class="list-group-item">
 										<div class="row g-0 align-items-center">
 											<div class="col-2">
@@ -201,12 +202,13 @@
 										</div>
 									</a>
 								</div>
+								
 								<div class="dropdown-menu-footer">
 									<a href="#" class="text-muted">Show all notifications</a>
 								</div>
 							</div>
 						</li>
-						<li class="nav-item dropdown">
+			<li class="nav-item dropdown">
 							<a class="nav-icon dropdown-toggle" href="#" id="messagesDropdown" data-bs-toggle="dropdown">
 								<div class="position-relative">
 									<i class="align-middle" data-feather="message-square"></i>
@@ -273,6 +275,14 @@
 								</div>
 							</div>
 						</li>
+
+				<div class="d-flex align-items-center" > <!-- Ajout de margin-top négatif pour rapprocher l'icône du tableau -->
+    <div style="flex-grow: 1;">
+    </div>
+    <a href="{{ path('Extract_data') }}"  >
+        <i data-feather="file-text" style="width: 25px; height: 25px;"></i>
+    </a>
+</div>
 						<li class="nav-item dropdown">
 							<a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-bs-toggle="dropdown">
                 <i class="align-middle" data-feather="settings"></i>

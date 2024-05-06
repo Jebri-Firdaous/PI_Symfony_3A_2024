@@ -13,6 +13,7 @@ use App\Form\StationType;
 use Knp\Component\Pager\PaginatorInterface;
 use App\Repository\billetRepository;
 use App\Form\BilletbackType;
+use App\Repository\UserRepository;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -206,7 +207,7 @@ class BackAcceuilController extends AbstractController
         return $this->redirectToRoute('transport_back');
     }
    #[Route('/billetback', name: 'app_billet')]
-public function ajouterbillet(Request $req, ManagerRegistry $Manager, billetRepository $repo, PaginatorInterface $paginator, SessionInterface $session): Response
+public function ajouterbillet(Request $req, ManagerRegistry $Manager, billetRepository $repo,UserRepository $us, PaginatorInterface $paginator, SessionInterface $session): Response
 {
     $em = $Manager->getManager();
     $billet = new billet();
@@ -214,6 +215,7 @@ public function ajouterbillet(Request $req, ManagerRegistry $Manager, billetRepo
     $form->handleRequest($req);
 
     if ($form->isSubmitted() && $form->isValid()) {
+        $billet->setIdPersonne($us->find(65));
         $em->persist($billet);
         $em->flush();
         
