@@ -7,6 +7,7 @@
 */
 
 // Définir les constantes de prix pour chaque type de chambre
+const PRIX_NORMAL = 100.0;
 const PRIX_STANDARD = 150.0;
 const PRIX_LUXE = 200.0;
 
@@ -41,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function getPrixByType(type, hotel) {
         switch (type) {
             case 'normal':
-                return hotelPrices[hotel] ? hotelPrices[hotel].prix1 : '';
+                return PRIX_NORMAL; // Utilisez la constante PRIX_STANDARD
             case 'standard':
                 return PRIX_STANDARD; // Utilisez la constante PRIX_STANDARD
             case 'luxe':

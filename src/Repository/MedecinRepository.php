@@ -20,6 +20,14 @@ class MedecinRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Medecin::class);
     }
+    public function findBySpecialite($specialite)
+    {
+        return $this->createQueryBuilder('m')
+            ->where('m.specialiteMedecin = :specialite')
+            ->setParameter('specialite', $specialite)
+            ->getQuery()
+            ->getResult();
+    }
 
 //    /**
 //     * @return Medecin[] Returns an array of Medecin objects

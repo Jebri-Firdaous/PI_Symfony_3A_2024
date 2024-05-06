@@ -358,6 +358,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->LesReservations = new ArrayCollection();
+        $this->lesRendezVous = new ArrayCollection();
     }
 
 
@@ -386,6 +387,39 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __toString()
     {
         return $this->getNomPersonne() . ' ' . $this->getPrenomPersonne();
+    }
+    /**
+     * @return Collection|RendezVous[]
+     */
+    public function getLesRendezVous(): Collection
+    {
+        return $this->lesRendezVous;
+    }
+    #[ORM\OneToMany(mappedBy: "user", targetEntity: RendezVous::class, cascade: ['persist', 'remove'])]
+    private $lesRendezVous;
+
+    
+
+    public function addLesRendezVous(RendezVous $rendezVous): self
+    {
+        if (!$this->lesRendezVous->contains($rendezVous)) {
+            $this->lesRendezVous[] = $rendezVous;
+            $rendezVous->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLesRendezVous(RendezVous $rendezVous): self
+    {
+        if ($this->lesRendezVous->removeElement($rendezVous)) {
+            // set the owning side to null (unless already changed)
+            if ($rendezVous->getUser() === $this) {
+                $rendezVous->setUser(null);
+            }
+        }
+
+        return $this;
     }
     
 

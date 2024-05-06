@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+
+
+</html><!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -38,9 +40,16 @@
    {% endblock %}
       {% endblock %}
   ======================================================== -->
+  {# calender #}
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.css" integrity="sha256-uq9PNlMzB+1h01Ij9cx7zeE2OR2pLAfRw3uUUOOPKdA=" crossorigin="anonymous">
+        {% block stylesheets %}{% endblock %}
 </head>
 <body  >
 
+
+
+<body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 {% block header %}
 {% set currentRoute = app.request.attributes.get('_route') %}
  <header id="header" class="header d-flex align-items-center sticky-top">
@@ -52,35 +61,57 @@
 <h1 style="color: #37423b;">E-CITY</h1>
         <!--<img src="{{ asset ('logo_city.png') }}" alt="">-->
       </a>
+      
+ {% block menu %}
       <nav id="navmenu" class="navmenu">
         <ul>
-
+        {% if app.user%}
    <li> <a href="{{ path ('app_acceuil')}}" {% if currentRoute == 'app_acceuil' %}class="active"{% endif %}>Accueil</a></li>
 
-          <li class="dropdown has-dropdown"><a ><span>Santé</span><i class="bi bi-chevron-down"></i></a>
+          <li class="dropdown has-dropdown"><a href="#"{% if currentRoute == 'app_sante' %}class="active"{% endif %}><span>Santé</span><i class="bi bi-chevron-down"></i></a>
 
     <ul>
-        <li><a >Les Medecins</a></li>
-        <li><a href="#">Les Rendez-Vous</a></li>
+        <li><a href="{{ path ('app_sante')}}">Les Medecins</a></li>
+        <li><a href="{{ path ('front_rendezVous_getAll')}}">Les Rendez-Vous</a></li>
     </ul>
    </li>
- {% block menu %}
-      
-<li><a >Shopping</a></li>
+<li><a href="{{ path ('app_shopping')}}" {% if currentRoute == 'app_shopping' %}class="active"{% endif %}>Shopping</a></li>
    <li><a href="{{ path ('app_transport')}}" {% if currentRoute == 'app_transport' %}class="active"{% endif %}>Transport</a></li>
-   <li><a>Parking</a></li>
-   <li><a href="{{ path ('app_hotel_index_Front')}}" {% if currentRoute == 'app_hotel_index_Front' %}class="active"{% endif %}>Tourisme</a></li>
-   <li><a>Contact</a></li>
-          {% endblock %}
-        </ul>
-        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
-      </nav>
-      <a class="btn-getstarted" >Se connecter</a>
-      <a class="btn-getstarted" >S'inscrire</a>
+   <li><a href="{{ path ('app_parking')}}" {% if currentRoute == 'app_parking' %}class="active"{% endif %}>Parking</a></li>
+   <li><a href="{{ path ('app_hotel_index_Front')}}" {% if currentRoute == 'app_tourisme' %}class="active"{% endif %}>Tourisme</a></li>
+   <li><a href="{{ path ('app_contact')}}" {% if currentRoute == 'app_contact' %}class="active"{% endif %}>Contact</a></li>
+       <li class="dropdown has-dropdown"> <a href="#"><span class="text-dark">            <img src="img/image_compte/{{ app.user.imagePersonne }}" style="width:50px; border-radius: 10%;" alt="Profile Image" />
 
+</span><i class="bi bi-chevron-down"></i></a>
+      <ul>
+         <li><a href="{{ path ('app_profile')}}"> Profile</a></li>
+         <a href="#"> Settings & Privacy</a>
+         <a href="#"> Help Center</a>
+         <a  href="{{ path ('app_logout')}}">Se déconnecter</a>
+         </div>
+         </li>
+      </ul>
+    </li>
+        
+                <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+
+      </nav>
+            {% else %}
+                <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+
+      <a class="btn-getstarted" href="{{ path ('app_login')}}">Se connecter</a>
+      <a class="btn-getstarted" href="{{ path ('app_register')}}">S'inscrire</a>
+      {% endif %}
+  {% endblock %}
     </div>
   </header>
     {% endblock %}
+
+
+{% block body %}
+{% endblock %}
+
+
 
   <main class="main">
 {% block section %}
@@ -116,13 +147,13 @@
       <div class="row gy-4">
         <div class="col-lg-4 col-md-6 footer-about">
           <a href="index.html" class="logo d-flex align-items-center">
-            <span class="">Mentor</span>
+            <span class="">E-CITY</span>
           </a>
           <div class="footer-contact pt-3">
             <p>Pôle Technologique, Rue André Ampère</p>
             <p>Ariana 2083, Tunisia</p>
             <p class="mt-3"><strong>Fix:</strong> <span>+216 71 234 567</span></p>
-            <p><strong>Email:</strong> <span>ecity.tunis2000@gmail.com</span></p>
+            <p><strong>email:</strong> <span>ecity.tunis2000@gmail.com</span></p>
           </div>
           <div class="social-links d-flex mt-4">
             <a href=""><i class="bi bi-twitter"></i></a>
@@ -132,34 +163,37 @@
           </div>
         </div>
 
-        <div class="col-lg-2 col-md-3 footer-links">
-          <h4>Useful Links</h4>
+  <div class="col-lg-2 col-md-3 footer-links">
+          <h4>Liens utiles</h4>
           <ul>
-           
-            <li><a href="#">Terms of service</a></li>
-            <li><a href="#">Privacy policy</a></li>
+            <li><a href="#">À propos</a></li>
+           <li><a href="#">Contact</a></li>
+
+            <li><a href="#">Conditions d'utilisation</a></li>
+            <li><a href="#">Politique de confidentialité</a></li>
+
           </ul>
         </div>
 
         <div class="col-lg-2 col-md-3 footer-links">
-          <h4>Our Services</h4>
+          <h4>Nos Services</h4>
           <ul>
-            <li><a href="{{ path ('app_acceuil')}}">Santé</a></li>
-            <li><a href="#">Shopping</a></li>
-            <li><a href="#">Transport</a></li>
-            <li><a href="#">Parking</a></li>
-            <li><a href="#">Tourisme</a></li>
+            <li><a href="{{ path ('app_sante')}}">Santé</a></li>
+            <li><a href="{{ path ('app_shopping')}}" >Shopping</a></li>
+            <li><a  href="{{ path ('app_transport')}}">Transport</a></li>
+            <li><a href="{{ path ('app_parking')}}">Parking</a></li>
+            <li><a  href="{{ path ('app_tourisme')}}">Tourisme</a></li>
           </ul>
         </div>
 
         <div class="col-lg-4 col-md-12 footer-newsletter">
-          <h4>Our Newsletter</h4>
-          <p>Subscribe to our newsletter and receive the latest news about our products and services!</p>
+          <h4>Notre newsletter</h4>
+          <p>Abonnez-vous à notre newsletter et recevez les dernières nouvelles sur nos services !</p>
           <form action="forms/newsletter.php" method="post" class="php-email-form">
-            <div class="newsletter-form"><input type="email" name="email"><input type="submit" value="Subscribe"></div>
-            <div class="loading">Loading</div>
+            <div class="newsletter-form"><input type="email" name="email"><input type="submit" value="S'abonner"></div>
+            <div class="loading">Chargement</div>
             <div class="error-message"></div>
-            <div class="sent-message">Your subscription request has been sent. Thank you!</div>
+            <div class="sent-message">Votre demande d'abonnement a été envoyée. Merci!</div>
           </form>
         </div>
       </div>

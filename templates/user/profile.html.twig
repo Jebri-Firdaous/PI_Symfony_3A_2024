@@ -1,0 +1,117 @@
+{% extends 'Front/base.html.twig' %}
+
+{% block styles %}
+    {{ parent() }}
+    <style>
+        /* Custom styles for Profile page */
+
+        .profile-info {
+            padding: 20px;
+        }
+
+        .profile-info h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .field {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .field label {
+            width: 120px;
+            font-weight: bold;
+        }
+
+        .field .value {
+            flex-grow: 1;
+        }
+
+        .field .icon {
+            margin-left: 10px;
+            cursor: pointer;
+            font-size: 18px;
+            color: #999;
+        }
+
+        .profile-image {
+            width: 50px;
+            border-radius: 50%;
+        }
+
+        /* Card styles */
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+            padding: 15px;
+        }
+
+        .card-title {
+            margin-bottom: 0;
+            font-size: 1.25rem;
+            color: #333;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .card-body img {
+            max-width: 100%;
+            border-radius: 8px;
+        }
+
+        .card-body .btn {
+            margin-top: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block section %}
+    <div class="profile-info">
+        <div class="field">
+            <img src="img/image_compte/{{ app.user.imagePersonne }}" style="width:50px; border-radius: 10%;" alt="Profile Image" />
+            <span class="icon">✏️</span>
+            <label for="email">email:</label>
+            <span class="value">{{ app.user.getemail() }}</span>
+            <span class="icon">✏️</span>
+        </div>
+        <div class="field">
+            <label for="nom_personne">Nom:</label>
+            <span class="value">{{ app.user.getNomPersonne() }}</span>
+            <span class="icon">✏️</span>
+        </div>
+        <div class="field">
+            <label for="prenom_personne">Prénom:</label>
+            <span class="value">{{ app.user.getPrenomPersonne() }}</span>
+            <span class="icon">✏️</span>
+        </div>
+
+        {% if 'ADMIN' in app.user.getRoles() %}
+            <div class="field">
+                <label for="roleAdmin">Rôle Admin:</label>
+                <span class="value">{{ app.user.getRoleAdmin() }}</span>
+                <span class="icon">✏️</span>
+            </div>
+        {% elseif 'CLIENT' in app.user.getRoles() %}
+            <div class="field">
+                <label for="age">Âge:</label>
+                <span class="value">{{ app.user.getAge() }}</span>
+                <span class="icon">✏️</span>
+            </div>
+            <div class="field">
+                <label for="genre">Genre:</label>
+                <span class="value">{{ app.user.getGenre() }}</span>
+                <span class="icon">✏️</span>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

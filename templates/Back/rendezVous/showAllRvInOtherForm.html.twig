@@ -1,0 +1,139 @@
+{% extends 'Back/base.html.twig' %}
+
+{% block main %}
+    <h1>{{ 'List de tous les rendez-vous'|trans }}</h1>
+    {# search static => with button #}
+{# <form action="{{ path('app_rv_search') }}" method="GET">
+        <input type="text" id="query" name="query">
+        <button type="submit">Search</button>
+    </form> #}
+
+    {# search dynamic  #}
+    <form id="searchForm" action="{{ path('app_rv_search') }}" method="GET">
+    <input type="text" id="query" name="query">
+    </form>
+
+     {# AJAX script to handle dynamic search #}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+   <script>
+    
+    $(document).ready(function(){
+         let original = $(".appointments-grid");
+    $("#query").on("input", function(){
+        var input = $(this).val();
+       if(input!=""){
+            $.ajax({
+                url: '{{ path('app_rv_search')}}', // Ensure this path is correctly defined in your Twig template
+                type: 'GET',
+                data: { query: input },
+                success: function(response) {
+                    // Assuming the response is HTML that can be directly inserted
+                    original.hide(); // This line empties the content of the div
+                    
+                
+                let responseHTML = $(response).find(".appointments-grid");
+                console.log(responseHTML);
+                $('.search-appointments').html(responseHTML); // This line inserts the new content
+                    
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error(textStatus, errorThrown);
+                }
+            });
+     }
+     else {
+       // original.hidden = false ; 
+      original.show() ; 
+      $('.search-appointments').empty() ; 
+     }
+       
+    });
+});
+
+</script>
+
+
+    {# ------------------------- #}
+      <form action="{{ path('app_rv_tri') }}" method="GET">
+    <label for="order">Ordre :</label>
+    <select name="order" id="order">
+        <option value="asc">Croissant</option>
+        <option value="desc">Décroissant</option>
+    </select>
+
+    <label for="field">Champ de tri :</label>
+    <select name="field" id="field">
+        <option value="date">Date</option>
+        <option value="nomMedecin">Nom Médecin</option>
+        <!-- Ajoutez d'autres options pour les champs de tri si nécessaire -->
+    </select>
+
+    <button type="submit" class="btn btn-primary">Trier</button>
+</form>
+
+
+    <div class="search-appointments"></div>
+    <div class="appointments-grid">
+        {% for rv in lesRVdeClient %}
+            <div class="appointment-item">
+                <div class="appointment-details">
+                    <div class="appointment-client">{{ rv.getUser().getNomPersonne() ~ " " ~ rv.getUser().getPrenomPersonne() }}</div>
+                    <div class="appointment-doctor">Dr. {{ rv.getIdMedecin().getNomMedecin }}</div>
+                    <div class="appointment-specialty">{{ rv.getIdMedecin().specialiteMedecin }}</div>
+                    <div class="appointment-date">{{ rv.getDateRendezVous().format('d/m/Y H:i') }}</div>
+                    <div class="appointment-address">{{ rv.getIdMedecin().getAddressMedecin() }}</div>
+                </div>
+                <div class="appointment-actions">
+                    <a href="{{ path('back_rendezVous_delete', {id: rv.getRefRendezVous()}) }}" class="btn btn-sm btn-secondary">
+                        <i class="fa fa-eye" aria-hidden="true"></i> {{ 'delete'|trans }}
+                    </a>
+                    <a href="{{ path('back_rendezVous_edit', {id: rv.getRefRendezVous()}) }}" class="btn btn-sm btn-primary">
+                        <i class="fa fa-edit" aria-hidden="true"></i> {{ 'edit'|trans }}
+                    </a>
+                </div>
+            </div>
+        {% else %}
+            <div class="no-appointments">
+                <p>{{ 'post.no_posts_found'|trans }}</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <a href="{{ path('back_rendezVous_add') }}" class="btn btn-sm btn-primary">
+        <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Ajouter RendezVous'|trans }}
+    </a>
+
+    <style>
+        .appointments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 7px;
+            margin: 7px;
+        }
+        .appointment-item {
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .appointment-details, .appointment-actions {
+            display: flex;
+            flex-direction: column;
+        }
+        .appointment-actions {
+            align-items: flex-end;
+        }
+        h1{
+            margin-left: 10px;
+        }
+        .appointment-actions a {
+                background-color: #3B7DDD;
+                border-radius: 5px;
+                width: 63px;
+                height: 28px;
+                margin-left: auto;
+                margin-top: 5px;
+        }
+
+    </style>
+
+{% endblock %}

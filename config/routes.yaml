@@ -14,3 +14,9 @@ dhifallahdarine_email:
 app_reservation_new:
     path: /reservation/addReservation
     controller: App\Controller\ReservationController::tourismeHome
+
+
+app_back_acceuil:
+    path: /back/acceuil
+    controller: App\Controller\BackAcceuilController::index
+    methods: ['GET']
