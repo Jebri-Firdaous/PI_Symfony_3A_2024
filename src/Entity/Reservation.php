@@ -5,8 +5,11 @@ use App\Entity\Hotel;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use App\Entity\Client;
+use App\Entity\User;
 use App\Repository\ReservationRepository;
+use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ReservationRepository")
  */
@@ -19,47 +22,87 @@ class Reservation
      #[ORM\Id]
      #[ORM\GeneratedValue]
      #[ORM\Column]
-
+    
     private ?int $refReservation = null;
 
    
     #[ORM\Column]
-    private ?float  $dureeReservation = null;
+    #[Assert\NotBlank(message: "La durée de la réservation est requise")]
+    #[Assert\PositiveOrZero(message: "La durée doit être un nombre positif ou nul")]
+
+    private ?float $dureeReservation = null;
 
    
 
      #[ORM\Column]
-   
+ 
     private ?float  $prixReservation = null ;
 
   
     
 
-    #[ORM\Column]
-     private ?\DateTime $dateReservation = null;
+    #[ORM\Column(nullable: true)]
+    #[Assert\NotBlank(message: "La date de la réservation est requise")]
+    #[Assert\Type(type: "\DateTimeInterface", message: "La date de la réservation doit être une instance de DateTimeInterface")]
+    #[Assert\GreaterThan("today", message: "La date de la réservation doit être postérieure à la date actuelle")]
+    private ?\DateTime $dateReservation;
+    
 
  
-    #[ORM\Column(length: 20)]
+     #[ORM\Column]
+     #[Assert\NotBlank(message:"Le type de la réservation est requise")]
     private ?string $typeChambre = null ;
 
    
 
  
 
-    #[ORM\ManyToOne(targetEntity: client::class)]
-    #[ORM\JoinColumn(name: 'id_personne', referencedColumnName: 'id_personne')]
-    private ?Client $idPersonne;
    
    
 
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "lesReservatoin")]
+    #[ORM\JoinColumn(name: 'id_personne', referencedColumnName: 'id')]
+    #[Assert\NotBlank(
+        message:'Cette valeur ne doit pas être vide'
+    )]
+    public User $user;
+    // private User $id;
   
+
     #[ORM\ManyToOne(targetEntity: Hotel::class)]
     #[ORM\JoinColumn(name: 'id_hotel', referencedColumnName: 'id_hotel')]
-    private ?Hotel $idHotel=null;
-
+    private ?Hotel $idHotel = null;
   
+  
+ 
+   /* private $hotels;
 
+    public function __construct()
+    {
+        $this->hotels = new ArrayCollection();
+    }
 
+    public function getHotels(): Collection
+    {
+        return $this->hotels;
+    }
+
+    public function addHotel(Hotel $hotel): self
+    {
+        if (!$this->hotels->contains($hotel)) {
+            $this->hotels[] = $hotel;
+        }
+
+        return $this;
+    }
+
+    public function removeHotel(Hotel $hotel): self
+    {
+        $this->hotels->removeElement($hotel);
+
+        return $this;
+    }
+*/
     public function getRefReservation(): ?int
     {
         return $this->refReservation;
@@ -113,15 +156,15 @@ class Reservation
         return $this;
     }
 
-    public function getIdPersonne(): ?Client
+    public function getUser(): ?User
     {
-        return $this->idPersonne;
+        return $this->user;
     }
     
 
-    public function setIdPersonne(?Client $idPersonne): static
+    public function setUser(?User $user): static
     {
-        $this->idPersonne = $idPersonne;
+        $this->user = $user;
 
         return $this;
     }
@@ -137,6 +180,9 @@ class Reservation
 
         return $this;
     }
+
+
+    
 
 
   

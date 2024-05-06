@@ -1,0 +1,212 @@
+{% extends 'Front/base.html.twig' %}
+
+{% block title %}E-CITY{% endblock %}
+{% block section %}
+
+    <!-- Hero Section -->
+<section id="hero" class="hero section">
+
+  <img src="{{ asset('img/smartcity.png') }}" alt="" data-aos="fade-in">
+
+ <div class="container">
+  <div class="row align-items-center">
+    <div class="col-md-3 col-6"> <!-- Colonne pour le logo, utilise col-md-3 pour les écrans moyens et grands, col-6 pour les écrans plus petits -->
+      <img src="{{ asset('img/logo2.png') }}" class="img-fluid" alt="Logo" style="max-width: 200px;"> <!-- Ajout d'un style pour définir la largeur maximale du logo -->
+    </div>
+    <div class="col-md-9 col-6"> <!-- Colonne pour le texte, utilise col-md-9 pour les écrans moyens et grands, col-6 pour les écrans plus petits -->
+      <h2 data-aos="fade-up" data-aos-delay="100">E-City,<h4> Dynamiser le présent,<br>Innover pour demain</h4></h2>
+        <p data-aos="fade-up" data-aos-delay="200">Bienvenue sur e-City, votre destination intelligente où la vie devient plus facile grâce à une gamme complète de services pour vos besoins quotidiens.</p>
+      <div class="d-flex mt-4" data-aos="fade-up" data-aos-delay="300">
+          <a <a  class="btn-get-started">Commencer</a>
+          </div>
+    </div>
+  </div>
+</div>
+</section><!-- /Section d'accueil -->
+{% endblock %}
+{% block section2 %}
+<!-- Section À Propos -->
+<section id="about" class="about section">
+
+  <div class="container">
+
+    <div class="row gy-4">
+
+      <div class="col-lg-6 order-1 order-lg-2" data-aos="fade-up" data-aos-delay="100">
+        <img src="{{ asset('img/about.jpg') }}" class="img-fluid" alt="">
+      </div>
+
+      <div class="col-lg-6 order-2 order-lg-1 content" data-aos="fade-up" data-aos-delay="200">
+        <h3>Qui somme nous?</h3>
+        <p class="fst-italic">
+          E-City, la ville intelligente du futur, où les technologies innovantes se rencontrent pour améliorer la qualité de vie.
+        </p>
+        <ul>
+          <li><i class="bi bi-check-circle"></i> <span>Des solutions avancées pour le bien-être de ses citoyens.</span></li>
+          <li><i class="bi bi-check-circle"></i> <span>Une approche durable pour l'environnement et la santé.</span></li>
+          <li><i class="bi bi-check-circle"></i> <span>Des infrastructures modernes pour faciliter la vie quotidienne.</span></li>
+        </ul>
+      </div>
+
+    </div>
+
+  </div>
+
+</section><!-- /Section À Propos -->
+{% endblock %}
+  {% block section3 %}
+<!-- Section Statistiques -->
+<section id="counts" class="section counts">
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+    <div class="row gy-4">
+      <div class="col-lg-3 col-md-6">
+        <div class="stats-item text-center w-100 h-100">
+          <span data-purecounter-start="0" data-purecounter-end="1232" data-purecounter-duration="1" class="purecounter"></span>
+          <p class="">Clients</p>
+        </div>
+      </div><!-- Fin Stats Item -->
+
+      <div class="col-lg-3 col-md-6">
+        <div class="stats-item text-center w-100 h-100">
+          <span data-purecounter-start="0" data-purecounter-end="64" data-purecounter-duration="1" class="purecounter"></span>
+          <p class="">Médecins</p>
+        </div>
+      </div><!-- Fin Stats Item -->
+
+      <div class="col-lg-3 col-md-6">
+        <div class="stats-item text-center w-100 h-100">
+          <span data-purecounter-start="0" data-purecounter-end="42" data-purecounter-duration="1" class="purecounter"></span>
+          <p class="">Points de Vente</p>
+        </div>
+      </div><!-- Fin Stats Item -->
+
+      <div class="col-lg-3 col-md-6">
+        <div class="stats-item text-center w-100 h-100">
+          <span data-purecounter-start="0" data-purecounter-end="24" data-purecounter-duration="1" class="purecounter"></span>
+          <p class="">Station de Transport</p>
+        </div>
+      </div><!-- Fin Stats Item -->
+    </div>
+  </div>
+</section><!-- /Section Statistiques -->
+{% endblock %}
+
+   
+
+ {% block section4 %}
+<!-- Section Pourquoi Nous Choisir -->
+<section id="why-us" class="section why-us">
+  <div class="container">
+    <div class="row gy-4">
+      <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="why-box">
+          <h3>Pourquoi Choisir E-City?</h3>
+          <p>
+            E-City offre une multitude de raisons de choisir ses services et ses installations, allant de la santé à la sécurité.
+          </p>
+      
+        </div>
+      </div><!-- Fin Pourquoi Choisir E-City -->
+
+      <div class="col-lg-8 d-flex align-items-stretch">
+        <div class="row gy-4" data-aos="fade-up" data-aos-delay="200">
+          <div class="col-xl-4" data-aos="fade-up" data-aos-delay="300">
+            <div class="icon-box d-flex flex-column justify-content-center align-items-center">
+              <i class="bi bi-heart"></i>
+              <h4>Services de Santé</h4>
+              <p>Des services de santé de pointe sont disponibles pour tous les résidents d'E-City.</p>
+            </div>
+          </div><!-- Fin Services de Santé -->
+
+          <div class="col-xl-4" data-aos="fade-up" data-aos-delay="400">
+            <div class="icon-box d-flex flex-column justify-content-center align-items-center">
+              <i class="bi bi-cart4"></i>
+              <h4>Points de Vente</h4>
+              <p>Explorez une variété de points de vente offrant des produits de qualité à E-City.</p>
+            </div>
+          </div><!-- Fin Points de Vente -->
+
+          <div class="col-xl-4" data-aos="fade-up" data-aos-delay="500">
+            <div class="icon-box d-flex flex-column justify-content-center align-items-center">
+             <i class="bi bi-arrow-right"></i>
+              <h4>Transport</h4>
+              <p>Découvrez nos options de transport sûres et efficaces pour vos déplacements.</p>
+            </div>
+          </div><!-- Fin Transport -->
+
+          <div class="col-xl-4" data-aos="fade-up" data-aos-delay="600">
+            <div class="icon-box d-flex flex-column justify-content-center align-items-center">
+              <i class="bi bi-signpost-split"></i>
+              <h4>Parking</h4>
+              <p>Nos installations de stationnement pratiques assurent un accès facile à votre destination.</p>
+            </div>
+          </div><!-- Fin Parking -->
+
+          <div class="col-xl-4" data-aos="fade-up" data-aos-delay="700">
+            <div class="icon-box d-flex flex-column justify-content-center align-items-center">
+              <i class="bi bi-binoculars"></i>
+              <h4>Tourisme</h4>
+              <p>Explorez les attractions locales et profitez de votre séjour dans la région.</p>
+            </div>
+          </div><!-- Fin Tourisme -->
+          
+        </div><!-- Fin row -->
+      </div><!-- Fin col-lg-8 -->
+    </div><!-- Fin row -->
+  </div><!-- Fin container -->
+</section><!-- /Section Pourquoi Nous Choisir -->
+{% endblock %}
+
+{% block section5 %}
+<!-- Section Services -->
+<section id="features" class="features section">
+  <div class="container">
+    <div class="row gy-4">
+     
+      <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="200">
+        <div class="features-item">
+          <i class="bi bi-heart" style="color: #5578ff;"></i>
+          <h3><a href="#" class="stretched-link">Services de Santé</a></h3>
+        </div>
+      </div><!-- Fin Services de Santé -->
+
+      <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="300">
+        <div class="features-item">
+          <i class="bi bi-cart4" style="color: #e80368;"></i>
+          <h3><a href="#" class="stretched-link">Shopping</a></h3>
+        </div>
+      </div><!-- Fin Shopping -->
+
+      <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="400">
+        <div class="features-item">
+          <i class="bi bi-arrow-right" style="color: #e361ff;"></i>
+          <h3><a href="#" class="stretched-link">Transport</a></h3>
+        </div>
+      </div><!-- Fin Transport -->
+
+      <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="500">
+        <div class="features-item">
+          <i class="bi bi-signpost-split" style="color: #47aeff;"></i>
+          <h3><a href="#" class="stretched-link">Parking</a></h3>
+        </div>
+      </div><!-- Fin Parking -->
+
+      <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="600">
+        <div class="features-item">
+          <i class="bi bi-binoculars" style="color: #ffa76e;"></i>
+          <h3><a href="#" class="stretched-link">Tourisme</a></h3>
+        </div>
+      </div><!-- Fin Tourisme -->
+    </div>
+  </div>
+</section>
+
+
+
+    </div><!-- Fin row -->
+  </div><!-- Fin container -->
+</section><!-- /Section Services -->
+{% endblock %}
+
+
+

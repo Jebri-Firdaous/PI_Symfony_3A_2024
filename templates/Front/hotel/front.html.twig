@@ -1,0 +1,41 @@
+{% extends 'Front/base.html.twig' %}
+{% block section %}
+
+    <div class="service">
+        <div class="container">
+            <div class="section-header text-center">
+                <div id="google_translate_element"></div>
+                <h4 style="margin-top:50px; margin-bottom:50px;">Liste des Hôtels</h4>
+            </div>
+            <div class="row">
+                {% for hotel in hotels %}
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="service-item">
+                           {# <img src="{{ asset('uploads/' ~ hotel.image) }}" style="width:360px; height:250px;" alt="">#}
+                            <center><h2>{{ hotel.NomHotel }}</h2></center>
+                            <p><strong style="color:#696969">Nom hotel:</strong> {{ hotel.nomHotel }}</p>
+                            
+                            <p><strong style="color:#696969">Prix par nuit du chombre normal:</strong> {{ hotel.prix1 }}</p>
+                            <p><strong style="color:#696969">Prix par nuit du chombre standard:</strong> {{ hotel.prix2 }}</p>
+                            <p><strong style="color:#696969">Prix par nuit du chombre luxe:</strong> {{ hotel.prix3 }}</p>
+
+                            <center>
+                                <a href="{{ path('app_reservation_new', {'idHotel': hotel.idHotel}) }}" class="btn btn-primary">Réserver</a>
+                                <a href="{{ path('app_paiement', {'id': hotel.idHotel}) }}" class="btn btn-success">Payer</a>
+
+                            </center>
+                            <br>
+                            <br>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="col">
+                        <p class="text-center">Aucun hôtel trouvé.</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <br>
+    
+{% endblock %}

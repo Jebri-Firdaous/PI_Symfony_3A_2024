@@ -1,0 +1,72 @@
+{# hotel/addHotel.html.twig #}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            {{ form_start(form , {'attr': {'novalidate': 'novalidate'}}) }}
+
+                {# Champ Nom de l'hôtel #}
+                <div class="mb-3">
+                    {{ form_label(form.nomHotel) }}
+                    {{ form_widget(form.nomHotel, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.nomHotel, {'attr': {'class': 'error-message'}}) }}
+                </div>
+
+                {# Champ Adresse de l'hôtel #}
+                <div class="mb-3">
+                    {{ form_label(form.adressHotel) }}
+                    {{ form_widget(form.adressHotel, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.adressHotel, {'attr': {'class': 'error-message'}}) }}
+                </div>
+
+                {# Champ Prix 1 #}
+                <div class="mb-3">
+                    {{ form_label(form.prix1 , "prix chombre normal") }}
+                    {{ form_widget(form.prix1, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.prix1, {'attr': {'class': 'error-message'}}) }}
+                </div>
+
+                {# Champ Prix 2 #}
+                <div class="mb-3">
+                    {{ form_label(form.prix2 , "prix chombre standard") }}
+                    {{ form_widget(form.prix2, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.prix2, {'attr': {'class': 'error-message'}}) }}
+                </div>
+
+                {# Champ Prix 3 #}
+                <div class="mb-3">
+                    {{ form_label(form.prix3  , "prix chombre luxe") }}
+                    {{ form_widget(form.prix3, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.prix3, {'attr': {'class': 'error-message'}}) }}
+                </div>
+
+                {# Champ Numéro 1 #}
+                <div class="mb-3">
+                    {{ form_label(form.numero1  , "nombre chombre normal") }}
+                    {{ form_widget(form.numero1, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.numero1, {'attr': {'class': 'error-message'}}) }}
+                </div>
+
+                {# Champ Numéro 2 #}
+                <div class="mb-3">
+                    {{ form_label(form.numero2 , "nombre chombre standard" ) }}
+                    {{ form_widget(form.numero2, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.numero2, {'attr': {'class': 'error-message'}}) }}
+                </div>
+
+                {# Champ Numéro 3 #}
+                <div class="mb-3">
+                    {{ form_label(form.numero3 , "nombre chombre luxe" ) }}
+                    {{ form_widget(form.numero3, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.numero3, {'attr': {'class': 'error-message'}}) }}
+                </div>
+
+                {# Bouton de soumission #}
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+                </div>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>

@@ -4,10 +4,16 @@ namespace App\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\RendezVousRepository;
-use DateTimeInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use DateTime;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
+use App\Validator as AcmeAssert;
+
+
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\RendezVousRepository")
+ * @ORM\Table(name="`rendez-vous`")
  */
 
 #[ORM\Entity(repositoryClass: RendezVousRepository::class)]
@@ -15,32 +21,45 @@ class RendezVous
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private $refRendezVous;
+    #[ORM\Column(name: "ref_rendez_vous")]
+    private $ref_Rendez_Vous;
 
     #[ORM\Column]
-    private ?DateTimeInterface $dateRendezVous;
+    #[Assert\NotBlank(
+        message:'Cette valeur ne doit pas être vide'
+    )]
+    #[Assert\GreaterThan('now',
+    message: 'date superieur de maintenant',
+    )]
+    #[AcmeAssert\ContainsRVWithSameDoctorInTheSameDate(mode: 'loose', message:'Le docteur a un rendez-vous à ce moment-là')]
+    private ?DateTime $dateRendezVous;
 
-    /**
-     * @var \Medecin
-     *
-     * @ORM\ManyToOne(targetEntity="Medecin")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_medecin", referencedColumnName="id_medecin")
-     * })
-     */
-    #[ORM\ManyToOne(targetEntity: Medecin::class)]
+
+
+
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "lesRendezVous")]
+    #[ORM\JoinColumn(name: 'id_personne', referencedColumnName: 'id')]
+    #[Assert\NotBlank(
+        message:'Cette valeur ne doit pas être vide'
+    )]
+    public User $user;
+   
+    
+
+    #[ORM\ManyToOne(targetEntity: Medecin::class, inversedBy: "rendezVous")]
     #[ORM\JoinColumn(name: 'id_medecin', referencedColumnName: 'id_medecin')]
-    private ?Medecin $idMedecin;
+    #[Assert\NotBlank(
+    message:'Medecin ne doit pas être vide'
+    )]
+    public ?Medecin $id_medecin=null;
 
+  
 
-    #[ORM\ManyToOne(targetEntity: Client::class)]
-    #[ORM\JoinColumn(name: 'id_personne', referencedColumnName: 'id_personne')]
-    private ?Client $idPersonne;
+    
 
     public function getRefRendezVous(): ?int
     {
-        return $this->refRendezVous;
+        return $this->ref_Rendez_Vous;
     }
 
     public function getDateRendezVous(): ?\DateTimeInterface
@@ -57,24 +76,24 @@ class RendezVous
 
     public function getIdMedecin(): ?Medecin
     {
-        return $this->idMedecin;
+        return $this->id_medecin;
     }
 
     public function setIdMedecin(?Medecin $idMedecin): static
     {
-        $this->idMedecin = $idMedecin;
+        $this->id_medecin = $idMedecin;
 
         return $this;
     }
 
-    public function getIdPersonne(): ?Client
+    public function getUser(): ?User
     {
-        return $this->idPersonne;
+        return $this->user;
     }
 
-    public function setIdPersonne(?Client $idPersonne): static
+    public function setUser(?User $user): static
     {
-        $this->idPersonne = $idPersonne;
+        $this->user = $user;
 
         return $this;
     }

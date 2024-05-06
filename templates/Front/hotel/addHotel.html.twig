@@ -1,0 +1,20 @@
+{% extends 'Front/base.html.twig' %}
+
+{% block title %}New Hotel{% endblock %}
+{% block section %}
+
+<header>
+    <!-- Votre en-tête ici -->
+</header>
+
+<div class="container">
+    <h1 class="text-center" >Entrer nouvel Hotel</h1>
+
+    <div class="form-container">
+        {% include 'Front/hotel/_form.html.twig' with {'button_label': 'Save'} %}
+    </div>
+
+    <a href="{{ path('app_hotel_index_Front') }}">back to list</a>
+</div>
+    
+{% endblock %}

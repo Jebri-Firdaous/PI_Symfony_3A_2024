@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+<div class="col-lg-8">
+            <form action="forms/contact.php" method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="200">
+              <div class="row gy-4">
+
+                <div class="col-md-6">
+                  <input type="text" name="dureeReservation" class="form-control" placeholder="Entrer durée reservation" required="">
+                </div>
+
+                <div class="col-md-6 ">
+                  <input type="text" class="form-control" name="prixReservation"  required="">
+                </div>
+
+                <div class="col-md-12">
+                <input type="date" class="form-control" name="dateReservation" placeholder="Entrer la date du premier jour" required>
+                </div>
+
+                <div class="col-md-12">
+                <input type="" class="form-control" name="dateReservation" placeholder="Entrer la date du premier jour" required>
+                </div>
+
+                <div class="col-md-12 text-center">
+                  <div class="loading">Loading</div>
+                  <div class="error-message"></div>
+                  <div class="sent-message">Your message has been sent. Thank you!</div>
+
+                  <button type="submit">Send Message</button>
+                </div>
+
+              </div>
+            </form>
+          </div><!-- End Contact Form -->
+
+        </div>
+
+      </div>
+
+    </section><!-- /Contact Section -->

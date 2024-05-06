@@ -1,0 +1,127 @@
+<link href="css/app.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<title>{% block title %}E-city{% endblock %}</title>
+
+  <link href="{{ asset ('img/icone.png') }}" rel="icon">
+  
+
+{% block section %}
+
+	
+	<main class="d-flex w-100">
+		<div class="container d-flex flex-column">
+			<div class="row vh-100">
+				<div class="col-sm-10 col-md-8 col-lg-6 mx-auto d-table h-100">
+					<div class="d-table-cell align-middle">
+
+						<div class="text-center mt-4">
+	<a href="{{ path ('app_acceuil')}}">
+		<h1 style="color: #37423b; font-size: 35px;">
+			<strong>E-CITY</strong>
+		</h1>
+	</a>
+	<p  style=" font-size: 20px; font-weight: bold;"> Créer un compte</p>
+</div>
+
+						<div class="card">
+							<div class="card-body">
+								<div class="m-sm-4">
+{{ form_start(registrationForm, {'attr': {'novalidate': 'novalidate'}}) }}
+{{ form_errors(registrationForm) }}
+
+<div class="mb-3">
+    <label class="form-label">Nom</label>
+    {{ form_widget(registrationForm.nom_personne, {'attr': {'class': 'form-control form-control-lg', 'type':'text', 'placeholder': 'Saisir votre nom'}}) }}
+    <td colspan="2"> {{ form_errors(registrationForm.nom_personne) }}</td>
+</div>
+<div class="mb-3">
+    <label class="form-label">Prenom</label>
+    {{ form_widget(registrationForm.prenom_personne, {'attr': {'class': 'form-control form-control-lg', 'type':'text', 'placeholder': 'Saisir votre nom'}}) }}
+    <td colspan="2"> {{ form_errors(registrationForm.prenom_personne) }}</td>
+</div>
+<div class="mb-3">
+    <label class="form-label">Numero telephone</label>
+    {{ form_widget(registrationForm.numero_telephone, {'attr': {'class': 'form-control form-control-lg', 'type':'text', 'placeholder': 'Saisir votre Numero telephone'}}) }}
+    <td colspan="2"> {{ form_errors(registrationForm.numero_telephone) }}</td>
+</div>
+
+{% if app.request.attributes.get('_route') == 'app_register_admin' %}
+    <div class="mb-3">
+            {{ form_label(registrationForm.roleAdmin) }}
+
+        {{ form_widget(registrationForm.roleAdmin) }}
+        {{ form_errors(registrationForm.roleAdmin) }}
+    </div>
+{% elseif app.request.attributes.get('_route') == 'app_register' %}
+    <div class="mb-3">
+            {{ form_label(registrationForm.genre) }}
+
+        {{ form_widget(registrationForm.genre) }}
+        {{ form_errors(registrationForm.genre) }}
+    </div>
+    <div class="mb-3">
+            {{ form_label(registrationForm.age) }}
+
+        {{ form_widget(registrationForm.age) }}
+        {{ form_errors(registrationForm.age) }}
+    </div>
+{% endif %}
+<div class="mb-3">
+    <label class="form-label">Adesse Mail</label>
+    {{ form_widget(registrationForm.email) }}
+    {{ form_errors(registrationForm.email) }}
+</div>
+
+<div class="mb-3">
+    <label class="form-label">Mot de passe</label>
+{{ form_widget(registrationForm.plainPassword, {'attr': {'autocomplete': 'new-password', 'placeholder': 'Entrez votre mot de passe'}}) }}
+    {{ form_errors(registrationForm.plainPassword) }}
+</div>
+<div class="mb-3">
+    <label class="form-label">Image de profile</label>
+    {{ form_widget(registrationForm.image_personne, {'attr': {'class': 'form-control form-control-lg', 'type':'text', 'placeholder': 'Saisir votre nom'}}) }}
+    <td colspan="2"> {{ form_errors(registrationForm.image_personne) }}</td>
+</div>
+
+
+
+<div class="mb-3">
+    {{ form_widget(registrationForm.agreeTerms) }}
+    {{ form_label(registrationForm.agreeTerms) }}
+    {{ form_errors(registrationForm.agreeTerms) }}
+</div>
+<div class="d-flex justify-content-center">
+    {{ form_widget(registrationForm.Submit, {'label': 'S\'inscrire', 'attr': {'class': 'btn btn-lg btn-primary'}}) }}
+</div>
+
+{{ form_end(registrationForm) }}
+
+
+	</div>
+							</div>
+						</div>
+			<div class="card">
+                     <div >
+                        <div class="m-sm-4">
+                        
+                          {% if app.request.attributes.get('_route') == 'app_register_admin' %}
+
+                           <div style="text-align: center;">
+                              Vous avez déja un compte? <a href="{{ path ('app_login_admin')}}">Se connecter</a>
+                             
+                           </div>
+                           {% endif %}
+                        </div>
+						
+                     </div>
+					</div>
+		
+				</div>
+			</div>
+		</div>
+
+	</main>
+
+
+	<script src="js/app.js"></script>
+{% endblock %}

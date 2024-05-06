@@ -1,0 +1,31 @@
+{# templates/emails/reservation_confirmation.html.twig #}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Réservation confirmée</title>
+</head>
+<body>
+    <h1>Réservation confirmée</h1>
+    
+    <p>Merci pour votre réservation !</p>
+    
+    <p>Détails de la réservation :</p>
+    <ul>
+        <li>Numéro de réservation : {{ reservation.refReservation }}</li>
+        <li>Client : {{ reservation.dureeReservation }}</li>
+         <li>Hôtel : {{ reservation.typeChambre }}</li>
+        <li>Date de réservation : {{ reservation.dateReservation|date('Y-m-d H:i:s') }}</li>
+        
+       
+        <!-- Ajoutez d'autres détails de réservation selon vos besoins -->
+    </ul>
+    
+    <p>Nous vous remercions de votre confiance et nous vous attendons avec impatience !</p>
+    
+    <p>Cordialement,<br>Votre équipe de réservation</p>
+</body>
+</html>

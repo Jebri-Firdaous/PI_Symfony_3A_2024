@@ -21,6 +21,46 @@ class ReservationRepository extends ServiceEntityRepository
         parent::__construct($registry, Reservation::class);
     }
 
+
+    public function getreservationStatistics()
+    {
+        return $this->createQueryBuilder('r')
+            ->select('r.typeChambre, COUNT(r.refReservation) as count')
+            ->groupBy('r.typeChambre')
+            ->getQuery()
+            ->getResult();
+    }
+
+
+    public function findAllSorted(): array
+    {
+        $queryBuilder = $this->createQueryBuilder('r')
+            ->orderBy('r.prixReservation', 'ASC');
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+    public function findAllSorted1(): array
+    {
+        $queryBuilder = $this->createQueryBuilder('r')
+            ->orderBy('r.prixReservation', 'DESC');
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    public function findBySearchQuery(?string $query): array
+    {
+        if (!$query) {
+            return $this->findAll();
+        }
+    
+        return $this->createQueryBuilder('r')
+            ->leftJoin('r.idHotel', 'h')
+            ->andWhere('r.refReservation LIKE :query OR r.dureeReservation LIKE :query OR r.prixReservation LIKE :query OR r.dateReservation LIKE :query OR r.typeChambre LIKE :query OR h.nomHotel LIKE :query')
+            ->setParameter('query', '%' . $query . '%')
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Reservation[] Returns an array of Reservation objects
 //     */

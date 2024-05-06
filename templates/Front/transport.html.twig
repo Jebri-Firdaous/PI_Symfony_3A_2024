@@ -1,0 +1,235 @@
+{% extends 'Front/base.html.twig' %}
+
+{% block title %}Hello HomeController!{% endblock %}
+
+{% block section6 %}
+
+
+ <!-- Page Title -->
+    <div class="page-title" data-aos="fade">
+      <div class="heading">
+        <div class="container">
+          <div class="row d-flex justify-content-center text-center">
+            <div class="col-lg-8">
+              <h1>Réservez Votre Billet</h1>
+              
+            </div>
+          </div>
+          
+        </div>
+      </div>
+      <nav class="breadcrumbs">
+        <div class="container">
+          <ol>
+            <li><a href="index.html.twig">Acceuil</a></li>
+            <li class="current">Transport</li>
+            <li ><a href="#" id="afficherListeBillets" class="category btn-afficher">Afficher votre liste des billets réservés</a></li>
+          </ol>
+        </div>
+      </nav>
+    </div><!-- End Page Title -->
+
+
+<div style="margin-top: 50px;"> <!-- Ajustez la marge supérieure selon vos besoins -->
+  <i class="bi bi-search-heart bi-lg"style="margin-left: 30px;"></i>
+  <input type="text" id="search" oninput="search()" placeholder=" destination/station..." style="margin-left: 30px;"> <!-- Ajoutez une marge à gauche -->
+</div>
+
+   <!-- Courses List Section -->
+<section id="courses-list" class="section courses-list">
+  <div class="container">
+    <div class="row justify-content-center"> <!-- Cette classe centre les éléments dans la rangée -->
+      {% for billet in list %}
+      
+      <!-- Début de chaque élément de cours -->
+      <div class="col mb-4" data-aos="zoom-in" data-aos-delay="100">
+        <div class="course-item h-100 p-3 shadow" >
+          <div class="course-content">
+            <!-- En-tête du cours -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <img src="img/billet.jpg" class="card-img" alt="">
+            </div>
+            
+            <!-- Informations sur le billet -->
+            <p class="dest price">
+              <i class="bi bi-geo-alt-fill"></i>   {{ billet.station.nomStation }} - {{ billet.station.adressStation }} - {{ billet.station.type }} &rarr; 
+              {{ billet.destinationVoyage }}
+            </p>
+            <p class="price"><i class="bi bi-cash"></i> Prix : {{ billet.prix }} DT</p>
+            <p class="description  mb-2"><i class="bi bi-clock"></i> {{ billet.dateDepart|date('Y-m-d H:i:s') }}</p>
+            
+            <!-- Durée du billet -->
+            <div class="trainer d-flex justify-content-between align-items-center">
+              <div class="trainer-profile d-flex align-items-center">
+                <a href="" class="trainer-link">Durée : {{ billet.duree }}</a>
+              </div>
+              
+              <!-- Bouton de réservation -->
+              <div class="trainer-rank d-flex align-items-center">
+                <a href="{{path('app_reserver',{'id':billet.refVoyage})}}" id="reservation-button" class="category btn-reserver"> Réserver</a>
+                <!-- Nombre de réservations -->
+                <i id="numberOfReservations" class="bi bi-person user-icon" data-reservations="0">&nbsp;0</i>
+
+                &nbsp;&nbsp;
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> <!-- Fin de chaque élément de cours -->
+
+      {% endfor %}
+    </div>
+  </div>
+  
+</section>
+
+<ul id="listeBilletsReservesUl">
+    <table id="listeBilletsReservesTable" style="border-collapse: collapse; width: 100%;">
+     <caption class="table-caption">
+        Liste des billets réservés
+        <i id="toggleTableIcon" class="bi bi-eye-slash" style="cursor: pointer;"></i>
+    </caption>
+        <thead>
+            <tr>
+                <th style="border: 2px solid #ddd; padding: 8px;">Départ -> Destination</th>
+                <th style="border: 2px solid #ddd; padding: 8px;">Date de départ</th>
+                <th style="border: 2px solid #ddd; padding: 8px;">Prix</th>
+                <th style="border: 2px solid #ddd; padding: 8px;">Durée</th>
+               
+                <th style="border: 2px solid #ddd; padding: 8px;">Annuler Votre Réservation</th>
+            </tr>
+        </thead>
+        <tbody id="listeBilletsReserves">
+            <!-- Les billets réservés seront ajoutés dynamiquement ici -->
+        </tbody>
+    </table>
+</ul>
+<div class="d-flex justify-content-center">
+             {% do list.setPageRange(2) %}
+             {{ knp_pagination_render(list, 'pagination.html.twig') }}
+         </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    // Cacher la liste des billets réservés au chargement de la page
+    $('#listeBilletsReservesUl').hide();
+
+    // Gérer le clic sur le bouton "Afficher votre liste des billets réservés"
+    $('#afficherListeBillets').click(function() {
+        $('#listeBilletsReservesUl').toggle();
+    });
+
+    // Gérer le clic sur l'icône "eye" pour cacher la liste
+    $('#toggleTableIcon').click(function() {
+        $('#listeBilletsReservesUl').hide();
+    });
+
+    // Gérer le clic sur le bouton "Réserver"
+$('.btn-reserver').click(function(e) {
+    e.preventDefault(); // Empêcher le comportement par défaut du lien
+
+    // Capturer la référence à l'élément
+    var btnReserver = $(this);
+
+    // Récupérer les détails du billet
+    var destination = btnReserver.closest('.course-item').find('.dest').text().trim();
+    var prix = btnReserver.closest('.course-item').find('.price').text().trim().split(":")[1].trim();
+    var dateDepart = btnReserver.closest('.course-item').find('.description').text().trim();
+    var duree = btnReserver.closest('.course-item').find('.trainer-link').text().trim();
+
+    // Envoyer une demande AJAX à votre contrôleur Symfony
+ /* $.ajax({
+        url: '{{ path('send_sms') }}', // Remplacez 'send_sms' par le nom de votre route Symfony
+        type: 'GET',
+        data: {
+            destination: destination,
+            dateDepart: dateDepart,
+            prix: prix,
+            duree: duree
+        },
+        success: function(response) {
+            alert('SMS envoyé avec succès!');*/
+            
+            // Créer un élément HTML pour le billet réservé
+            var billetReserveHTML = '<tr>'; // Ouvrir une nouvelle ligne
+            billetReserveHTML += '<td style="border: 1px solid #ddd; padding: 8px;">' + destination + '</td>';
+            billetReserveHTML += '<td style="border: 1px solid #ddd; padding: 8px;">' + dateDepart + '</td>';
+            billetReserveHTML += '<td style="border: 1px solid #ddd; padding: 8px;">' + prix + '</td>';
+            billetReserveHTML += '<td style="border: 1px solid #ddd; padding: 8px;">' + duree + '</td>';
+
+            billetReserveHTML += '<td style="border: 1px solid #ddd; padding: 8px;"><button class="btn-annuler-reservation bi-person"><i class="bi bi-trash"></i></button></td>';
+
+            billetReserveHTML += '</tr>'; // Fermer la ligne
+
+            // Ajouter le billet à la liste en tant qu'élément de ligne de tableau
+            $('#listeBilletsReserves').append(billetReserveHTML);
+
+            // Incrémenter le nombre de réservations pour ce billet spécifique
+            var numberOfReservationsElement = btnReserver.closest('.trainer-rank').find('.bi-person');
+            var currentNumberOfReservations = parseInt(numberOfReservationsElement.attr('data-reservations'));
+            if (!isNaN(currentNumberOfReservations)) {
+                var newNumberOfReservations = currentNumberOfReservations + 1;
+                numberOfReservationsElement.text(newNumberOfReservations).attr('data-reservations', newNumberOfReservations);
+            }
+       /* },
+        error: function(xhr, status, error) {
+            console.error(error);
+            alert('Erreur lors de l\'envoi du SMS.');
+        }
+    });*/
+});
+
+
+
+    // Gérer le clic sur le bouton "Annuler"
+$(document).on('click', '.btn-annuler-reservation', function() {
+    // Trouver l'élément tr correspondant à la réservation annulée
+    var trElement = $(this).closest('tr');
+
+    // Récupérer le nombre de réservations depuis l'élément bi-person
+    var numberOfReservationsElement = $('#numberOfReservations');
+
+    // Récupérer le texte de l'élément
+    var currentNumberOfReservationsText = numberOfReservationsElement.text().trim();
+
+    // Vérifier si le texte est un nombre valide
+    var currentNumberOfReservations = parseInt(currentNumberOfReservationsText);
+    if (!isNaN(currentNumberOfReservations)) {
+        // Décrémenter le nombre de réservations si c'est supérieur à zéro
+        if (currentNumberOfReservations > 0) {
+            var newNumberOfReservations = currentNumberOfReservations - 1;
+            numberOfReservationsElement.text(newNumberOfReservations); // Mettre à jour le nombre affiché
+        }
+    } else {
+        console.log("Le nombre de réservations n'est pas un nombre valide.");
+    }
+
+    // Supprimer l'élément tr correspondant à la réservation annulée
+    trElement.remove();
+});
+
+});
+</script>
+ 
+
+   		<script src="{{ asset('https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js') }}"></script>
+      	<script>
+$(document).ready(function () {
+    $("#search").on("input", function () {
+        var value = $(this).val().toLowerCase().trim();
+        $(".course-item").each(function () {
+            var destination = $(this).find('.dest.price').text().toLowerCase().trim();
+            if (destination.includes(value)) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    });
+});
+
+
+</script>
+
+{% endblock %}

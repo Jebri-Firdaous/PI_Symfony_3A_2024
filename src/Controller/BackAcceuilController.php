@@ -87,7 +87,7 @@ class BackAcceuilController extends AbstractController
     
     
     #[Route('/transportback', name: 'transport_back')]
-    public function indexxx(Request $req,ManagerRegistry $Manager,StationRepository $repo,PaginatorInterface $paginator): Response
+    public function indexxx(Request $req,ManagerRegistry $Manager, StationRepository $repo,PaginatorInterface $paginator): Response
     {  $entityManager = $Manager->getManager();
         $list = $repo->findAll();
         $list = $paginator->paginate(

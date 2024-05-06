@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Controller;
-
+use App\Controller\ReservationController;
+use Psr\Container\ContainerInterface;
 use App\Entity\Billet;
 use App\Entity\Station;
 use App\Form\BilletType;
@@ -15,14 +16,29 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  use App\Repository\billetRepository;
  use Knp\Component\Pager\PaginatorInterface;
  use App\Repository\StationRepository;
+use App\Repository\HotelRepository;
 
+
+use App\Entity\Hotel;
+use App\Form\HotelType;
+use Doctrine\ORM\EntityManagerInterface;
 class AcceuilController extends AbstractController
 {
     #[Route('/home', name: 'app_acceuil')]
-    public function index(): Response
+    public function index(ContainerInterface $container): Response
     {
-        return $this->render('home/index.html.twig', [
+        return $this->render('Front/index.html.twig', [
             'controller_name' => 'AcceuilController',
+            'container' => $container,
+        ]);
+    }
+
+    #[Route('/profile', name: 'app_profile')]
+    public function profile(ContainerInterface $container): Response
+    {
+        return $this->render('user/profile.html.twig', [
+            'controller_name' => 'AcceuilController',
+            'container' => $container,
         ]);
     }
 
@@ -30,44 +46,19 @@ class AcceuilController extends AbstractController
     public function show(Request $req,ManagerRegistry $Manager,billetRepository $repo,UserRepository $us,PaginatorInterface $paginator ): Response
     {   
      
-
-        $em=$Manager->getManager();
-     
         $list=$repo->findAll();
-        $billet=new billet();
-        $form=$this->createForm(BilletType::class,$billet);
-        $form->handleRequest($req);
-      
-        if ($form ->isSubmitted() && $form ->isValid())
-        {
-       
-        $em->persist($billet);
-        $em->flush();
-      
-        return $this->redirectToRoute('app_transport');
-        }
-        
-        else {
+        dump($list);
             $list = $repo->findAll();
             $list = $paginator->paginate(
                 $list, /* query NOT result */
                 $req->query->getInt('page', 1),
                 3
             );
-        return $this->render('home/transport.html.twig', [
+        return $this->render('Front/transport.html.twig', [
            
             'list' => $list
         ]);
-    }}
-    #[Route('/listebilletsreserves', name: 'liste_billets_reserves')]
-    public function listebilletsreserves(): Response
-    {
-        return $this->render('home/listebilletreserves.html.twig', [
-            'controller_name' => 'AcceuilController',
-        ]);
     }
-
-    
     #[Route('/transport/{id}', name: 'app_reserver',methods:['GET','POST'])]
     public function reserver(Request $req,ManagerRegistry $Manager,billetRepository $repo,UserRepository $us,PaginatorInterface $paginator,$id ): Response
     {   
@@ -81,39 +72,47 @@ class AcceuilController extends AbstractController
         return $this->redirectToRoute('app_transport');
 
     }
-
-  
-
-#[Route('/EditBillet/{id}', name: 'edit_billet')] 
-public function editBillet (Request $req,ManagerRegistry $Manager,billetRepository $repo,$id)
-:Response {
-    $em=$Manager->getManager();
-    $billet=$repo->find($id);
-    $form=$this->createForm(BilletType::class,$billet);
-    $form->handleRequest($req);
-    if ($form ->isSubmitted())
+    #[Route('/parking', name: 'app_parking')]
+    public function parkingHome(): Response
     {
-    $em->persist($billet);
-    $em->flush();
-   
-    return $this->redirectToRoute('app_transport');
+        return $this->render('Front/parking.html.twig', [
+            'controller_name' => 'AcceuilController',
+        ]);
     }
-    else {
-        $list = $repo->findAll();
-    return $this->renderForm('home/transport.html.twig',
-    ['f'=>$form,
-    'list' => $list
-    ]
-);
-}}
-
-#[Route('/DeleteBillet{id}', name: 'delete_billet')] 
-public function deleteAuthor(ManagerRegistry $Manager,billetRepository $repo,$id):Response
-{
-    $em=$Manager->getManager();
-    $billet=$repo->find($id);
-    $em->remove($billet);
-    $em->flush();
-    return $this->redirectToRoute('app_transport');
-}
+    #[Route('/sante', name: 'app_sante')]
+    public function santeHome(): Response
+    {
+        return $this->render('Front/sante.html.twig', [
+            'controller_name' => 'AcceuilController',
+        ]);
+    }
+    #[Route('/shopping', name: 'app_shopping')]
+    public function shoppingHome(): Response
+    {
+        return $this->render('Front/shopping.html.twig', [
+            'controller_name' => 'AcceuilController',
+        ]);
+    }
+    #[Route('/tourism', name: 'app_tourisme')]
+    public function tourismHome(): Response
+    {
+        return $this->render('Front/tourism.html.twig', [
+            'controller_name' => 'AcceuilController',
+        ]);
+    }
+    #[Route('/contact', name: 'app_contact')]
+    public function contactHome(): Response
+    {
+        return $this->render('Front/contact.html.twig', [
+           
+            // 'list' => $list
+        ]);
+    }
+    #[Route('/listebilletsreserves', name: 'liste_billets_reserves')]
+    public function listebilletsreserves(): Response
+    {
+        return $this->render('home/listebilletreserves.html.twig', [
+            'controller_name' => 'AcceuilController',
+        ]);
+    }
 }

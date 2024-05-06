@@ -4,6 +4,8 @@ namespace App\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\HotelRepository;
+use Symfony\Component\Validator\Constraints as Assert;
+
 /**
  * @ORM\Entity(repositoryClass="App\Repository\HotelRepository")
  */
@@ -17,38 +19,67 @@ class Hotel
      #[ORM\Id]
      #[ORM\GeneratedValue]
      #[ORM\Column]
-
-    private ?int  $idHotel = null;
+     private ?int  $idHotel = null;
 
 
      #[ORM\Column(length: 15)]
+     #[Assert\NotBlank(message:"Le nom  de hotel est requise")]
+
     private  ?string $nomHotel = null;
 
 
      #[ORM\Column(length: 30)]
+     #[Assert\NotBlank(message:"L'adress  de hotel est requise")]
+
      private  ?string $adressHotel = null;
     
     
      #[ORM\Column]
+     #[Assert\NotBlank(message:"Le prix normal  de hotel est requise")]
+     #[Assert\Positive(message: "Le prix de type normal doit être un nombre entier positif")]
+
+     #[Assert\Type(type: "float", message: "Le prix de type normal doit être un nombre")]
     private  ?float $prix1 = null;
 
    
     #[ORM\Column]
+    #[Assert\NotBlank(message:"Le prix standard  de hotel est requise")]
+    #[Assert\Positive(message: "Le prix de type standard doit être un nombre entier positif")]
+
+    #[Assert\Type(type: "float", message: "Le prix de type standard doit être un nombre")]
+
     private ?float $prix2 = null;
 
     #[ORM\Column]
+    #[Assert\Positive(message: "Le prix de type luxe doit être un nombre entier positif")]
+
+    #[Assert\Type(type: "float", message: "Le prix de type luxe doit être un nombre")]
+
+    #[Assert\NotBlank(message:"Le prix luxe  de hotel est requise")]
+
     private ?float  $prix3 = null;
 
   
     #[ORM\Column]
-   
+    #[Assert\NotBlank(message:"Le numero de chombre de type  normal  de hotel est requise")]
+    #[Assert\Positive(message: "La numero de chombre de type  normal doit être un nombre entier positif")]
+
     private ?int $numero1 = null ;
+   
 
     #[ORM\Column]
+    #[Assert\Positive(message: "La numero de chombre de type  standard doit être un nombre entier positif")]
+
+    #[Assert\NotBlank(message:"Le numero de chombre de type  standard  de hotel est requise")]
+
     private ?int $numero2 = null ;
 
   
     #[ORM\Column]
+    #[Assert\Positive(message: "La numero de chombre de type  luxe doit être un nombre entier positif")]
+
+    #[Assert\NotBlank(message:"Le numero de chombre de type  luxe  de hotel est requise")]
+
     private ?int $numero3 = null ;
 
     public function getIdHotel(): ?int
@@ -152,5 +183,15 @@ class Hotel
         return $this;
     }
 
+   /* public function __toString(): string
+    {
+        return $this->getNomHotel() ?? 'Unnamed Hotel';
+    }
+    */
+
+    public function __toString(): string
+    {
+        return $this->getNomHotel() ?? 'Unnamed Hotel';
+    }
 
 }

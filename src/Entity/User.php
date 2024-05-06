@@ -16,7 +16,7 @@ use Doctrine\Common\Collections\Collection;
 
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-// #[Vich\Uploadable]
+#[Vich\Uploadable]
 
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -341,8 +341,53 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-    
 
+
+    #[ORM\OneToMany(mappedBy: "user", targetEntity: Reservation::class, cascade: ['persist', 'remove'])]
+    private $LesReservations;
+    
+     /**
+     * @return Collection|Reservations[]
+     */
+    public function getLesReservations(): Collection
+    {
+        return $this->LesReservations;
+    }
+
+
+    public function __construct()
+    {
+        $this->LesReservations = new ArrayCollection();
+        $this->lesRendezVous = new ArrayCollection();
+    }
+
+
+    public function addLesReservations(Reservation $reservation): self
+    {
+        if (!$this->LesReservations->contains($reservation)) {
+            $this->LesReservations[] = $reservation;
+            $reservation->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLesReservations(Reservation $reservation): self
+    {
+        if ($this->LesReservations->removeElement($reservation)) {
+            // set the owning side to null (unless already changed)
+            if ($reservation->getUser() === $this) {
+                $reservation->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->getNomPersonne() . ' ' . $this->getPrenomPersonne();
+    }
     /**
      * @return Collection|RendezVous[]
      */
@@ -353,36 +398,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: "user", targetEntity: RendezVous::class, cascade: ['persist', 'remove'])]
     private $lesRendezVous;
 
-    public function __construct()
+    
+
+    public function addLesRendezVous(RendezVous $rendezVous): self
     {
-        $this->lesRendezVous = new ArrayCollection();
+        if (!$this->lesRendezVous->contains($rendezVous)) {
+            $this->lesRendezVous[] = $rendezVous;
+            $rendezVous->setUser($this);
+        }
+
+        return $this;
     }
 
-    // public function addLesRendezVous(RendezVous $rendezVous): self
-    // {
-    //     if (!$this->lesRendezVous->contains($rendezVous)) {
-    //         $this->lesRendezVous[] = $rendezVous;
-    //         $rendezVous->setUser($this);
-    //     }
-
-    //     return $this;
-    // }
-
-    // public function removeLesRendezVous(RendezVous $rendezVous): self
-    // {
-    //     if ($this->lesRendezVous->removeElement($rendezVous)) {
-    //         // set the owning side to null (unless already changed)
-    //         if ($rendezVous->getUser() === $this) {
-    //             $rendezVous->setUser(null);
-    //         }
-    //     }
-
-    //     return $this;
-    // }
-    public function __toString()
+    public function removeLesRendezVous(RendezVous $rendezVous): self
     {
-        return $this->getNomPersonne();
+        if ($this->lesRendezVous->removeElement($rendezVous)) {
+            // set the owning side to null (unless already changed)
+            if ($rendezVous->getUser() === $this) {
+                $rendezVous->setUser(null);
+            }
+        }
+
+        return $this;
     }
+    
 
-
+  
 }
