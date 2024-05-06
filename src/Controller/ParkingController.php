@@ -110,13 +110,23 @@ class ParkingController extends AbstractController
     {
         if ($this->isCsrfTokenValid('delete'.$parking->getIdParking(), $request->request->get('_token'))) {
 
+            // $filename = 'parking/recycle.txt';
+            // $lines = file($filename);
+            // $new = $parking->getNomParking().','.$parking->getAddressParking().','
+            // .$parking->getLatitude().','.$parking->getLongitude().','.$parking->getNombrePlaceMax().','.$parking->getNombrePlaceOcc()
+            // .','.$parking->getEtatParking(). PHP_EOL;
+            // $lines[] = $new;
+            // file_put_contents($filename, implode('', $lines));
             $filename = 'parking/recycle.txt';
             $lines = file($filename);
-            $new = $parking->getNomParking().','.$parking->getAddressParking().','
-            .$parking->getLatitude().','.$parking->getLongitude().','.$parking->getNombrePlaceMax().','.$parking->getNombrePlaceOcc()
-            .','.$parking->getEtatParking(). PHP_EOL;
-            $lines[] = $new;
-            file_put_contents($filename, implode('', $lines));
+
+            $new = PHP_EOL . $parking->getNomParking() . ',' . $parking->getAddressParking() . ','
+                . $parking->getLatitude() . ',' . $parking->getLongitude() . ',' . $parking->getNombrePlaceMax() . ',' . $parking->getNombrePlaceOcc()
+                . ',' . $parking->getEtatParking() ;
+
+            // Append the new content to the end of the file
+            file_put_contents($filename, $new, FILE_APPEND);
+
 
             $entityManager->remove($parking);
             $entityManager->flush();
@@ -165,24 +175,24 @@ class ParkingController extends AbstractController
     #[Route('back/recycle', name: 'app_parking_recy', methods: ['GET', 'POST'])]
     public function recycle(ParkingRepository $parkingRepository, EntityManagerInterface $entityManager, Request $request, PaginatorInterface $paginator): Response
     {
-        $parking = new Parking();
         $filename = 'parking/recycle.txt';
         $lines = file($filename);
         $parkings = [];
 
+        foreach ($lines as $lineNumber => $line) {
+            $parts = explode(',', $line, 7);
+            $parking = new Parking(); // Create a new Parking object for each iteration
+            $parking->setNomParking($parts[0]);
+            $parking->setAddressParking($parts[1]);
+            $parking->setLatitude($parts[2]);
+            $parking->setLongitude($parts[3]);
+            $parking->setNombrePlaceMax($parts[4]);
+            $parking->setNombrePlaceOcc($parts[5]);
+            $parking->setEtatParking($parts[6]);
 
-            foreach($lines as $lineNumber => $line){
-                $parts = explode(',', $line, 7);
-                $parking->setNomParking($parts[0]);
-                $parking->setAddressParking($parts[1]);
-                $parking->setLatitude($parts[2]);
-                $parking->setLongitude($parts[3]);
-                $parking->setNombrePlaceMax($parts[4]);
-                $parking->setNombrePlaceOcc($parts[5]);
-                $parking->setEtatParking($parts[6]);
-
-                array_push($parkings, $parking);
+            array_push($parkings, $parking);
         }
+
 
     // Paginate the results
     $pag = $paginator->paginate(
@@ -202,7 +212,6 @@ class ParkingController extends AbstractController
     #[Route('back/recycle/{id}', name: 'app_parking_recyBtn', methods: ['GET', 'POST'])]
     public function recycleBtn(ParkingRepository $parkingRepository, EntityManagerInterface $entityManager, $id): Response
     {
-        $parking = new Parking();
         $filename = 'parking/recycle.txt';
         $lines = file($filename);
         $parkings = [];
@@ -210,6 +219,7 @@ class ParkingController extends AbstractController
 
             foreach($lines as $lineNumber => $line){
                 $parts = explode(',', $line, 7);
+                $parking = new Parking();
                 $parking->setNomParking($parts[0]);
                 $parking->setAddressParking($parts[1]);
                 $parking->setLatitude($parts[2]);

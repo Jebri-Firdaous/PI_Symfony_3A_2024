@@ -35,6 +35,7 @@ class PlaceController extends AbstractController
     {
         $this->qrcodeService = $qrcodeService;
     }
+
     #[Route('front/place/{idP}', name: 'app_place_indexF', methods: ['GET'])]
     public function indexF(PlaceRepository $placeRepository, $idP, Request $request, PaginatorInterface $paginator): Response
     {
@@ -44,6 +45,8 @@ class PlaceController extends AbstractController
         $result = $placeRepository->findByIdClient($_SESSION['user_id']);
         // echo $result->getNumPlace();
         
+        // $qrCodePath = $this->qrcodeService->qrcode($result);
+        // $qrCode[$result->getRefPlace()] = $qrCodePath;
         
         if($result == null){
             
@@ -62,6 +65,7 @@ class PlaceController extends AbstractController
                 'places' => $placeRepository->findByIdPark($idP),
                 'place' => $result,
                 'idP' => $idP,
+                // 'qrCodes' => $qrCode,
             ]);
         }
         
@@ -158,8 +162,8 @@ class PlaceController extends AbstractController
         $qrContent = "ID de la place: $refP";
 
         // Génération du code QR
-        $qrCode = new QrCode($qrContent);
-        $qrCode->setSize(300); // Taille du code QR
+        // $qrCode = new QrCode($qrContent);
+        // $qrCode->setSize(300); // Taille du code QR
         // $qrCodePath = 'qr_codes/place_' . $refP . '.png'; // Chemin où enregistrer le code QR
 
         // Enregistrement du code QR
@@ -167,20 +171,19 @@ class PlaceController extends AbstractController
         // $qrCodeStr=$qrCode->writeString();
         // $qrCodePath = $this->qrcodeService->qrcode($place);
 
-        // $email = (new Email())
-        //     ->from($client->getPersonne()->getMailPersonne())
-        //     ->to('f.felhi2016@gmail.com')
-        //     ->subject('Hello from Symfony!')
-        //     ->text('This is a test email sent from Symfony.');
+        $qrCodePath = $this->qrcodeService->qrcode($place);
+        $qrCode[$place->getRefPlace()] = $qrCodePath;
+        $qrCodePath = $this->qrcodeService->qrcode($place);
 
-        // $mailer->send($email);
-
-        // $recipientEmail = 'random.felhi2020@gmail.com';
-        // $subject = 'Test Email';
-
-        // $email = new NotificationEmail($recipientEmail, $subject);
-
-        // $mailer->send($email);
+        $email = (new Email())
+            ->from('dhifallahdarine@gmail.com')
+            ->to('f.felhi2016@gmail.com')
+            ->subject('Hello from Symfony!')
+            ->text('This is a test email sent from Symfony.')
+            // ->attachFromPath($qrCodePath);
+            ->attachFromPath($qrCodePath); // Attacher le code QR à l'e-mail en utilisant le chemin du fichier
+                
+        $mailer->send($email);
 
         return $this->redirectToRoute('app_place_indexF', ['idP' => $idP], Response::HTTP_SEE_OTHER);
     }

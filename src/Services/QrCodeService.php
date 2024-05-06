@@ -38,9 +38,9 @@ class QrCodeService
         $qrCode = $this->builder
             ->writer(new PngWriter())
             ->data($this->generateQrCodeData($place))
-            ->logoPath($path.'/logo1.png')
-            ->logoResizeToWidth('100')
-            ->logoResizeToHeight('100')
+            // ->logoPath($path.'/logo1.png')
+            // ->logoResizeToWidth('100')
+            // ->logoResizeToHeight('100')
             ->encoding(new Encoding('UTF-8'))
             ->errorCorrectionLevel(ErrorCorrectionLevel::High)
             ->size(300)

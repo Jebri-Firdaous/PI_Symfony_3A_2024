@@ -38,6 +38,14 @@
                 <th>Etat</th>
                 <td>{{ place.etat }}</td>
             </tr>
+            {# <tr>
+                <th>
+                    {% if qrCodes[place.refPlace] is defined %}
+                        <img src="{{ asset(qrCodes[place.refPlace]) }}"  style="width: 80px; height: 80px;" alt="QR Code">
+                    
+                    {% endif %}
+                </th>
+            </tr> #}
         </tbody>
     </table>
     {# <h3><a href="{{  path('app_place_annulerRes', {'idP': idP, 'refP': place.refplace}) }}">Annuler Reservation</a></h3> #}
