@@ -27,7 +27,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 
 
-use App\Services\QrCodeService;
+use App\Services\QrCodeServiceShopping;
 use Doctrine\DBAL\Connection;
 use Knp\Snappy\Pdf;
 use Stripe\Stripe;
@@ -49,7 +49,7 @@ class ArticleController extends AbstractController
     private $qrcodeService;
     private $paginator;
 
-    public function __construct(QrCodeService $qrcodeService, PaginatorInterface $paginator,private Connection $connection)
+    public function __construct(QrCodeServiceShopping $qrcodeService, PaginatorInterface $paginator,private Connection $connection)
     {
         $this->qrcodeService = $qrcodeService;
         $this->paginator = $paginator;

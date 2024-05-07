@@ -11,7 +11,7 @@ use Endroid\QrCode\RoundBlockSizeMode;
 use Endroid\QrCode\Writer\PngWriter;
 use Symfony\Component\HttpKernel\KernelInterface;
 
-class QrCodeService
+class QrCodeServiceShopping
 {
     protected $builder;
     private $kernel;
