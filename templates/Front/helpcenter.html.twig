@@ -1,0 +1,270 @@
+{% extends 'Back/base.html.twig' %}
+
+
+{% block title %}Question frequents{% endblock %}
+{% block style %}
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<style type="text/css">
+    	body{margin-top:20px;}
+.accordion-style .card {
+    background: transparent;
+    box-shadow: none;
+    margin-bottom: 15px;
+    margin-top: 0 !important;
+    border: none;
+}
+.accordion-style .card:last-child {
+    margin-bottom: 0;
+}
+.accordion-style .card-header {
+    border: 0;
+    background: none;
+    padding: 0;
+    border-bottom: none;
+}
+.accordion-style .btn-link {
+    color: #ffffff;
+    position: relative;
+    background: #15395a;
+    border: 1px solid #15395a;
+    display: block;
+    width: 100%;
+    font-size: 18px;
+    border-radius: 3px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    text-align: left;
+    white-space: normal;
+    box-shadow: none;
+    padding: 15px 55px;
+    text-decoration: none;
+}
+.accordion-style .btn-link:hover {
+    text-decoration: none;
+}
+.accordion-style .btn-link.collapsed {
+    background: #ffffff;
+    border: 1px solid #15395a;
+    color: #1e2022;
+    border-radius: 3px;
+}
+.accordion-style .btn-link.collapsed:after {
+    background: none;
+    border-radius: 3px;
+    content: "+";
+    left: 16px;
+    right: inherit;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 26px;
+    height: 26px;
+    transform: none;
+    width: 26px;
+    top: 15px;
+    text-align: center;
+    background-color: #15395a;
+    color: #fff;
+}
+.accordion-style .btn-link:after {
+    background: #fff;
+    border: none;
+    border-radius: 3px;
+    content: "-";
+    left: 16px;
+    right: inherit;
+    font-size: 20px;
+    font-weight: 600;
+    height: 26px;
+    line-height: 26px;
+    transform: none;
+    width: 26px;
+    top: 15px;
+    position: absolute;
+    color: #15395a;
+    text-align: center;
+}
+.accordion-style .card-body {
+    padding: 20px;
+    border-top: none;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+    border-left: 1px solid #15395a;
+    border-right: 1px solid #15395a;
+    border-bottom: 1px solid #15395a;
+}
+@media screen and (max-width: 767px) {
+    .accordion-style .btn-link {
+        padding: 15px 40px 15px 55px;
+    }
+}
+@media screen and (max-width: 575px) {
+    .accordion-style .btn-link {
+        padding: 15px 20px 15px 55px;
+    }
+}
+.card-style1 {
+    box-shadow: 0px 0px 10px 0px rgb(89 75 128 / 9%);
+}
+.border-0 {
+    border: 0!important;
+}
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: 0.25rem;
+}
+
+section {
+    padding: 120px 0;
+    overflow: hidden;
+    background: #fff;
+}
+.mb-2-3, .my-2-3 {
+    margin-bottom: 2.3rem;
+}
+
+.section-title {
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    position: relative;
+    display: inline-block;
+}
+.text-primary {
+    color: #ceaa4d !important;
+}
+</style>
+{% endblock %}
+{% block main %}
+
+
+
+<div class="card-body p-4 p-md-5 p-xl-6">
+<div class="text-center mb-2-3 mb-lg-6">
+<h2 class="h1 mb-0 text-secondary">Questions  réccurentes</h2>
+</div>
+<div id="accordion" class="accordion-style">
+<div class="card mb-3">
+    <div class="card-header" id="headingSix">
+        <h5 class="mb-0">
+            <button class="btn btn-link collapsed" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix"><span class="text-theme-secondary me-2">Q.</span> Comment fonctionnent les infrastructures intelligentes dans E-City pour améliorer la qualité de vie des citoyens ?</button>
+        </h5>
+    </div>
+    <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-bs-parent="#accordion">
+        <div class="card-body">
+            Les infrastructures intelligentes d'E-City intègrent des capteurs et des systèmes de gestion de données pour surveiller et optimiser divers aspects de la ville, tels que la circulation, l'éclairage public, la gestion des déchets, et bien plus encore. Ces technologies permettent une gestion plus efficace des ressources et contribuent à créer un environnement urbain plus sûr, plus propre et plus durable.
+        </div>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header" id="headingSeven">
+        <h5 class="mb-0">
+            <button class="btn btn-link collapsed" data-bs-toggle="collapse" data-bs-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven"><span class="text-theme-secondary me-2">Q.</span> Quelles technologies innovantes sont utilisées pour assurer la durabilité environnementale dans E-City ?</button>
+        </h5>
+    </div>
+    <div id="collapseSeven" class="collapse" aria-labelledby="headingSeven" data-bs-parent="#accordion">
+        <div class="card-body">
+            Les technologies innovantes telles que les énergies renouvelables, la gestion intelligente de l'eau, les bâtiments à faible consommation d'énergie et les transports publics électriques sont utilisées dans E-City pour promouvoir la durabilité environnementale. Ces solutions contribuent à réduire l'empreinte carbone de la ville et à préserver les ressources naturelles.
+        </div>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header" id="headingEight">
+        <h5 class="mb-0">
+            <button class="btn btn-link collapsed" data-bs-toggle="collapse" data-bs-target="#collapseEight" aria-expanded="false" aria-controls="collapseEight"><span class="text-theme-secondary me-2">Q.</span> Quels sont les avantages des services de santé de pointe disponibles pour les résidents d'E-City ?</button>
+        </h5>
+    </div>
+    <div id="collapseEight" class="collapse" aria-labelledby="headingEight" data-bs-parent="#accordion">
+        <div class="card-body">
+            Les services de santé de pointe disponibles à E-City offrent un accès rapide à des soins de qualité, des équipements médicaux de pointe et des professionnels de santé hautement qualifiés. Cela garantit que les résidents bénéficient des meilleurs soins médicaux possibles, ce qui contribue à améliorer leur bien-être et leur qualité de vie.
+        </div>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header" id="headingNine">
+        <h5 class="mb-0">
+            <button class="btn btn-link collapsed" data-bs-toggle="collapse" data-bs-target="#collapseNine" aria-expanded="false" aria-controls="collapseNine"><span class="text-theme-secondary me-2">Q.</span> Comment E-City garantit-il la sécurité de ses citoyens grâce à ses installations modernes ?</button>
+        </h5>
+    </div>
+    <div id="collapseNine" class="collapse" aria-labelledby="headingNine" data-bs-parent="#accordion">
+        <div class="card-body">
+            E-City garantit la sécurité de ses citoyens en utilisant des technologies de pointe telles que la vidéosurveillance, les systèmes d'alerte précoce, les éclairages de rue intelligents et les patrouilles de sécurité. Ces installations modernes contribuent à prévenir la criminalité, à assurer la sécurité publique et à créer un environnement urbain sûr et accueillant.
+        </div>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header" id="headingTen">
+        <h5 class="mb-0">
+            <button class="btn btn-link collapsed" data-bs-toggle="collapse" data-bs-target="#collapseTen" aria-expanded="false" aria-controls="collapseTen"><span class="text-theme-secondary me-2">Q.</span> Quelles sont les options de transport disponibles à E-City et comment contribuent-elles à réduire la congestion et la pollution ?</button>
+        </h5>
+    </div>
+    <div id="collapseTen" class="collapse" aria-labelledby="headingTen" data-bs-parent="#accordion">
+        <div class="card-body">
+            E-City propose une gamme d'options de transport durables telles que les transports publics électriques, les pistes cyclables, les services de covoiturage et les zones piétonnes. Ces alternatives à la voiture individuelle contribuent à réduire la congestion routière, les émissions de gaz à effet de serre et la pollution atmosphérique, tout en offrant aux citoyens des moyens de déplacement efficaces et respectueux de l'environnement.
+        </div>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header" id="headingEleven">
+        <h5 class="mb-0">
+            <button class="btn btn-link collapsed" data-bs-toggle="collapse" data-bs-target="#collapseEleven" aria-expanded="false" aria-controls="collapseEleven"><span class="text-theme-secondary me-2">Q.</span> Quels sont les avantages des points de vente disponibles à E-City et comment contribuent-ils à soutenir l'économie locale ?</button>
+        </h5>
+    </div>
+    <div id="collapseEleven" class="collapse" aria-labelledby="headingEleven" data-bs-parent="#accordion">
+        <div class="card-body">
+            Les points de vente à E-City offrent une variété de produits de qualité et de services, ce qui permet aux résidents de répondre à leurs besoins quotidiens sans avoir à voyager loin. De plus, en soutenant les commerces locaux, les habitants contribuent à stimuler l'économie de la ville, à créer des emplois et à renforcer le lien communautaire.
+        </div>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header" id="headingTwelve">
+        <h5 class="mb-0">
+            <button class="btn btn-link collapsed" data-bs-toggle="collapse" data-bs-target="#collapseTwelve" aria-expanded="false" aria-controls="collapseTwelve"><span class="text-theme-secondary me-2">Q.</span> Comment les installations de stationnement pratiques d'E-City facilitent-elles la mobilité des résidents et des visiteurs ?</button>
+        </h5>
+    </div>
+    <div id="collapseTwelve" class="collapse" aria-labelledby="headingTwelve" data-bs-parent="#accordion">
+        <div class="card-body">
+            Les installations de stationnement pratiques à E-City comprennent des parkings bien situés, des systèmes de guidage de stationnement et des applications mobiles pour trouver des places de stationnement disponibles. Cela facilite la mobilité des résidents et des visiteurs en réduisant le temps passé à chercher un stationnement et en offrant une expérience de stationnement plus fluide et plus efficace.
+        </div>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header" id="headingThirteen">
+        <h5 class="mb-0">
+            <button class="btn btn-link collapsed" data-bs-toggle="collapse" data-bs-target="#collapseThirteen" aria-expanded="false" aria-controls="collapseThirteen"><span class="text-theme-secondary me-2">Q.</span> Quelles attractions touristiques sont disponibles à E-City et comment la ville les promeut-elle pour les visiteurs ?</button>
+        </h5>
+    </div>
+    <div id="collapseThirteen" class="collapse" aria-labelledby="headingThirteen" data-bs-parent="#accordion">
+        <div class="card-body">
+            E-City propose une variété d'attractions touristiques telles que des parcs, des musées, des centres culturels et des événements communautaires. La ville les promeut en utilisant des campagnes de marketing numérique, des partenariats avec des agences de voyages et des événements spéciaux pour attirer les visiteurs. De plus, des informations touristiques sont facilement accessibles via des panneaux d'information, des applications mobiles et des sites web dédiés.
+        </div>
+    </div>
+</div>
+
+</div>
+</div>
+
+
+
+
+<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript">
+	
+</script>
+{% endblock %}

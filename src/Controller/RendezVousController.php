@@ -97,7 +97,7 @@ class RendezVousController extends AbstractController
             dump($dateRendezVous);
             $stringDate = $dateRendezVous->format('d/m/Y'); // for example
             $body = "tu auras un rendez-vous le  ". $stringDate;
-            // $smsGenerator->SendSms("+4915510686794",$medecinNom, $body);
+            $smsGenerator->SendSms("+4915510686794",$medecinNom, $body);
 
             // Mailing -------------------
            
@@ -322,7 +322,7 @@ class RendezVousController extends AbstractController
             dump($dateRendezVous);
             $stringDate = $dateRendezVous->format('d/m/Y'); // for example
             $body = "tu auras un rendez-vous le  ". $stringDate;
-            // $smsGenerator->SendSms("+4915510686794",$medecinNom, $body);
+            $smsGenerator->SendSms("+4915510686794",$medecinNom, $body);
 
             // mailing 
             

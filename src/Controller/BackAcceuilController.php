@@ -348,5 +348,14 @@ public function deleteBillet(ManagerRegistry $manager, BilletRepository $repo, $
         $response->headers->set('Content-Disposition', $disposition);
         return $response;
     }
+    
+ #[Route('/back/helpcenter', name: 'app_helpcenter')]
+ public function helpBack(): Response
+ {
+     return $this->render('Back/helpcenter.html.twig', [
+         'controller_name' => 'BackAcceuilController',
+     ]);
+ }
+
 
 }

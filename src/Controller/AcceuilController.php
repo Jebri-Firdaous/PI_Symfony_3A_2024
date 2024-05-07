@@ -122,5 +122,15 @@ class AcceuilController extends AbstractController
             'controller_name' => 'AcceuilController',
         ]);
     }
+    
+    #[Route('/help', name: 'app_help_center')]
+
+    public function help(ContainerInterface $container): Response
+    {
+        return $this->render('Front/helpcenter.html.twig', [
+            'controller_name' => 'AcceuilController',
+            'container' => $container,
+        ]);
+    }
  
 }

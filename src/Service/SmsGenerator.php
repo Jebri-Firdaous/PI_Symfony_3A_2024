@@ -11,7 +11,7 @@ class SmsGenerator
     {
         
         $accountSid = "ACb7699b0b6314abd7941be7a60f5822b5";  //Identifiant du compte twilio
-        $authToken = "f3c626e09affc552fadfe4aa4977896c"; //Token d'authentification
+        $authToken = "3dd1f2c145312185c33ce9f713c63eea"; //Token d'authentification
         $fromNumber = "+19784867818"; // Numéro de test d'envoie sms offert par twilio
 
         $toNumber = $number; // Le numéro de la personne qui reçoit le message

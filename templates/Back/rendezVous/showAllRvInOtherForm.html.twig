@@ -85,7 +85,7 @@
                 </div>
                 <div class="appointment-actions">
                     <a href="{{ path('back_rendezVous_delete', {id: rv.getRefRendezVous()}) }}" class="btn btn-sm btn-secondary">
-                        <i class="fa fa-eye" aria-hidden="true"></i> {{ 'delete'|trans }}
+                        <i class="fa fa-trash" aria-hidden="true"></i> {{ 'delete'|trans }}
                     </a>
                     <a href="{{ path('back_rendezVous_edit', {id: rv.getRefRendezVous()}) }}" class="btn btn-sm btn-primary">
                         <i class="fa fa-edit" aria-hidden="true"></i> {{ 'edit'|trans }}
@@ -128,7 +128,7 @@
         .appointment-actions a {
                 background-color: #3B7DDD;
                 border-radius: 5px;
-                width: 63px;
+                width: 85px;
                 height: 28px;
                 margin-left: auto;
                 margin-top: 5px;

@@ -10,6 +10,10 @@
     h1 {
         margin-left: 20px;
     }
+    
+
+
+
 </style>
     <form action="{{ path('app_medecins_search') }}" method="GET">
         <input type="text" id="query" name="query">
@@ -61,7 +65,7 @@
                             <i class="fa fa-eye" aria-hidden="true"></i> {{ 'delete'|trans }}
                         </a>
 
-                        <a href="{{ path('app_medecin_edit', {id: doctor.idMedecin}) }}" class="btn btn-sm btn-primary">
+                        <a href="{{ path('app_medecin_edit', {id: doctor.idMedecin}) }}" class=" btn btn-sm btn-primary">
                             <i class="fa fa-edit" aria-hidden="true"></i> {{ 'edit'|trans }}
                         </a>
                     </div>
