@@ -1,0 +1,33 @@
+{% extends 'Front/base.html.twig' %}
+{% block title %}Offre{% endblock %}
+
+{% block section %}
+
+<div class="container">
+    </br> </br> </br> </br>
+    <div class="col-md-6 offset-md-3">
+        <div class="text-center">
+            {% if hotel is defined %}
+                <h2>prix totale : {{ hotel.prix1 }}  Dt <h2>
+           
+            {% elseif reservation is defined %}
+                <h2>prix totale : {{ reservation.prixReservation }}  Dt <h2>
+            {% endif %}
+        </div>
+    </div>
+    </br>
+
+    <div class="text-center"> <!-- add text-center class to center button -->
+        </br>
+        </br>
+        <form>
+            {% if hotel is defined %}
+                <button class="btn btn-success btn-block"><a href="{{ path('app_checkout', {id: hotel.idHotel}) }}">checkout</a></button>
+            {% elseif reservation is defined %}
+                <button class="btn btn-success btn-block"><a href="{{ path('app_checkout', {id: reservation.refReservation}) }}">checkout</a></button>
+            {% endif %}
+        </form>
+        </br>
+    </div>
+</div>
+{% endblock %}

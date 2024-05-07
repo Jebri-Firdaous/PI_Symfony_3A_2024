@@ -1,0 +1,139 @@
+{% extends 'Front/base.html.twig' %}
+
+{% block title %}Hotel index{% endblock %}
+{% block section %}
+    <input type="text" id="searchInput" class="form-control mb-3" placeholder="Search...">
+{#
+    <form class="search-form d-flex align-items-center" method="GET" action="{{ path('search2') }}">
+        <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+    </form>
+#}
+
+    <div>
+        <a href="{{ path('triFrontHotel') }}" class="d-inline-block">
+            <button type="button" style="padding: 10px; margin-right: 10px;" class="btn btn-outline-info">tri croissant</button>
+        </a>
+
+        <a href="{{ path('tridFrontHotel') }}" class="d-inline-block">
+            <button type="button" style="padding: 10px;" class="btn btn-outline-info">tri décroissant</button>
+        </a>
+    </div>
+
+    <div class="container">
+        <div style="text-align: right;">
+            <a href="{{ path('app_weather') }}">
+                <img src="{{ asset('img/sun.png') }}" style="width: 50px; height: 50px;"> Temperature
+            </a>
+        </div>
+
+        <h1 class="text-center" style="font-weight: bold; color: #2f64b1; text-align: center;">Liste des Hôtels</h1>
+
+        <div class="row card-container">
+            {% for hotel in hotels %}
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ hotel.nomHotel }}</h5>
+                            <p class="card-text">Adresse: {{ hotel.adressHotel }}</p>
+                            <p class="card-text">Prix 1: {{ hotel.prix1 }}</p>
+                            <p class="card-text">Prix 2: {{ hotel.prix2 }}</p>
+                            <p class="card-text">Prix 3: {{ hotel.prix3 }}</p>
+                            <p class="card-text">Numero 1: {{ hotel.numero1 }}</p>
+                            <p class="card-text">Numero 2: {{ hotel.numero2 }}</p>
+                            <p class="card-text">Numero 3: {{ hotel.numero3 }}</p>
+                        </div>
+                        
+                        {% if qrCodes[hotel.idHotel] is defined %}
+                            <img src="{{ asset(qrCodes[hotel.idHotel]) }}"  style="width: 80px; height: 80px;" alt="QR Code">
+                        {% endif %}
+
+                        <div class="card-footer">
+                            <a href="{{ path('app_tourisme', {'idHotel': hotel.idHotel}) }}" class="btn btn-success btn-block" style="background-color: #57C0DD;border: none;">Réserver</a>
+                        {#    <a href="{{ path('app_paiement', {'id': hotel.idHotel}) }}" class="btn btn-success" style="background-color: #57C0DD;border: none;" >Payer</a>#}
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col">
+                    <p>No records found</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div style="text-align: right;">
+        <a href="{{ path('app_bot') }}">
+            <img src="{{ asset('img/chatbot.png') }}" style="width: 50px; height: 50px;"> Chatting
+        </a>
+    </div>
+
+    <span class="icon"> Retour à la liste ➡ </span>
+
+
+    <script>
+        // JavaScript code for searching and updating the cards
+        function search() {
+            var query = document.getElementById('searchInput').value;
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '{{ path('app_hotel_search') }}?q=' + query, true);
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    updateCards(response);
+                }
+            };
+            xhr.send();
+        }
+
+        function updateCards(data) {
+            var cardContainer = document.querySelector('.card-container');
+            cardContainer.innerHTML = ''; // Clear existing cards
+            if (data.length > 0) {
+                data.forEach(function (hotel) {
+                    var card = '<div class="col-md-4 mb-3">';
+                    card += '<div class="card">';
+                    card += '<div class="card-body">';
+                    card += '<h5 class="card-title">' + hotel.nomHotel + '</h5>';
+                    card += '<p class="card-text">Address: ' + hotel.adressHotel + '</p>';
+                    card += '<p class="card-text">Prix 1: ' + hotel.prix1 + '</p>';
+                    card += '<p class="card-text">Prix 2: ' + hotel.prix2 + '</p>';
+                    card += '<p class="card-text">Prix 3: ' + hotel.prix3 + '</p>';
+                    card += '<p class="card-text">Numero 1: ' + hotel.numero1 + '</p>';
+                    card += '<p class="card-text">Numero 2: ' + hotel.numero2 + '</p>';
+                    card += '<p class="card-text">Numero 3: ' + hotel.numero3 + '</p>';
+                    card += '</div>';
+                    card += '<div class="card-footer">';
+                    card += '&nbsp;';
+                    card += '</div>';
+                    card += '</div>';
+                    card += '</div>';
+                    cardContainer.innerHTML += card;
+                });
+            } else {
+                cardContainer.innerHTML = '<p class="text-center">No records found</p>';
+            }
+        }
+
+        document.getElementById('searchInput').addEventListener('input', function () {
+            search();
+        });
+    </script>
+
+
+    <script>
+        $(document).ready(function(){
+            $(".btn1").click(function(){
+                $("h1").slideUp();
+            });
+            $(".btn2").click(function(){
+                $("h1").slideDown();
+            });
+            $(".btn3").click(function(){
+                $("h1").slideToggle();
+            });
+        });
+    </script>
+  {# {{ knp_pagination_render(hotels, 'Front/bootstrap_4_pagination.html.twig') }}#}
+
+{% endblock %}

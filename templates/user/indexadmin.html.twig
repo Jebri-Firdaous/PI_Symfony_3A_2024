@@ -1,0 +1,144 @@
+{% extends 'Back/base.html.twig' %}
+{% block style %}
+<style>
+/* Style de la fenêtre modale */
+.modal {
+  display: none; /* Masquer la fenêtre modale par défaut */
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4); /* Fond semi-transparent */
+}
+
+/* Style du contenu de la fenêtre modale */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+/* Style des boutons */
+button {
+  background-color: #f44336;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #d32f2f;
+}
+
+</style>
+{% endblock %}
+{% block main %}
+<div class="row" style="margin-left: 2px; margin-right: 2px;">
+    <div class="card flex-fill">
+        <div class="card-header">
+            <h2 style="font-weight: bold; color: #2f64b1; text-align: center;">Liste des Administrateurs</h2>
+        </div>
+        <table class="table table-hover my-0">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th class="d-none d-xl-table-cell">Prénom</th>
+                    <th>Numéro Téléphone</th>
+                    <th class="d-none d-md-table-cell">Adresse email</th>
+                    <th class="d-none d-md-table-cell">ROLE</th>
+                    <th class="d-none d-md-table-cell">Image</th>
+                    <th class="d-none d-md-table-cell">Etat verification</th>
+                    <th class="d-none d-md-table-cell">Etat ban</th>
+                    <th class="d-none d-md-table-cell">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                {% if 'ADMIN' in user.roles %}
+                <tr>
+                    <td>{{ user.nomPersonne }}</td>
+                    <td>{{ user.prenomPersonne }}</td>
+                    <td>{{ user.numeroTelephone }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.roleAdmin }}</td>
+                    <td>
+                        <img src="{{ asset('img/image_compte/' ~ user.imagePersonne) }}" alt="{{ user.nomPersonne }}" width="50" height="50">
+                    </td>
+                    {% if user.isVerified == 1 %}
+                        <td>✅</td>
+                    {% else %}
+                        <td>❌</td>
+                    {% endif %}
+                    {% if user.isBanned == 1 %}
+                        <td>⛔</td>
+                    {% else %}
+                        <td>🟢</td>
+                    {% endif %}
+                    <td>
+                        <a ><span class="icon">Banner</span> </a>
+                        <a class="deleteBtn" href="{{ path('app_user_delete_admin', {id: user.getId()}) }}"><span class="icon">🗑️</span></a>
+                        <a href="{{ path('app_user_edit', {id: user.getId()}) }}"><span class="icon">✏️</span></a>
+                    </td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- Incluez le script JavaScript -->
+
+<a href="{{ path('app_user_new_admin') }}" class="btn-primary">Ajouter </a>
+{% endblock %}
+{% block javascript %}
+<script>
+// Obtenez la fenêtre modale et les boutons de confirmation
+var modal = document.getElementById('confirmModal');
+var confirmYes = document.getElementById('confirmYes');
+var confirmNo = document.getElementById('confirmNo');
+var deleteButtons = document.querySelectorAll('.deleteBtn'); // Sélectionnez tous les boutons de suppression
+
+// Fonction pour afficher la fenêtre modale
+function showModal(event) {
+  event.preventDefault(); // Empêcher le comportement de clic par défaut du lien
+  console.log("Show modal function triggered."); // Débogage
+  modal.style.display = 'block'; // Afficher la fenêtre modale
+  document.body.style.overflow = 'hidden'; // Désactiver le défilement de la page principale
+}
+
+// Fonction pour masquer la fenêtre modale
+function hideModal() {
+  console.log("Hide modal function triggered."); // Débogage
+  modal.style.display = 'none'; // Masquer la fenêtre modale
+  document.body.style.overflow = 'auto'; // Activer le défilement de la page principale
+}
+
+// Ajoutez un gestionnaire d'événements pour le clic sur le bouton "Oui"
+confirmYes.addEventListener('click', function() {
+  // Redirigez l'utilisateur vers la page de suppression après confirmation
+  var deleteUrl = this.getAttribute('data-delete-url');
+  console.log("Confirm Yes button clicked."); // Débogage
+  window.location.href = deleteUrl;
+});
+
+// Ajoutez un gestionnaire d'événements pour le clic sur le bouton "Non"
+confirmNo.addEventListener('click', hideModal);
+
+// Ajoutez un gestionnaire d'événements pour le clic sur les boutons de suppression
+deleteButtons.forEach(function(button) {
+  button.addEventListener('click', function(event) {
+    var deleteUrl = this.getAttribute('href');
+    console.log("Delete button clicked."); // Débogage
+    confirmYes.setAttribute('data-delete-url', deleteUrl);
+    showModal(event);
+  });
+});
+
+</script>
+{% endblock %}

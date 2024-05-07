@@ -2090,7 +2090,7 @@ progress {
   padding-top: calc(0.375rem + var(--bs-border-width));
   padding-bottom: calc(0.375rem + var(--bs-border-width));
   margin-bottom: 0;
-  font-size: inherit;
+  font-size: inhmerit;
   line-height: 1.5;
 }
 

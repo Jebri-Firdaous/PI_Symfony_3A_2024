@@ -207,17 +207,20 @@ public function show(Commande $commande, EntityManagerInterface $entityManager):
     // Récupérer les articles associés à chaque commande
     $articlesParCommande = [];
    
-        $commandeArticles = $entityManager->getRepository(CommandeArticle::class)->findBy(['idCommande' => $commande->getIdCommande()]);
-        $articles = [];
-        foreach ($commandeArticles as $commandeArticle) {
-            $articles[] = $commandeArticle->getIdArticle();
-        }
-        $articlesParCommande[$commande->getIdCommande()] = $articles;
-    
+    $commandeArticles = $entityManager->getRepository(CommandeArticle::class)->findBy(['idCommande' => $commande->getIdCommande()]);
+    $articles = [];
+    foreach ($commandeArticles as $commandeArticle) {
+        $articles[] = $commandeArticle->getIdArticle();
+    }
+    $articlesParCommande[$commande->getIdCommande()] = $articles;
+
+    // Récupérer le nom du client associé à la commande
+    $nomClient = $commande->getUser()->getNomPersonne(); // Assurez-vous que la méthode getNomPersonne existe dans votre entité User
 
     return $this->render('Front/commande/show.html.twig', [
         'commande' => $commande,
         'articlesParCommande' => $articlesParCommande,
+        'nomClient' => $nomClient, // Passer le nom du client à la vue
     ]);
 }
 
@@ -262,11 +265,14 @@ public function showback(Commande $commande, EntityManagerInterface $entityManag
             $articles[] = $commandeArticle->getIdArticle();
         }
         $articlesParCommande[$commande->getIdCommande()] = $articles;
+        // Récupérer le nom du client associé à la commande
+    $nomClient = $commande->getUser()->getNomPersonne();
     
 
     return $this->render('Back/commande/show.html.twig', [
         'commande' => $commande,
         'articlesParCommande' => $articlesParCommande,
+        'nomClient' => $nomClient, // Passer le nom du client à la vue
     ]);
 }
 

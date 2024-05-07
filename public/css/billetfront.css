@@ -1,0 +1,25 @@
+.table-caption {
+    caption-side: top;
+    text-align: center;
+    font-weight: bold;
+    font-size: 20px;
+    color: white; /* couleur du texte */
+    background-color: #57C0DD; /* couleur de fond */
+    padding: 10px; /* espacement intérieur */
+    border-bottom: 2px solid #ddd; /* bordure inférieure */
+    margin-top: 50px;
+}
+#listeBilletsReservesTable {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+ #listeBilletsReservesTable td {
+    border: 2px solid #ddd;
+    padding: 8px;
+}
+#listeBilletsReservesTable th {
+    background-color: #57C0DD;
+    color: white; /* Pour rendre le texte lisible sur le fond bleu */
+}
+

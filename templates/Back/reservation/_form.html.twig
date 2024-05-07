@@ -1,0 +1,66 @@
+{# reservation/addReservation.html.twig #}
+{% for typeChambre, price in prices %}
+            <span style="display: none;" id="{{typeChambre}}">{{price}}</span>
+    {% endfor %}
+            
+   <script>
+document.addEventListener('DOMContentLoaded', function() {
+    var dropdown = document.getElementById('reservation_typeChambre');
+    var priceField = document.getElementById('reservation_prixReservation');
+
+    dropdown.addEventListener('change', function() {
+        var selectedOption = this.value;
+        var priceSpan = document.getElementById(selectedOption);
+        var price = priceSpan.textContent; // Get the price from the span
+
+        priceField.value = price; // Set the price in the text field
+    });
+});
+</script>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            {{ form_start(form , {'attr': {'novalidate': 'novalidate', 'class': 'reservation-form'}}) }}
+
+            <div class="form-group">
+                {{ form_label(form.idHotel, 'ID Hotel', {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.idHotel, {'attr': {'class': 'form-control custom-input', 'id': 'idHotel'}}) }}
+                {{ form_errors(form.idHotel, {'attr': {'class': 'error-message'}}) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.dureeReservation, 'Durée de la réservation', {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.dureeReservation, {'attr': {'class': 'form-control custom-input'}}) }}
+                {{ form_errors(form.dureeReservation, {'attr': {'class': 'error-message'}}) }}
+            </div>
+           
+            <div class="form-group">
+                {{ form_label(form.dateReservation, 'Date de la réservation', {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.dateReservation, {'attr': {'class': 'form-control custom-input'}}) }}
+                {{ form_errors(form.dateReservation, {'attr': {'class': 'error-message'}}) }}
+            </div>
+          
+            <div class="form-group">
+                {{ form_label(form.typeChambre, 'Type de chambre', {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.typeChambre, {'attr': {'class': 'form-control custom-input', 'id': 'typeChambre'}}) }}
+                {{ form_errors(form.typeChambre, {'attr': {'class': 'error-message'}}) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.prixReservation, 'Prix de la réservation', {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.prixReservation, {'attr': {'class': 'form-control custom-input'}}) }}
+                {{ form_errors(form.prixReservation, {'attr': {'class': 'error-message'}}) }}
+            </div>
+            
+   <div class="form-group text-center mt-2"> <!-- Ajout de la classe "mt-2" pour une marge en haut -->
+    <button type="submit" class="btn btn-primary">Enregistrer</button>
+</div>
+
+
+            {{ form_end(form) }}
+
+            <!-- Inclure le script JavaScript à la fin du fichier -->
+            <script src="{{ asset('js/reservation.js') }}"></script>
+        </div>
+    </div>
+</div>

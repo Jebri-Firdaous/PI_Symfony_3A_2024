@@ -122,58 +122,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(nullable: true)]
     private ?bool $isBanned = false;
-   
-    private $LesCommandes;
-
-    
-
-     /**
-
-     * @return Collection|Commandes[]
-
-     */
-
-    public function getLesCommandes(): Collection
-
-    {
-        return $this->LesCommandes;
-    }
-
-    public function addLescommandes(Commande $commande): self
-    {
-        if (!$this->LesCommandes->contains($commande)) {
-            $this->LesCommandes[] = $commande;
-            $commande->setUser($this);
-        }
-        return $this;
-    }
-
-
-
-
-    public function removeLescommandes(Commande $commande): self
-
-    {
-
-        if ($this->LesCommandes->removeElement($commande)) {
-
-            // set the owning side to null (unless already changed)
-
-            if ($commande->getUser() === $this) {
-
-                $commande->setUser(null);
-
-            }
-
-        }
-
-
-
-
-        return $this;
-
-    }
-
 
     public function getId(): ?int
     {
@@ -322,6 +270,60 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
     }
 
+
+
+     
+    private $LesCommandes;
+
+    
+
+     /**
+
+     * @return Collection|Commandes[]
+
+     */
+
+    public function getLesCommandes(): Collection
+
+    {
+        return $this->LesCommandes;
+    }
+
+    public function addLescommandes(Commande $commande): self
+    {
+        if (!$this->LesCommandes->contains($commande)) {
+            $this->LesCommandes[] = $commande;
+            $commande->setUser($this);
+        }
+        return $this;
+    }
+
+
+
+
+    public function removeLescommandes(Commande $commande): self
+
+    {
+
+        if ($this->LesCommandes->removeElement($commande)) {
+
+            // set the owning side to null (unless already changed)
+
+            if ($commande->getUser() === $this) {
+
+                $commande->setUser(null);
+
+            }
+
+        }
+
+
+
+
+        return $this;
+
+    }
+
     public function getRoleAdmin(): ?string
     {
         return $this->roleAdmin;
@@ -393,18 +395,88 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+
+    #[ORM\OneToMany(mappedBy: "user", targetEntity: Reservation::class, cascade: ['persist', 'remove'])]
+    private $LesReservations;
     
-   
+     /**
+     * @return Collection|Reservations[]
+     */
+    public function getLesReservations(): Collection
+    {
+        return $this->LesReservations;
+    }
 
 
     public function __construct()
     {
-      
+        $this->LesReservations = new ArrayCollection();
+        $this->lesRendezVous = new ArrayCollection();
         $this->LesCommandes = new ArrayCollection();
     }
 
+
+    public function addLesReservations(Reservation $reservation): self
+    {
+        if (!$this->LesReservations->contains($reservation)) {
+            $this->LesReservations[] = $reservation;
+            $reservation->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLesReservations(Reservation $reservation): self
+    {
+        if ($this->LesReservations->removeElement($reservation)) {
+            // set the owning side to null (unless already changed)
+            if ($reservation->getUser() === $this) {
+                $reservation->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->getNomPersonne() . ' ' . $this->getPrenomPersonne();
+    }
+    /**
+     * @return Collection|RendezVous[]
+     */
+    public function getLesRendezVous(): Collection
+    {
+        return $this->lesRendezVous;
+    }
+    #[ORM\OneToMany(mappedBy: "user", targetEntity: RendezVous::class, cascade: ['persist', 'remove'])]
+    private $lesRendezVous;
+
     
 
- 
+    public function addLesRendezVous(RendezVous $rendezVous): self
+    {
+        if (!$this->lesRendezVous->contains($rendezVous)) {
+            $this->lesRendezVous[] = $rendezVous;
+            $rendezVous->setUser($this);
+        }
 
+        return $this;
+    }
+
+    public function removeLesRendezVous(RendezVous $rendezVous): self
+    {
+        if ($this->lesRendezVous->removeElement($rendezVous)) {
+            // set the owning side to null (unless already changed)
+            if ($rendezVous->getUser() === $this) {
+                $rendezVous->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+    
+
+  
 }

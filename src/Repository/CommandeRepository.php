@@ -2,35 +2,34 @@
 
 namespace App\Repository;
 
-use App\Entity\Commande; 
+use App\Entity\Commande;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Commande> // Mettre à jour le type d'entité
+ * @extends ServiceEntityRepository<Commande>
  *
  * @method Commande|null find($id, $lockMode = null, $lockVersion = null)
  * @method Commande|null findOneBy(array $criteria, array $orderBy = null)
  * @method Commande[]    findAll()
  * @method Commande[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CommandeRepository extends ServiceEntityRepository // Renommer la classe en CommandeRepository
+class CommandeRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Commande::class); // Mettre à jour le type d'entité
+        parent::__construct($registry, Commande::class);
     }
-
 
 //    /**
 //     * @return Commande[] Returns an array of Commande objects
 //     */
 //    public function findByExampleField($value): array
 //    {
-//        return $this->createQueryBuilder('m')
-//            ->andWhere('m.exampleField = :val')
+//        return $this->createQueryBuilder('c')
+//            ->andWhere('c.exampleField = :val')
 //            ->setParameter('val', $value)
-//            ->orderBy('m.id', 'ASC')
+//            ->orderBy('c.id', 'ASC')
 //            ->setMaxResults(10)
 //            ->getQuery()
 //            ->getResult()
@@ -39,13 +38,11 @@ class CommandeRepository extends ServiceEntityRepository // Renommer la classe e
 
 //    public function findOneBySomeField($value): ?Commande
 //    {
-//        return $this->createQueryBuilder('m')
-//            ->andWhere('m.exampleField = :val')
+//        return $this->createQueryBuilder('c')
+//            ->andWhere('c.exampleField = :val')
 //            ->setParameter('val', $value)
 //            ->getQuery()
 //            ->getOneOrNullResult()
 //        ;
 //    }
-
 }
-

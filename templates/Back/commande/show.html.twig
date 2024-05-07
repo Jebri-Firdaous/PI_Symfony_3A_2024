@@ -9,6 +9,7 @@
             <h1 style="font-size: 24px; font-weight: bold;">Commande #{{ commande.idCommande }}</h1>
 
             <div style="margin-bottom: 15px;">
+                
                 <strong>Nombre d'articles:</strong> {{ commande.nombreArticle }}<br>
                 <strong>Prix total:</strong> {{ commande.prixTotale }}<br>
                 <strong>Délai de commande:</strong> {{ commande.delaisCommande ? commande.delaisCommande|date('Y-m-d H:i:s') : '' }}

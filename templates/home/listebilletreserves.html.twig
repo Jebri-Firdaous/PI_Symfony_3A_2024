@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des billets réservés{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Liste des billets réservés</h1>
+    {% if listeBilletsReserves is empty %}
+        <p>Aucun billet réservé pour le moment.</p>
+    {% else %}
+        <ul>
+            {% for billet in listeBilletsReserves %}
+                <li>
+                    <strong>Destination:</strong> {{ billet.destinationVoyage }}<br>
+                    <strong>Date de départ:</strong> {{ billet.dateDepart|date('Y-m-d H:i:s') }}<br>
+                    <strong>Prix:</strong> {{ billet.prix }} DT<br>
+                    <strong>Durée:</strong> {{ billet.duree }}<br>
+                    <strong>Station:</strong> {{ billet.station.nomStation }} - {{ billet.station.adressStation }} - {{ billet.station.type }}<br>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</div>
+{% endblock %}

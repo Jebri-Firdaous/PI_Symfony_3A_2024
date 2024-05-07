@@ -31,6 +31,7 @@
                         
                     </div>
                         <div class="card-body">
+                            <strong>Nom de client :</strong> {{ commande.user }}<br>
                             <p>Nombre d'articles: {{ commande.nombreArticle }}</p>
                             <p>Prix total: {{ commande.prixTotale }} DT</p>
                             <p>Délai de commande: {{ commande.delaisCommande ? commande.delaisCommande|date('Y-m-d H:i:s') : '' }}</p>
