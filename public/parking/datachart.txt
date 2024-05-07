@@ -1,5 +1,5 @@
-Grtr,12
-QQQq,2
+Grtr,16
+QQQq,11
 Kjjj,1
 grgg,3
 nbvdrehgtf,0

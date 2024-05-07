@@ -1,5 +1,5 @@
 <?php
-namespace App\Services;
+namespace App\Services\parking;
 
 use App\Entity\Place;
 use App\Entity\Article;
@@ -26,7 +26,7 @@ class QrCodeService
     public function qrcode(Place $place)
     {
         // Chemin relatif depuis le répertoire public
-        $path = 'img/qrcode/';
+        $path = 'parking/img/qrcode/';
         $destinationDir = $this->kernel->getProjectDir() . '/public/' . $path;
 
         // Vérifier si le répertoire de destination existe, sinon le créer

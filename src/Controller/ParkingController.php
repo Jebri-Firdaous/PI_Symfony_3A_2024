@@ -117,15 +117,32 @@ class ParkingController extends AbstractController
             // .','.$parking->getEtatParking(). PHP_EOL;
             // $lines[] = $new;
             // file_put_contents($filename, implode('', $lines));
-            $filename = 'parking/recycle.txt';
-            $lines = file($filename);
+            // $filename = 'parking/recycle.txt';
+            // $lines = file($filename);
 
-            $new = PHP_EOL . $parking->getNomParking() . ',' . $parking->getAddressParking() . ','
+            // if(filesize($filename) === 0){
+            //     $new = $parking->getNomParking() . ',' . $parking->getAddressParking() . ','
+            //     . $parking->getLatitude() . ',' . $parking->getLongitude() . ',' . $parking->getNombrePlaceMax() . ',' . $parking->getNombrePlaceOcc()
+            //     . ',' . $parking->getEtatParking();
+            // }else{
+                $new = $parking->getNomParking() . ',' . $parking->getAddressParking() . ','
                 . $parking->getLatitude() . ',' . $parking->getLongitude() . ',' . $parking->getNombrePlaceMax() . ',' . $parking->getNombrePlaceOcc()
                 . ',' . $parking->getEtatParking() ;
+            // }
+            $filename = 'parking/recycle.txt';
+            $lines = file($filename);
+            $i = 0;
+
+            foreach($lines as $lineNumber => $line){$i++;}
+        // unset($parkings[$id]);
+        // unset($lines[$id]);
 
             // Append the new content to the end of the file
-            file_put_contents($filename, $new, FILE_APPEND);
+            // file_put_contents($filename, $new, FILE_APPEND);
+            
+            $lines[] = $new;
+            
+            file_put_contents($filename, implode('', $lines));
 
 
             $entityManager->remove($parking);
@@ -227,9 +244,9 @@ class ParkingController extends AbstractController
                 $parking->setNombrePlaceMax($parts[4]);
                 $parking->setNombrePlaceOcc($parts[5]);
                 $parking->setEtatParking($parts[6]);
-                $new = $parking->getNomParking().','.$parking->getAddressParking().','
-            .$parking->getLatitude().','.$parking->getLongitude().','.$parking->getNombrePlaceMax().','.$parking->getNombrePlaceOcc()
-            .','.$parking->getEtatParking(). PHP_EOL;
+            //     $new = $parking->getNomParking().','.$parking->getAddressParking().','
+            // .$parking->getLatitude().','.$parking->getLongitude().','.$parking->getNombrePlaceMax().','.$parking->getNombrePlaceOcc()
+            // .','.$parking->getEtatParking(). PHP_EOL;
                 if($i == $id){
                 //     $lines[$i] = $new;
                 //     array_push($parkings, $parking);
@@ -241,7 +258,7 @@ class ParkingController extends AbstractController
                 $i++;
         }
         // unset($parkings[$id]);
-        unset($lines[$id - 1]);
+        unset($lines[$id]);
 
         // file_put_contents($filename, '');
         file_put_contents($filename, implode('', $lines));

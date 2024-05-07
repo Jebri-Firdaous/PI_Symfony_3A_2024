@@ -6,7 +6,7 @@ use App\Entity\Place;
 use App\Form\PlaceType;
 use Endroid\QrCode\QrCode;
 use Doctrine\DBAL\Connection;
-use App\Services\QrCodeService;
+use App\Services\parking\QrCodeService;
 use Symfony\Component\Mime\Email;
 use App\Repository\UserRepository;
 use App\Repository\PlaceRepository;
@@ -120,7 +120,7 @@ class PlaceController extends AbstractController
         if($place->getEtat() == 'Libre'){
             $place->setEtat('Reservée');
             $parking->setNombrePlaceOcc($tmp+1);
-            if($parking->getNombrePlaceOcc() == $parking->getNombrePlaceMax())
+            if($parking->getNombrePlaceOcc() == $parkingRepository->nbPlaces($idP))
                 $parking->setEtatParking('Plein');
 
             $entityManager->persist($place, $parking);
@@ -130,7 +130,7 @@ class PlaceController extends AbstractController
         }else{
             $place->setEtat('Libre');
             $parking->setNombrePlaceOcc($tmp-1);
-            if($parking->getNombrePlaceOcc() < $parking->getNombrePlaceMax())
+            if($parking->getNombrePlaceOcc() < $parkingRepository->nbPlaces($idP))
                 $parking->setEtatParking('Disponible');
 
             $entityManager->persist($place, $parking);
@@ -152,27 +152,15 @@ class PlaceController extends AbstractController
 
         $place->setEtat('Reservee');
         $parking->setNombrePlaceOcc($tmp+1);
-        if($parking->getNombrePlaceOcc() == $parking->getNombrePlaceMax())
+        if($parking->getNombrePlaceOcc() == $parkingRepository->nbPlaces($idP))
             $parking->setEtatParking('Plein');
         $place->setIdPersonne($client);
 
         $entityManager->persist($place, $parking);
         $entityManager->flush();
 
-        $qrContent = "ID de la place: $refP";
-
-        // Génération du code QR
-        // $qrCode = new QrCode($qrContent);
-        // $qrCode->setSize(300); // Taille du code QR
-        // $qrCodePath = 'qr_codes/place_' . $refP . '.png'; // Chemin où enregistrer le code QR
-
-        // Enregistrement du code QR
-        // $qrCode->writeFile($qrCodePath);
-        // $qrCodeStr=$qrCode->writeString();
         // $qrCodePath = $this->qrcodeService->qrcode($place);
-
-        $qrCodePath = $this->qrcodeService->qrcode($place);
-        $qrCode[$place->getRefPlace()] = $qrCodePath;
+        // $qrCode[$place->getRefPlace()] = $qrCodePath;
         $qrCodePath = $this->qrcodeService->qrcode($place);
 
         $email = (new Email())
@@ -184,6 +172,7 @@ class PlaceController extends AbstractController
             ->attachFromPath($qrCodePath); // Attacher le code QR à l'e-mail en utilisant le chemin du fichier
                 
         $mailer->send($email);
+        unlink($qrCodePath);
 
         return $this->redirectToRoute('app_place_indexF', ['idP' => $idP], Response::HTTP_SEE_OTHER);
     }
