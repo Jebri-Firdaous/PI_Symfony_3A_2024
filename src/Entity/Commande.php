@@ -37,9 +37,17 @@ class Commande
     #[Assert\Type(type: '\DateTime', message: "Le délai de commande doit être une date")]
     private ?DateTime $delaisCommande;
 
-    #[ORM\ManyToOne(targetEntity: client::class)]
-    #[ORM\JoinColumn(name: 'id_personne', referencedColumnName: 'id_personne')]
-    private ?Client $idPersonne;
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "lesReservatoin")]
+    #[ORM\JoinColumn(name: 'id_personne', referencedColumnName: 'id')]
+    #[Assert\NotBlank(
+        message:'Cette valeur ne doit pas être vide'
+
+    )]
+
+    public User $user;
+
+    // private User $id;
+
 
  
 
@@ -84,17 +92,18 @@ class Commande
         return $this;
     }
 
-    public function getIdPersonne(): ?Client
+    public function getUser(): ?User
     {
-        return $this->idPersonne;
+        return $this->user;
     }
 
-    public function setIdPersonne(?Client $idPersonne): static
+    
+    public function setUser(?User $user): static
     {
-        $this->idPersonne = $idPersonne;
-
+        $this->user = $user;
         return $this;
     }
+
     
 
 

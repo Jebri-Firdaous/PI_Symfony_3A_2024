@@ -122,6 +122,58 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(nullable: true)]
     private ?bool $isBanned = false;
+   
+    private $LesCommandes;
+
+    
+
+     /**
+
+     * @return Collection|Commandes[]
+
+     */
+
+    public function getLesCommandes(): Collection
+
+    {
+        return $this->LesCommandes;
+    }
+
+    public function addLescommandes(Commande $commande): self
+    {
+        if (!$this->LesCommandes->contains($commande)) {
+            $this->LesCommandes[] = $commande;
+            $commande->setUser($this);
+        }
+        return $this;
+    }
+
+
+
+
+    public function removeLescommandes(Commande $commande): self
+
+    {
+
+        if ($this->LesCommandes->removeElement($commande)) {
+
+            // set the owning side to null (unless already changed)
+
+            if ($commande->getUser() === $this) {
+
+                $commande->setUser(null);
+
+            }
+
+        }
+
+
+
+
+        return $this;
+
+    }
+
 
     public function getId(): ?int
     {
@@ -342,19 +394,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
     
-    /**
-     * @return Collection|RendezVous[]
-     */
-    public function getLesRendezVous(): Collection
-    {
-        return $this->lesRendezVous;
-    }
-    #[ORM\OneToMany(mappedBy: "id", targetEntity: RendezVous::class, cascade: ['persist', 'remove'])]
-    private $lesRendezVous;
+   
+
 
     public function __construct()
     {
-        $this->lesRendezVous = new ArrayCollection();
+      
+        $this->LesCommandes = new ArrayCollection();
     }
 
     

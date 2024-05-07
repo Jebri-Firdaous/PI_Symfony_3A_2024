@@ -274,6 +274,13 @@ public function removeFromCartback(Article $article, SessionInterface $session):
 
         // Calculer le prix total
         $total = $this->calculateTotal($cart, $articleRepository);
+        $user = $this->getUser(); // Remplacez 55 par l'ID de l'utilisateur que vous souhaitez récupérer
+     // Vérifier si l'utilisateur existe
+
+     if (!$user) {
+      throw $this->createNotFoundException('Utilisateur non trouvé');
+     }
+
 
         // Créer une nouvelle commande
         $commande = new Commande();
@@ -287,6 +294,7 @@ public function removeFromCartback(Article $article, SessionInterface $session):
         $commande->setNombreArticle($totalArticles);
         $commande->setPrixTotale($total);
         $commande->setDelaisCommande($limitDate);
+        $commande->setUser($user);
 
         // Enregistrer la commande dans la base de données
         $entityManager->persist($commande);
@@ -386,9 +394,18 @@ public function paymentSuccess(): Response
     {
         // Récupérer le contenu du panier
         $cart = $session->get('cart', []);
+        $user = $this->getUser(); // Remplacez 55 par l'ID de l'utilisateur que vous souhaitez récupérer
+
+     // Vérifier si l'utilisateur existe
+
+     if (!$user) {
+      throw $this->createNotFoundException('Utilisateur non trouvé');
+     }
+
 
         // Créer une nouvelle commande
         $commande = new Commande();
+
 
         // Calculer le prix total
         $total = 0;
@@ -408,6 +425,7 @@ public function paymentSuccess(): Response
         $commande->setNombreArticle($totalArticles);
         $commande->setPrixTotale($total);
         $commande->setDelaisCommande($limitDate);
+        $commande->setUser($user);
 
         // Enregistrer la commande dans la base de données
         $entityManager->persist($commande);

@@ -30,6 +30,7 @@ class CommandeController extends AbstractController
     public function __construct(private Connection $connection, PaginatorInterface $paginator) {
         $this->paginator = $paginator;
     }
+   
     #[Route('/stats', name: 'app_commande_stats', methods: ['GET'])]
     public function stats(EntityManagerInterface $entityManager): Response
     {
