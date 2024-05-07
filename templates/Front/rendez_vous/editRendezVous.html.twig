@@ -1,0 +1,38 @@
+{% extends 'Front/base.html.twig' %}
+{# templates/task/new.html.twig #}
+
+{% block body %}
+<div style="display: flex; align-items: center;">
+    <div style="margin-right: 159px;">
+         {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'style': 'margin: 143px;'}}) }}
+    <table >
+   
+    <tr>{{form_label(form.specialiteMedecin)}}</tr>
+    <tr>{{form_widget(form.specialiteMedecin)}}</tr>
+    <tr>{{form_errors(form.specialiteMedecin)}}</tr>
+
+   {% if form.idMedecin is defined %}
+    <tr>{{ form_label(form.idMedecin) }}</tr>
+    <tr>{{ form_widget(form.idMedecin) }}</tr>
+    <tr>{{ form_errors(form)}}</tr>
+    {% endif %}
+</br>
+    <tr>{{form_label(form.dateRendezVous)}}</tr>
+    <tr>{{form_widget(form.dateRendezVous)}}</tr>
+    <tr>{{form_errors(form.dateRendezVous)}}</tr>
+    </table>
+
+    {{form_widget(form.save)}}
+    {{form_end(form)}}
+    </div>
+    <img src="{{ asset('img/imgGM/rendezVous.png') }}" alt="Image Description" style="width: 412px;
+    height: auto;
+    margin-left: 106px;">
+</div>
+
+<style>
+    button{
+        margin-top: 8px;
+    }
+</style>
+{% endblock %}

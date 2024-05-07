@@ -1,7 +1,25 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+app_hotel_search:
+  path: /search
+  controller: App\Controller\HotelController::search
+  methods: [GET]
 
-generate_qr_code:
-    path: '/reserveFront'
-    controller: 'App\Controller\PlaceController::reserveFront'
+app_reservation_search:
+  path: /reservation/search
+  controller: App\Controller\ReservationController::searchReservation
+  methods: [GET]
+
+dhifallahdarine_email:
+  path: /dhifallahdarine@gmail.com
+  controller: App\Controller\YourControllerName::yourAction
+app_reservation_new:
+    path: /reservation/addReservation
+    controller: App\Controller\ReservationController::tourismeHome
+
+
+app_back_acceuil:
+    path: /back/acceuil
+    controller: App\Controller\BackAcceuilController::index
+app_sms:
+    path: '/sms'
+    controller: 'App\Controller\SmsController::sendSms'
+    methods: ['GET', 'POST']    methods: ['GET']

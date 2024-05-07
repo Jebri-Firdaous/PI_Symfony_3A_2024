@@ -11,13 +11,12 @@ use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use App\Entity\Place;
 
 
 
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-// #[Vich\Uploadable]
+#[Vich\Uploadable]
 
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -124,10 +123,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: true)]
     private ?bool $isBanned = false;
 
-    
     #[ORM\OneToOne(targetEntity: Place::class, mappedBy: "id_personne", cascade: ["persist", "remove"])]
     private ?Place $place;
-
+    
     public function getId(): ?int
     {
         return $this->id;
@@ -275,6 +273,60 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
     }
 
+
+
+     
+    private $LesCommandes;
+
+    
+
+     /**
+
+     * @return Collection|Commandes[]
+
+     */
+
+    public function getLesCommandes(): Collection
+
+    {
+        return $this->LesCommandes;
+    }
+
+    public function addLescommandes(Commande $commande): self
+    {
+        if (!$this->LesCommandes->contains($commande)) {
+            $this->LesCommandes[] = $commande;
+            $commande->setUser($this);
+        }
+        return $this;
+    }
+
+
+
+
+    public function removeLescommandes(Commande $commande): self
+
+    {
+
+        if ($this->LesCommandes->removeElement($commande)) {
+
+            // set the owning side to null (unless already changed)
+
+            if ($commande->getUser() === $this) {
+
+                $commande->setUser(null);
+
+            }
+
+        }
+
+
+
+
+        return $this;
+
+    }
+
     public function getRoleAdmin(): ?string
     {
         return $this->roleAdmin;
@@ -346,7 +398,54 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+
+    #[ORM\OneToMany(mappedBy: "user", targetEntity: Reservation::class, cascade: ['persist', 'remove'])]
+    private $LesReservations;
     
+     /**
+     * @return Collection|Reservations[]
+     */
+    public function getLesReservations(): Collection
+    {
+        return $this->LesReservations;
+    }
+
+
+    public function __construct()
+    {
+        $this->LesReservations = new ArrayCollection();
+        $this->lesRendezVous = new ArrayCollection();
+        $this->LesCommandes = new ArrayCollection();
+    }
+
+
+    public function addLesReservations(Reservation $reservation): self
+    {
+        if (!$this->LesReservations->contains($reservation)) {
+            $this->LesReservations[] = $reservation;
+            $reservation->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLesReservations(Reservation $reservation): self
+    {
+        if ($this->LesReservations->removeElement($reservation)) {
+            // set the owning side to null (unless already changed)
+            if ($reservation->getUser() === $this) {
+                $reservation->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->getNomPersonne() . ' ' . $this->getPrenomPersonne();
+    }
     /**
      * @return Collection|RendezVous[]
      */
@@ -354,19 +453,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->lesRendezVous;
     }
-    #[ORM\OneToMany(mappedBy: "id", targetEntity: RendezVous::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: "user", targetEntity: RendezVous::class, cascade: ['persist', 'remove'])]
     private $lesRendezVous;
 
-    public function __construct()
-    {
-        $this->lesRendezVous = new ArrayCollection();
-    }
+    
 
     public function addLesRendezVous(RendezVous $rendezVous): self
     {
         if (!$this->lesRendezVous->contains($rendezVous)) {
             $this->lesRendezVous[] = $rendezVous;
-            // $rendezVous->setIdPersonne($this);
+            $rendezVous->setUser($this);
         }
 
         return $this;
@@ -376,12 +472,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->lesRendezVous->removeElement($rendezVous)) {
             // set the owning side to null (unless already changed)
-            // if ($rendezVous->getUser() === $this) {
-            //     $rendezVous->setIdPersonne(null);
-            // }
+            if ($rendezVous->getUser() === $this) {
+                $rendezVous->setUser(null);
+            }
         }
 
         return $this;
     }
+    
 
+  
 }

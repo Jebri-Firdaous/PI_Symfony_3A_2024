@@ -1,0 +1,239 @@
+{% extends 'back/base.html.twig' %}
+{% block main %}
+<style>
+
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+      .promo-toggle-wrapper {  margin-bottom:10px;margin-right: 100px; }
+  .custom-alert {
+    background-color: black;
+    color: #721c24;
+    border-color: #f5c6cb;
+    padding: .75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+}
+
+</style>
+
+<div class="example-wrapper" >
+<div style="background-color: #343a40; padding: 30px ;margin-bottom: 40px;"> 
+    <h2 style="text-align: center; color:white ">Ajouter Billet</h2>
+    </div>
+    
+    <div class="row justify-content-center" > <!-- Centrer les champs du formulaire -->
+        <div class="col-md-6"> <!-- Utilisation de 6 colonnes pour chaque champ -->
+
+            {{ form_start(f, {'attr': {'class': 'form', 'novalidate': 'novalidate'}}) }}
+            <div class="form-group">
+             {{ form_label(f.destinationVoyage, null, {'label_attr': {'style':  'color:#343a40 ; font-weight: bold;'}}) }}
+                {{ form_widget(f.destinationVoyage, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(f.destinationVoyage) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(f.dateDepart ,null,{'label_attr': {'style':  'color:#343a40 ; font-weight: bold;'}}) }}
+                {{ form_widget(f.dateDepart, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(f.dateDepart) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(f.prix ,null,{'label_attr': {'style':  'color:#343a40 ; font-weight: bold;'}})  }}
+                {{ form_widget(f.prix, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(f.prix) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(f.duree ,null,{'label_attr': {'style':  'color:#343a40 ; font-weight: bold;'}})  }}
+              <div class="input-group">
+        {{ form_widget(f.duree, {'attr': {'class': 'form-control'}}) }}
+        <div class="input-group-append">
+            <span class="input-group-text">Format: hh:mm:ss</span>
+        </div>
+    </div>
+                {{ form_errors(f.duree) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(f.station ,null,{'label_attr': {'style':  'color:#343a40 ; font-weight: bold;'}}) }}
+                {{ form_widget(f.station, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(f.station) }}
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Confirmer</button>
+            {% for message in app.flashes('error') %}
+                <div class="custom-alert">{{ message }}</div>
+            {% endfor %}
+            {{ form_end(f) }}
+ 
+        </div>
+    </div>
+</div>
+ 
+
+
+{# <div class="d-flex align-items-center" style="margin-top: -10px;"> <!-- Ajout de margin-top négatif pour rapprocher l'icône du tableau -->
+    <div style="flex-grow: 1;">
+    </div>
+    <a href="{{ path('Extract_data') }}" type="button" style="display: flex; align-items: center; margin-left: 10px;">
+        <i data-feather="file-text" style="width: 32px; height: 32px;"></i>
+    </a>
+</div> #}
+
+ <a href="{{ path('Extract_data') }}"  >
+        <i data-feather="file-text" style="width: 25px; height: 25px;"></i>
+    </a>
+<div style="margin-top: 20px;"> <!-- Ajustez la marge supérieure selon vos besoins -->
+ <i data-feather="search"></i>
+
+  <input type="text" id="searchInput" oninput="search()" placeholder="Rechercher destination/date...">
+  <i data-feather="refresh-cw" title="Trier par date" onclick="sortTable()"></i> 
+    <table class="table table-bordered" id="billetTable">
+        <thead>
+            <tr>
+                <th>Destination Voyage</th>
+                <th>Date Départ</th>
+                <th>Prix</th>
+                <th>Durée</th>
+                <th>Station</th>
+                <th>Actions</th>
+                
+ 
+            </tr>
+        </thead>
+        
+        <tbody>
+            {% for billet in list %}
+                <tr>
+                    <td>{{ billet.destinationVoyage }}</td>
+                    <td>{{ billet.dateDepart|date('Y-m-d H:i:s') }}</td>
+        <td>
+    <span class="price" id="price{{ billet.refVoyage }}">{{ billet.prix }}</span> DT
+</td>
+<!-- Modifiez la balise <span> où le prix est affiché pour inclure une classe distinctive -->
+                    <td>{{ billet.duree }}H</td>
+                    <td>{{ billet.station.nomStation }} - {{ billet.station.adressStation }} - {{ billet.station.type }}</td>
+                      <td>
+                      
+                        <a href="{{ path('edit_billetBack',{id:billet.refVoyage}) }}" class="btn btn-info"><i data-feather="edit"></i></a>
+                        <a href="{{ path('delete_billetBack',{id:billet.refVoyage}) }}" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce billet ?')"><i data-feather="trash-2"></i></a>
+                        
+
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<a href="{{ path('appliquer_promo') }}" id="promoButton" class="btn btn-danger" onclick="togglePromotion50()">
+    <i class="bi bi-clock"></i> <!-- Icône -->
+    Appliquer Promo 50%
+</a>
+
+<script>
+    window.addEventListener('load', function() {
+        // Récupérer l'état de la promotion à partir de la session côté serveur lors du chargement de la page
+        var promoApplied = {{ app.session.get('promoApplied') ? 'true' : 'false' }};
+        
+        function togglePromotion50() {
+            if (!promoApplied) {
+                var priceElements = document.querySelectorAll(".price");
+
+                priceElements.forEach(function(priceElement) {
+                    var price = parseFloat(priceElement.textContent);
+                    priceElement.textContent = (price * 0.5).toFixed(2);
+                });
+
+                document.getElementById("promoButton").disabled = true;
+
+                // Enregistrer l'état de la promotion dans la session côté serveur
+                fetch('{{ path('save_promo_state') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({ promoApplied: true })
+                }).then(response => {
+                    // Vérifier si la réponse est réussie
+                    if (response.ok) {
+                        // Mettre à jour la valeur de promoApplied côté client
+                        promoApplied = true;
+                    } else {
+                        console.error('Failed to save promotion state:', response.statusText);
+                    }
+                }).catch(error => {
+                    console.error('Error:', error);
+                });
+            } else {
+                alert('La promotion a déjà été appliquée une fois.');
+            }
+        }
+
+        // Assurez-vous que la fonction togglePromotion50 est accessible globalement
+        window.togglePromotion50 = togglePromotion50;
+    });
+</script>
+
+
+
+
+
+ <script>
+    function search() {
+        // Récupère la valeur de recherche
+        let input = document.getElementById("searchInput");
+        let filter = input.value.toUpperCase();
+
+        // Récupère les lignes du tableau à filtrer
+        let rows = document.querySelectorAll("#billetTable tbody tr");
+
+        // Parcours toutes les lignes du tableau et masque celles qui ne correspondent pas à la recherche
+        rows.forEach(row => {
+            let cells = row.querySelectorAll("td");
+            let matches = false;
+            // Recherche par destination (colonne 0)
+            let textDestination = cells[0].textContent || cells[0].innerText;
+            // Recherche par date de départ (colonne 1)
+            let textDate = cells[1].textContent || cells[1].innerText;
+            
+            if (textDestination.toUpperCase().indexOf(filter) > -1 || textDate.toUpperCase().indexOf(filter) > -1) {
+                matches = true;
+            }
+            if (matches) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        });
+    }
+</script>
+<script>
+    function sortTable() {
+        var table, rows, switching, i, x, y, shouldSwitch;
+        table = document.getElementById("billetTable");
+        switching = true;
+        while (switching) {
+            switching = false;
+            rows = table.rows;
+            for (i = 1; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("td")[1]; // Changer 1 à l'index de la colonne dateDepart
+                y = rows[i + 1].getElementsByTagName("td")[1];
+                if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                    shouldSwitch = true;
+                    break;
+                }
+            }
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+            }
+        }
+    }
+</script>
+
+<div class="d-flex justify-content-center">
+       
+      
+    {{ knp_pagination_render(list, 'pagination.html.twig') }}
+</div>
+
+
+{% endblock %}

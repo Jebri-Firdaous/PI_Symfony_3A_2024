@@ -1,18 +1,6 @@
 {% extends 'Front/base.html.twig' %}
 
-{% block title %}Hello ParkingController!{% endblock %}
-{% block css %}
-  <!-- Vendor CSS Files -->
-  <link href="{{asset('vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
-  <link href="{{ asset ('vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
-  <link href="{{ asset ('vendor/aos/aos.css') }}" rel="stylesheet">
-  <link href="{{ asset ('vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
-  <link href="{{ asset ('vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
-
-  <!-- Main CSS File -->
-  <link href="{{ asset ('css/main.css') }}" rel="stylesheet">
-
-
+{% block css1 %}
   <meta charset="utf-8">
         <title>Fruitables - Vegetable Website Template</title>
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -59,17 +47,8 @@
     <script src="https://unpkg.com/esri-leaflet@3.0.12/dist/esri-leaflet.js"></script>
     <script src="https://unpkg.com/esri-leaflet-vector@4.2.3/dist/esri-leaflet-vector.js"></script>
 {% endblock %}
-{% block menu %}
-<li><a href="{{ path ('app_acceuil')}}">Acceuil</a></li>
-<li><a href="{{ path ('app_acceuil')}}">Santé</a></li>
-<li><a href="{{ path ('app_acceuil')}}">Shopping</a></li>
-<li><a href="{{ path ('app_transport')}}">Transport</a></li>
-<li><a href="{{ path ('app_parkingF')}}" class="active">Parking</a></li>
-<li><a href="{{ path ('app_acceuil')}}">Tourisme</a></li>
-<li><a href="{{ path ('app_acceuil')}}">Contact</a></li>
-{% endblock %}
 
-{% block body %}
+{% block section %}
 <!-- Vesitable Shop Start-->
 <div class="container-fluid vesitable py-5">
     <div class="container py-5">

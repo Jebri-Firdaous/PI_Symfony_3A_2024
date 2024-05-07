@@ -1,0 +1,74 @@
+{% extends 'Back/base.html.twig' %}
+
+{% block main %}
+<main class="content">
+    <div class="container-fluid p-0">
+		<br><br><br><br><br><br><br><br>
+		<br><br><br><br><br><br><br><br>
+		<br><br><br><br><br><br><br><br>
+		<br><br><br><br><br><br><br><br>
+		<br><br><br><br>
+<div id="piechart-container1" style="width: 600px; height: 400px; margin: -800px auto 0 auto; background-color: black;"></div>
+<div id="piechart-container2" style="width: 600px; height: 400px; margin: -50px auto 0 auto; background-color: black;"></div>
+
+</div>
+</main>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+   function updatePieChart(newData) {
+        var data2 = google.visualization.arrayToDataTable(newData);
+        var chart2 = new google.visualization.PieChart(document.getElementById('piechart-container1'));
+        chart2.draw(data1, options1);
+    }
+    google.charts.load('current', {'packages':'corechart'});
+    google.charts.setOnLoadCallback(drawChart1);
+
+function drawChart1() {
+    var data1 = google.visualization.arrayToDataTable([
+        ['Station', 'Prix Total'],
+        {% for item in data1 %}
+            ['{{ item.nom }} - {{ item.adresse }} - {{ item.type }}', {{ item.totalPrice }}],
+        {% endfor %}
+    ]);
+	  console.log(data1);
+
+    var options1 = {
+        title: 'Total des prix des billets par station',
+        is3D: true,
+          backgroundColor: '#f8f9fa',
+        titleTextStyle: {color: 'black'},
+        legendTextStyle: {color: 'black'},
+    };
+
+    var chart1 = new google.visualization.PieChart(document.getElementById('piechart-container1'));
+    chart1.draw(data1, options1);
+}
+</script>
+<script type="text/javascript">
+
+    google.charts.setOnLoadCallback(drawChart2);
+
+// Dans votre template Twig
+function drawChart2() {
+var data2 = google.visualization.arrayToDataTable([
+    ['Station', 'Pourcentage'],
+    {% for data in data2 %}
+        ['{{ data[0] }}', {{ data[1] }}],
+    {% endfor %}
+]);
+
+
+        var options2 = {
+            title: 'Pourcentage des billets par station',
+            is3D: true,
+             backgroundColor: '#f8f9fa',
+            titleTextStyle: {color: 'black'},
+            legendTextStyle: {color: 'black'},
+        };
+
+        var chart2 = new google.visualization.PieChart(document.getElementById('piechart-container2'));
+
+        chart2.draw(data2, options2);
+    }
+</script>
+{% endblock %}

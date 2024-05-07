@@ -1,0 +1,210 @@
+{% extends 'Front/base.html.twig' %}
+
+{% block title %}
+    Boutique
+{% endblock %}
+
+{% block section %}
+    <div class="container d-flex justify-content-between align-items-center">
+        <div class="attr-nav">
+            <a href="{{ path('cart_index') }}">
+                <i class="bi bi-cart4" style="color: #333071; font-size: 45px;"></i>
+            </a>
+          
+        </div>
+            
+
+
+    </div>
+
+    <!-- Section d'accueil -->
+    <img src="{{ asset('img/article2.png') }}" alt="" data-aos="fade-in" style="width: 100%; max-width: 100%;">
+
+    
+
+    <div class="container">
+        <!-- Formulaire de tri -->
+        <div class="row mb-4 align-items-center">
+            <div class="col-md-6">
+               <div class="row mt-3">
+        <div class="container">
+            <input type="text" id="searchInput" class="form-control mb-3" placeholder="Search...">
+            <div class="card-container row"></div>
+        </div>
+    </div>
+                
+            </div>
+        </div>
+    </div>
+
+{% block top_articles %}
+        <div class="container mt-4">
+            <h2 class="text-center mb-4">MEILLEURES VENTES</h2>
+            <div class="row">
+                {% for articleStat in articlesStats %}
+                    <div class="col-md-3 mb-3">
+                        <div class="card article-card border rounded" style="width: 100%; max-width: 400px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);">
+                            <img src="{{ asset(articleStat.photo_article) }}" class="card-img-top article-image" style="width: 200px; height: 200px;">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h4 class="card-title font-weight-bold mb-0">{{ articleStat.nom_article }}</h4>
+                                    <h5 class="card-text mb-0"><span style="color: red; font-weight: bold;">{{ articleStat.prix_article }} DT</span></h5>
+                                </div>
+                                <p class="card-text mb-2">{{ articleStat.type_article }}</p>
+                                <p class="card-text mb-3"><span style="color: grey;">{{ articleStat.description_article }}</span></p>
+                                <p class="card-text">Total ventes: {{ articleStat.totalVentes }}</p>
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <div class="btn-group">
+                                        <a href="{{ path('app_article_show', {'idArticle': articleStat.id_article}) }}"><i class="bi bi-eye" style="color: #333071; font-size: 35px;"></i></a>
+                                    </div>
+                                    <div>
+                                        <a href="{{ path('article_add_to_cart', {'id': articleStat.id_article}) }}"><i class="bi bi-cart4" style="color: #333071; font-size: 35px;"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+{% endblock %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-9">
+            <h2 class="text-center mb-4">DECOUVREZ NOS ARTICLES UNIQUES</h2>
+        </div>
+        <div class="col-md-3">
+            <form action="{{ path('app_article_index') }}" method="GET" class="form-inline">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <label for="sortOrder" class="input-group-text">Trier par :</label>
+                    </div>
+                    <select name="sortOrder" id="sortOrder" class="custom-select mr-sm-2">
+                        <option value="asc" {% if app.request.query.get('sortOrder') == 'asc' %}selected{% endif %}>Prix croissant</option>
+                        <option value="desc" {% if app.request.query.get('sortOrder') == 'desc' %}selected{% endif %}>Prix décroissant</option>
+                    </select>
+                    <button type="submit" >Trier</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+    <div class="container">
+        <div class="row">
+            {% for article in articles %}
+                <div class="col-md-3 mb-3">
+                    <div class="card article-card border rounded" style="width: 100%; max-width: 400px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);">
+                        <img src="{{ asset(article.photoArticle) }}" class="card-img-top article-image" style="width: 200px; height: 200px;">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h4 class="card-title font-weight-bold mb-0">{{ article.nomArticle }}</h4>
+                                <h5 class="card-text mb-0"><span style="color: red; font-weight: bold;">{{ article.prixArticle }} DT</span></h5>
+                            </div>
+                            <p class="card-text mb-2">{{ article.typeArticle }}</p>
+                            <p class="card-text mb-3"><span style="color: grey;">{{ article.descriptionArticle }}</span></p>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <div class="btn-group">
+                                    <a href="{{ path('app_article_show', {'idArticle': article.idArticle}) }}"><i class="bi bi-eye" style="color: #333071; font-size: 35px;"></i></a>
+                                </div>
+                                <div>
+                                    <a href="{{ path('article_add_to_cart', {'id': article.idArticle}) }}"><i class="bi bi-cart4" style="color: #333071; font-size: 35px;"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+                             <script>
+        </script>
+        </div>
+    </div>
+
+    
+
+    {% if articles|length > 0 %}
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {% if page > 1 %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ path('app_article_index', {'page': page - 1, 'sortOrder': app.request.query.get('sortOrder', 'asc')}) }}">Précédent</a>
+                    </li>
+                {% endif %}
+                {% for i in 1..maxPage %}
+                    <li class="page-item {% if page == i %}active{% endif %}">
+                        <a class="page-link" href="{{ path('app_article_index', {'page': i, 'sortOrder': app.request.query.get('sortOrder', 'asc')}) }}">{{ i }}</a>
+                    </li>
+                {% endfor %}
+                {% if page < maxPage %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ path('app_article_index', {'page': page + 1, 'sortOrder': app.request.query.get('sortOrder', 'asc')}) }}">Suivant</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+    
+   
+    <script>
+        // JavaScript code for searching and updating the cards
+
+        function search() {
+            var query = document.getElementById('searchInput').value;
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('GET', '{{ path('app_article_search') }}?q=' + query, true);
+
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    updateCards(response);
+                }
+            };
+
+            xhr.send();
+        }
+
+        function updateCards(data) {
+            var cardContainer = document.querySelector('.card-container');
+            cardContainer.innerHTML = ''; // Clear existing cards
+
+            if (data.length > 0) {
+                data.forEach(function (article) {
+                    var card = '<div class="col-md-3 mb-3">';
+                    card += '<div class="card article-card border rounded" style="width: 100%; max-width: 400px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);">';
+                    card += '<div class="card-body">';
+                    card += '<h4 class="card-title font-weight-bold mb-0">' + article.nomArticle + '</h4>';
+                    card += '<h5 class="card-text mb-0"><span style="color: red; font-weight: bold;">' + article.prixArticle + ' DT</span></h5>';
+                    card += '<p class="card-text mb-2">' + article.typeArticle + '</p>';
+                    card += '<p class="card-text mb-3"><span style="color: grey;">' + article.descriptionArticle + '</span></p>';
+    
+                    card += '<div class="d-flex justify-content-between align-items-center mt-3">';
+                
+                    card += '</div>';
+                    card += '</div>';
+                    card += '</div>';
+                    card += '</div>';
+                    cardContainer.innerHTML += card;
+                });
+            } else {
+                cardContainer.innerHTML = '<p class="text-center">Aucun résultat trouvé</p>';
+            }
+        }
+
+        function addToCart(articleId) {
+            // Envoyer la requête pour ajouter au panier avec l'ID de l'article
+            console.log('Ajout de l\'article au panier avec ID:', articleId);
+            // Ici, vous pouvez ajouter votre logique JavaScript pour ajouter au panier
+        }
+
+        document.getElementById('searchInput').addEventListener('input', function () {
+            search();
+        });
+    </script>
+
+    <hr style="border-top: 5px solid #333071; width: 100%;">
+    <img src="{{ asset('img/article3.png') }}" alt="" data-aos="fade-in" style="width: 100%; max-width: 100%;">
+{% endblock %}
+
+

@@ -11,11 +11,65 @@
 # Help: https://bootstrapmade.com/color-system/
 --------------------------------------------------------------*/
 /* Fonts */
+.form-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  max-width: 400px; /* Ajoutez une largeur maximale pour le formulaire */
+  margin: 0 auto; /* Centrer le formulaire horizontalement */
+}
+
+.form-group {
+  margin-bottom: 20px; /* Ajouter un espacement entre chaque champ */
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #57C0DD; /* Utilisation de la couleur spécifiée */
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #57C0DD; /* Utilisation de la couleur spécifiée */
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.form-container label {
+  font-weight: bold; /* Applique le style en gras aux labels */
+}
+
+/* Ajoutez d'autres styles selon vos besoins */
+
+
+.card {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 800px; /* Largeur fixe du formulaire */
+  margin: 0 auto; /* Centre le formulaire horizontalement */
+  margin-bottom: 40px; /* Ajustez la marge inférieure selon vos besoins */
+
+}
+/* Style pour le formulaire */
+
+/* Centrer le bouton dans la division du formulaire */
+.btn-center {
+  display: inline-block; /* Permet au bouton de ne pas prendre toute la largeur */
+  margin: 0 auto; /* Centre horizontalement le bouton */
+}
+
+
 :root {
   --default-font: "Open Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --heading-font: "Raleway", sans-serif;
   --nav-font: "Poppins", sans-serif;
-}
+  }
 
 /* Global Colors */
 :root {
@@ -25,8 +79,15 @@
   --default-color-rgb: 68, 68, 68;
   --heading-color: #37423b;
   --heading-color-rgb: 55, 66, 59;
+<<<<<<< HEAD
   --accent-color: #1000f3;
   --accent-color-rgb: 95, 207, 128;
+=======
+  --accent-color: #57C0DD;
+  --accent-color-rgb: 166,222,237;
+  --accent-color: #57C0DD;
+  --accent-color-rgb: 166,222,237;
+>>>>>>> 4d914860633ac1baccbd01675445e9077db0651a
   --contrast-color: #ffffff;
   --contrast-color-rgb: 255, 255, 255;
 }
@@ -34,15 +95,41 @@
 /* Nav Menu Colors */
 :root {
   --nav-color: #272828;
+<<<<<<< HEAD
   --nav-hover-color: #1000f3;
   --nav-dropdown-color: #272828;
   --nav-dropdown-hover-color: #1000f3;
+=======
+  --nav-hover-color: #57C0DD;
+  --nav-hover-color: #57C0DD;
+  --nav-dropdown-color: #272828;
+  --nav-dropdown-hover-color: #57C0DD;
+  --nav-dropdown-hover-color: #57C0DD;
+>>>>>>> 4d914860633ac1baccbd01675445e9077db0651a
   --nav-dropdown-background-color: #ffffff;
 }
-
 /* Smooth scroll */
 :root {
   scroll-behavior: smooth;
+}
+.btn-centered {
+  position: fixed; /* Utilisation de position fixe pour maintenir la position même en zoomant */
+  top: 50%; /* Placer le bouton à 50% de la hauteur de la fenêtre */
+  left: 50%; /* Placer le bouton à 50% de la largeur de la fenêtre */
+  transform: translate(-50%, -50%); /* Déplacer le bouton de moitié de sa propre largeur et hauteur dans les deux directions pour le centrer */
+  transition: 0.5s;
+  background-color: #B0E847;
+  color: black;
+  font-weight: bold;
+  border: none;
+  font-size: 18px;
+  width: 186px;
+  height: 43px;
+
+}
+.btn-centered:hover{
+  background-color: #7cc576; /* Couleur de fond au survol */
+    color: bl; /* Couleur du texte au survol */
 }
 
 /*--------------------------------------------------------------
@@ -73,6 +160,29 @@ h5,
 h6 {
   color: var(--heading-color);
   font-family: var(--heading-font);
+}
+
+/* Global Colors */
+:root {
+  --background-color: #ffffff;
+  --background-color-rgb: 255, 255, 255;
+  --default-color: #444444;
+  --default-color-rgb: 68, 68, 68;
+  --heading-color: #37423b;
+  --heading-color-rgb: 55, 66, 59;
+  --accent-color: #57C0DD;
+  --accent-color-rgb: 166,222,237;
+  --contrast-color: #ffffff;
+  --contrast-color-rgb: 255, 255, 255;
+}
+
+/* Nav Menu Colors */
+:root {
+  --nav-color: #272828;
+  --nav-hover-color: #57C0DD;
+  --nav-dropdown-color: #272828;
+  --nav-dropdown-hover-color: #57C0DD;
+  --nav-dropdown-background-color: #ffffff;
 }
 
 /*--------------------------------------------------------------
@@ -693,6 +803,8 @@ h6 {
   color: var(--default-color);
   background-color: var(--background-color);
   position: relative;
+  margin-bottom: 40px; /* Ajustez la marge inférieure selon vos besoins */
+
 }
 
 .page-title .heading {
@@ -873,7 +985,14 @@ section,
     font-size: 18px;
   }
 }
-
+#hero {
+  width: 100%;
+  height: 100%;
+  background: url("../img/background.png")  no-repeat;
+  background-size: cover; /* Cover the entire container */
+  background-attachment: fixed; /* Fixed position */
+  position: relative;
+}
 /*--------------------------------------------------------------
 # About Section
 --------------------------------------------------------------*/
@@ -1115,6 +1234,10 @@ section,
   padding: 6px 14px;
   margin: 0;
   border-radius: 5px;
+}
+.courses .course-content .dest 
+{
+  font-size: 200px;
 }
 
 .courses .course-content .price {
@@ -1965,6 +2088,28 @@ section,
 /*--------------------------------------------------------------
 # Starter Section Section
 --------------------------------------------------------------*/
+<<<<<<< HEAD
 /* .starter-section {
   /* Add your styles here 
 } */
+=======
+.starter-section {
+  /* Add your styles here */
+}
+
+
+/* styles.css */
+.btn-delete {
+  color: red; /* Définir la couleur du texte en rouge */
+  /* Ajoutez d'autres styles selon vos besoins */
+}
+
+.date-picker {
+  width: 300px; /* Ajustez la largeur selon vos préférences */
+}
+
+.error-message {
+  color: red !important;
+}
+
+>>>>>>> 4d914860633ac1baccbd01675445e9077db0651a

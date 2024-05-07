@@ -1,0 +1,93 @@
+{% extends 'Back/base.html.twig' %}
+
+{% block title %}Commande index{% endblock %}
+
+{% block main %}
+    <div class="container">
+        <div class="row justify-content-end">
+            <div class="col-md-6 text-right">
+                <h1 style="font-family: Arial, sans-serif; color: black; font-size: 35px;">Liste des commandes :</h1>
+            </div>
+            <div class="col-md-6 d-flex justify-content-end"> 
+    <div class="mt-4">
+        <a href="{{ path('app_article_index_back2') }}" class="btn btn-success">
+            <i class="align-middle me-1" data-feather="plus-circle"></i> Ajouter un nouvel commande
+        </a>
+    </div>
+</div>
+
+    <div class="container">
+        <div class="row">
+            {% for commande in commandes %}
+                <div class="col-md-12 mb-4">
+                    <div class="card">
+                       <div class="card-header d-flex justify-content-between align-items-center">
+                       <h5 class="card-title">Commande #{{ commande.idCommande }}</h5>
+                        <div>
+                            <a href="{{ path('download_pdf', {'idCommande': commande.idCommande}) }}" class="btn btn-sm btn-outline-secondary">
+                                <i class="bi bi-file-pdf"></i> Télécharger PDF
+                            </a>
+                        </div>
+                        
+                    </div>
+                        <div class="card-body">
+                            <strong>Nom de client :</strong> {{ commande.user }}<br>
+                            <p>Nombre d'articles: {{ commande.nombreArticle }}</p>
+                            <p>Prix total: {{ commande.prixTotale }} DT</p>
+                            <p>Délai de commande: {{ commande.delaisCommande ? commande.delaisCommande|date('Y-m-d H:i:s') : '' }}</p>
+                            <hr>
+                            <h6>Articles dans la commande :</h6>
+                            <div class="row">
+                                {% for article in articlesParCommande[commande.idCommande] %}
+                                    <div class="col-md-3">
+                                        <img src="{{ asset(article.photoArticle) }}" class="card-img-top article-image" style="width: 100px; height: 100px;" >
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="card-body">
+                                            <h5 class="card-title font-weight-bold" style="color: black;">{{ article.nomArticle }}</h5>
+                                            <p class="card-text">Prix: {{ article.prixArticle }} DT</p>
+                                            <p class="card-text">Type: {{ article.typeArticle }}</p>
+                                            <p class="card-text">{{ article.descriptionArticle }}</p>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                       <div class="d-flex justify-content-between align-items-center">
+                                        <div class="btn-group">
+                            <a href="{{ path('app_commande_show_back', {'idCommande': commande.idCommande}) }}" class="btn btn-secondary">Voir détails</a>
+                            <a href="{{ path('app_commande_edit', {'idCommande': commande.idCommande}) }}" class="btn btn-secondary">Modifier</a>
+                            
+                            {{ include('Back/commande/_delete_form.html.twig') }}
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                 
+            {% else %}
+                <p>Aucune commande n'a été trouvée.</p>
+            {% endfor %}
+        </div>
+        {% if commandes|length > 0 %}
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {% if page > 1 %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ path('app_commande_index_back', {'page': page - 1}) }}">Précédent</a>
+                    </li>
+                {% endif %}
+                {% for i in 1..maxPage %}
+                    <li class="page-item {% if page == i %}active{% endif %}">
+                        <a class="page-link" href="{{ path('app_commande_index_back', {'page': i}) }}">{{ i }}</a>
+                    </li>
+                {% endfor %}
+                {% if page < maxPage %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ path('app_commande_index_back', {'page': page + 1}) }}">Suivant</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+    </div>
+{% endblock %}

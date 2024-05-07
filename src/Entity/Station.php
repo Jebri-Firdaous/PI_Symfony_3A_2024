@@ -1,32 +1,42 @@
 <?php
 
 namespace App\Entity;
-use repository;
+use Repository;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\StationRepository;
+use Symfony\Component\Validator\Constraints as Assert;
+
 /**
- * @ORM\Entity(repositoryClass="App\Repository\StationRepository")
+ * @ORM\Entity(repositoryClass=StationRepository::class)
  */
 #[ORM\Entity(repositoryClass: StationRepository::class)]
 class Station
 {
   #[ORM\Id]
   #[ORM\GeneratedValue]
-  #[ORM\Column]
-   /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+  #[ORM\Column()]
     private ?int $idStation = null ;
-    #[ORM\Column(length:30)]
-  
-    private?string $nomStation = null ;
 
     #[ORM\Column(length:30)]
+    #[Assert\Length(min:6, minMessage:"nom Non valide !")]
+    #[Assert\Regex(
+             pattern:"/^(?=.*\d).*station.*$/i",
+             message:"Le nom de la station doit contenir le mot 'station' et au moins un chiffre")]
+    #[Assert\NotBlank(message:"nom station est obligatoire")]
+    private ?string $nomStation = null ;
+
+    #[ORM\Column(length:30)]
+    #[Assert\Length(min:3, minMessage:"Destination doit contenir au minimum 3 caractères !")]
+    #[Assert\Regex(
+        pattern:"/^[a-zA-Z]+$/",
+        message:"L'adresse de la station doit contenir uniquement des caractères alphabétiques")]
+        #[Assert\NotBlank(message:"L'adresse  est obligatoire")]
+
     private ?string $adressStation = null ;
 
     #[ORM\Column(length:50)]
+    #[Assert\NotBlank(message:"Le type est obligatoire")]
+
     private ?string $type = null;
 
     public function getIdStation(): ?int

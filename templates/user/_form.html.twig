@@ -1,0 +1,39 @@
+   {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                    {{ form_errors(form) }}
+
+                    <div class="mb-3">
+                        <label class="form-label">Nom</label>
+                        {{ form_widget(form.nom_personne, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.nom_personne) }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Prénom</label>
+                        {{ form_widget(form.prenom_personne, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.prenom_personne) }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Numéro de téléphone</label>
+                        {{ form_widget(form.numero_telephone, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.numero_telephone) }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form_label(form.roleAdmin, 'role') }}
+                        {{ form_widget(form.roleAdmin, {'attr': {'class': 'form-select'}}) }}
+                        {{ form_errors(form.roleAdmin) }}
+                    </div>
+        
+                    <div class="mb-3">
+                        <label class="form-label">Adresse Mail</label>
+                        {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.email) }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Mot de passe</label>
+                        {{ form_widget(form.plainPassword, {'attr': {'class': 'form-control', 'autocomplete': 'new-password'}}) }}
+                        {{ form_errors(form.plainPassword) }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Image de profil</label>
+                        {{ form_widget(form.image_personne, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.image_personne) }}
+                    </div>

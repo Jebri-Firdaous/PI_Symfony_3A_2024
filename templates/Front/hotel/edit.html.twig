@@ -1,0 +1,18 @@
+{% extends 'Front/base.html.twig' %}
+
+{% block title %}Edit Hotel{% endblock %}
+{% block section %}
+
+<h1 class="text-center">Modifier l'hôtel</h1>
+
+<div class="container">
+    
+    {{ include('Front/hotel/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_hotel_index_Front') }}" class="btn btn-secondary">Retour à la liste</a>
+
+    {{ include('Front/hotel/_delete_form.html.twig') }}
+</div>
+
+{% endblock %}
+

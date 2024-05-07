@@ -1,0 +1,37 @@
+{% extends 'Back/base.html.twig' %}
+
+{% block title %}Edit Commande{% endblock %}
+
+{% block main %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <h1 class="text-center mb-4">Modifier la commande</h1>
+                <div class="card">
+                    <div class="card-body">
+                        {{ form_start(form, {'attr': {'class': 'commande-form', 'novalidate': 'novalidate'}}) }}
+                            <div class="form-group">
+                                {{ form_label(form.nombreArticle, 'Nombre d\'articles', {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(form.nombreArticle, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_errors(form.nombreArticle) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form_label(form.prixTotale, 'Prix total', {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(form.prixTotale, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_errors(form.prixTotale) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form_label(form.delaisCommande, 'Date limite de commande', {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(form.delaisCommande, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_errors(form.delaisCommande) }}
+                            </div>
+
+                            {{ form_row(form.save, {'label': 'Modifier Commande', 'attr': {'class': 'btn btn-primary btn-block'}}) }}
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+                <a href="{{ path('app_commande_index_back') }}" class="btn btn-secondary btn-block mt-3">Retour à la liste</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

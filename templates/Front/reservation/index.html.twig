@@ -1,0 +1,208 @@
+{% extends 'Front/base.html.twig' %}
+
+{% block title %}Reservation index{% endblock %}
+{% block section %}
+
+
+
+
+
+
+    {#<h1>Reservation index</h1>#}
+  <div class="row">
+                                <div class="card-header">
+<h2 style="font-weight: bold; color: #2f64b1; text-align: center;">Liste des Reservations</h2>
+      </div>
+    <input type="text" id="searchInput" class="form-control mb-3" placeholder="Search...">
+ {#
+     <div>
+    <a href="{{ path('triFront') }}" class="d-inline-block">
+        <button type="button" style="padding: 10px; margin-right: 10px;" class="btn btn-outline-info">tri croissant</button>
+    </a>
+
+    <a href="{{ path('tridFront') }}" class="d-inline-block">
+        <button type="button" style="padding: 10px;" class="btn btn-outline-info">tri décroissant</button>
+    </a>
+</div>
+#}
+
+        <table class="table table-hover my-0">
+        <thead>
+            <tr>
+                <th>Nom client</th>
+                <th>RefReservation</th>
+                <th>DureeReservation</th>
+                <th>PrixReservation</th>
+                <th>DateReservation</th>
+                <th>TypeChambre</th>
+                <th>Hotel Name</th> {# Ajoutez une colonne pour le nom de l'hôtel #}
+                <th>actions</th>
+            </tr>
+        </thead>
+        
+        <tbody>
+        {% for reservation in reservations %}
+            <tr>
+                <td>{{ reservation.user }}</td>
+                <td>{{ reservation.refReservation }}</td>
+                <td>{{ reservation.dureeReservation }}jour</td>
+                <td>{{ reservation.prixReservation }}</td>
+                <td>{{ reservation.dateReservation ? reservation.dateReservation|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ reservation.typeChambre }}</td>
+               <td>{{ reservation.idHotel ? reservation.idHotel.nomHotel : 'Aucun hôtel associé' }}</td>
+               {# Accédez au nom de l'hôtel associé à la réservation s'il existe, sinon affichez un message indiquant qu'aucun hôtel n'est associé #}
+                <td>
+                    <a href="{{ path('app_reservation_delete', {'refReservation': reservation.refReservation}) }}">
+                     <span class="icon">🗑️</span>
+                    </a>
+                        &nbsp;
+
+                    <a href="{{ path('app_reservation_edit', {'refReservation': reservation.refReservation}) }}">
+                     <span class="icon">✏️</span>  </a>
+                </td>
+                
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td> {# Colspan est égal au nombre de colonnes dans votre tableau #}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+        <script>
+           
+            function search() {
+                var query = document.getElementById('searchInput').value;
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', '{{ path('app_reservation_search_Front') }}?q=' + query, true);
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        var response = JSON.parse(xhr.responseText);
+                        updateTable(response);
+                    }
+                };
+                xhr.send();
+            }
+        
+        
+            // Function to update the table with search results
+function updateTable(data) {
+    var tableBody = document.querySelector('tbody');
+    tableBody.innerHTML = ''; // Clear existing table rows
+    if (data.length > 0) {
+        data.forEach(function (reservation) {
+            var row = '<tr>';
+            row += '<td>' + reservation.refReservation + '</td>';
+            row += '<td>' + reservation.dureeReservation + '</td>';
+            row += '<td>' + reservation.prixReservation + '</td>';
+            row += '<td>' + reservation.dateReservation + '</td>';
+            row += '<td>' + reservation.typeChambre + '</td>';
+            row += '<td>' + reservation.nomHotel + '</td>';
+            row += '</tr>';
+            tableBody.innerHTML += row;
+        });
+    } else {
+        tableBody.innerHTML = '<tr><td colspan="6" class="text-center">No records found</td></tr>';
+    }
+}
+
+
+
+            // Event listener for the search input
+            document.getElementById('searchInput').addEventListener('input', function () {
+                search();
+            });
+        </script>
+
+    <a href="{{ path('app_hotel_index_Front') }}">
+    <span class="icon">Créer ➕
+
+</span>  </a>
+           </a>
+    
+   {% block body %}
+
+    
+{% endblock %}
+
+
+
+
+{% block hotels %}
+
+        <div class="container mt-4">
+
+            <h2 class="text-center mb-4">Meilleurs Reservations</h2>
+
+            <div class="row">
+
+                {% for hotelsStat in hotelsStats %}
+
+                    <div class="col-md-3 mb-3">
+
+                        <div class="card article-card border rounded" style="width: 100%; max-width: 400px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);">
+
+                          {# <img src="{{ asset(hotelsStat.photo_article) }}" class="card-img-top article-image" style="width: 200px; height: 200px;">#} 
+
+                            <div class="card-body">
+
+                                <div class="d-flex justify-content-between align-items-center">
+
+                                    <h4 class="card-title font-weight-bold mb-0">{{ hotelsStat.nomHotel }}</h4>
+
+                                    <h5 class="card-text mb-0"><span style="color: red; font-weight: bold;">{{ hotelsStat.adressHotel }} DT</span></h5>
+
+                                </div>
+
+                                <p class="card-text mb-2">{{ hotelsStat.prix1 }}</p>
+                                 <p class="card-text mb-2">{{ hotelsStat.prix2 }}</p>
+                                  <p class="card-text mb-2">{{ hotelsStat.prix3 }}</p>
+
+
+                                <p class="card-text">Total Reservations: {{ hotelsStat.totalReservations }}</p>
+
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+
+                                    
+
+                                 
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+{% endblock %}
+
+
+
+
+ <script>
+        $(document).ready(function(){
+            $(".btn1").click(function(){
+                $("h1").slideUp();
+            });
+            $(".btn2").click(function(){
+                $("h1").slideDown();
+            });
+            $(".btn3").click(function(){
+                $("h1").slideToggle();
+            });
+        });
+    </script>
+   {{ knp_pagination_render(reservations, 'Front/bootstrap_4_pagination.html.twig') }}
+
+
+
+ {% endblock %}

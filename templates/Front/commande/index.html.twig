@@ -1,0 +1,40 @@
+{% extends 'Front/base.html.twig' %}
+
+{% block title %}Commande index{% endblock %}
+
+{% block section %}
+    <h1>Commande index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>IdCommande</th>
+                <th>NombreArticle</th>
+                <th>PrixTotale</th>
+                <th>DelaisCommande</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for commande in commandes %}
+            <tr>
+                <td>{{ commande.idCommande }}</td>
+                <td>{{ commande.nombreArticle }}</td>
+                <td>{{ commande.prixTotale }}</td>
+                <td>{{ commande.delaisCommande ? commande.delaisCommande|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_commande_show', {'idCommande': commande.idCommande}) }}">show</a>
+                    <a href="{{ path('app_commande_edit', {'idCommande': commande.idCommande}) }}">edit</a>
+                    
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_commande_new') }}">Create new</a>
+{% endblock %}

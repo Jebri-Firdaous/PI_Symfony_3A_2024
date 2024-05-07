@@ -1,0 +1,26 @@
+{% extends 'Back/base.html.twig' %}
+
+{% block title %}Passer commande{% endblock %}
+
+{% block section %}
+    <h1>Passer commande</h1>
+
+    <h2>Articles dans la commande</h2>
+    {% for article in articles %}
+        <div>
+            {{ article.nomArticle }} - {{ article.prixArticle }}
+            <!-- Vous pouvez ajouter d'autres informations sur l'article si nécessaire -->
+        </div>
+    {% endfor %}
+
+    <hr>
+
+    <p>Total d'articles: {{ totalArticles }}</p>
+    <p>Total à payer: {{ total }}</p>
+    <p>Date limite de commande: {{ limitDate|date('Y-m-d H:i:s') }}</p>
+
+    {# Bouton pour passer la commande #}
+    <form action="{{ path('cart_place_order_back') }}" method="post">
+        <button type="submit">Passer la commande</button>
+    </form>
+{% endblock %}

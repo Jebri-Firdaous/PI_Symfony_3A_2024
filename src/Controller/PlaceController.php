@@ -212,13 +212,13 @@ class PlaceController extends AbstractController
         $parkingMax = $parking->getNombrePlaceMax();
         for ($i = 1; $i <= $parkingMax; $i++) {
             if (!in_array($i, $usedNumbers) && $parkingRepository->nbPlaces($idP)!=0) {
-                var_dump($i);
+                // var_dump($i);
                 $numberList[] = $i;
             }elseif($parkingRepository->nbPlaces($idP)==0)
                 $numberList[] = $i;
         }
-        var_dump($numberList);
-        var_dump($usedNumbers);
+        // var_dump($numberList);
+        // var_dump($usedNumbers);
         $form = $this->createForm(PlaceType::class, $place, ['parking' => $parking, 'list' => $numberList]);
         $form->handleRequest($request);
         if($parking->getNombrePlaceMax() > $parkingRepository->nbPlaces($idP))
@@ -272,8 +272,8 @@ class PlaceController extends AbstractController
             }
         }
         $numberList[] = $place->getNumPlace();
-        var_dump($numberList);
-        var_dump($parkingMax);
+        // var_dump($numberList);
+        // var_dump($parkingMax);
         $form = $this->createForm(PlaceType::class, $place, ['parking' => $parking, 'list' => $numberList]);
         $form->handleRequest($request);
 

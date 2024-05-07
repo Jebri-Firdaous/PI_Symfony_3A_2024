@@ -1,0 +1,72 @@
+{% extends 'Back/base.html.twig' %}
+
+{% block main %}
+
+<main class="content">
+    <div class="container-fluid p-0">
+        <div class="mb-3">
+<h1 style="font-weight: bold; color: #2f64b1;">Modifier Administrateur</h2>
+
+        </div>
+        <div class="row">
+            <div class="col-12 col-lg-6">
+                <div class="card">
+
+                    <div class="card-body">
+                        {{ form_start(form_admin, {'attr': {'novalidate': 'novalidate'}}) }}
+                            {{ form_errors(form_admin) }}
+                            <div class="mb-3">
+                                {{ form_label(form_admin.personne.nom_personne, "Nom", {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(form_admin.personne.nom_personne, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_errors(form_admin.personne.nom_personne) }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form_label(form_admin.personne.prenom_personne, "Prénom", {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(form_admin.personne.prenom_personne, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_errors(form_admin.personne.prenom_personne) }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form_label(form_admin.role, "Role", {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(form_admin.role, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_errors(form_admin.role) }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form_label(form_admin.personne.numero_telephone, "Numéro de Téléphone", {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(form_admin.personne.numero_telephone, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_errors(form_admin.personne.numero_telephone) }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form_label(form_admin.personne.email, "Adresse Mail", {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(form_admin.personne.email, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_errors(form_admin.personne.email) }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form_label(form_admin.personne.mdp_personne, "Mot de Passe", {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(form_admin.personne.mdp_personne, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_errors(form_admin.personne.mdp_personne) }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form_label(form_admin.personne.image_personne, "Image", {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(form_admin.personne.image_personne, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_errors(form_admin.personne.image_personne) }}
+                            </div>
+                            <div class="text-center mt-3">
+                                {{ form_widget(form_admin.Submit, {'label': 'S\'inscrire', 'attr': {'class': 'btn btn-lg btn-primary'}}) }}
+<a href="{{ path('administrateur_list') }}" style="display: block; text-align: left;">Retour à la liste</a>
+
+
+
+
+
+
+                            </div>
+                        {{ form_end(form_admin) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+{% endblock %}

@@ -1,0 +1,131 @@
+{% extends 'back/base.html.twig' %}
+{% block main %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+<div style="background-color: #343a40; padding: 30px ;margin-bottom: 40px;"> 
+<h2 style="text-align: center;color:white;">Ajouter Station</h2>
+</div>
+    {{ form_start(f, {'attr': {'class': 'form', 'novalidate': 'novalidate'}}) }}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                {{ form_label(f.nomStation, null, {'label_attr': {'style':  'color:#343a40 ; font-weight: bold;'}}) }}
+                {{ form_widget(f.nomStation, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(f.nomStation) }}
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                {{ form_label(f.adressStation ,null, {'label_attr': {'style':  'color:#343a40 ; font-weight: bold;'}}) }}
+                {{ form_widget(f.adressStation, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(f.adressStation) }}
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                {{ form_label(f.type ,null, {'label_attr': {'style':  'color:#343a40 ; font-weight: bold;'}}) }}
+                {{ form_widget(f.type, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(f.type) }}
+            </div>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary mt-3">Confirmer</button>
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">{{ message }}</div>
+    {% endfor %}
+    {{ form_end(f) }}
+</div>
+
+<div style="margin-top: 20px;"> <!-- Adjust margin-top as needed -->
+ <i data-feather="search"></i>
+  <input type="text" id="searchInput" oninput="search()" placeholder=" nom/adresse/type...">
+  <i data-feather="refresh-cw" title="Trier par date" onclick="sortTable()"></i> 
+    <table class="table table-bordered" id="stationTable">
+        <thead>
+            <tr>
+                <th>Nom Station</th>
+                <th>Adresse Station</th>
+                <th>Type</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for station in list %}
+                <tr>
+                    <td>{{ station.nomStation }}</td>
+                    <td>{{ station.adressStation }}</td>
+                    <td>{{ station.type }}</td>
+                    <td>
+                        <a href="{{ path('edit_station',{id:station.idStation}) }}" class="btn btn-info"><i data-feather="edit"></i></a>
+                        <a href="{{ path('delete_station',{id:station.idStation}) }}" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette station ?')"><i data-feather="trash-2"></i></a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+        <div class="d-flex justify-content-center">
+             {% do list.setPageRange(2) %}
+             {{ knp_pagination_render(list, 'pagination.html.twig') }} 
+         </div>
+ <script>
+    function search() {
+        
+        // Récupère la valeur de recherche
+        let input = document.getElementById("searchInput");
+        let filter = input.value.toUpperCase();
+
+        // Récupère les lignes du tableau à filtrer
+        let rows = document.querySelectorAll("#stationTable tbody tr");
+
+        // Parcours toutes les lignes du tableau et masque celles qui ne correspondent pas à la recherche
+        rows.forEach(row => {
+            let cells = row.querySelectorAll("td");
+            let matches = false;
+            // Recherche par destination (colonne 0)
+            let textDestination = cells[0].textContent || cells[0].innerText;
+            // Recherche par date de départ (colonne 1)
+            let textDate = cells[1].textContent || cells[1].innerText;
+            //Recherche par type
+              let texttype = cells[2].textContent || cells[2].innerText;
+            
+            if (textDestination.toUpperCase().indexOf(filter) > -1 || textDate.toUpperCase().indexOf(filter) > -1 ||texttype.toUpperCase().indexOf(filter) > -1) {
+                matches = true;
+            }
+            if (matches) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        });
+    }
+</script>
+<script>
+    function sortTable() {
+        var table, rows, switching, i, x, y, shouldSwitch;
+        table = document.getElementById("stationTable");
+        switching = true;
+        while (switching) {
+            switching = false;
+            rows = table.rows;
+            for (i = 1; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("td")[1]; // Changer 1 à l'index de la colonne dateDepart
+                y = rows[i + 1].getElementsByTagName("td")[1];
+                if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                    shouldSwitch = true;
+                    break;
+                }
+            }
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+            }
+        }
+    }
+</script>
+{% endblock %}

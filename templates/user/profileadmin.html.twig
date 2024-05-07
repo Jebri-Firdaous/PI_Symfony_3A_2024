@@ -1,0 +1,45 @@
+
+
+{% extends 'Back/base.html.twig' %}
+
+{% block main %}
+    <div class="profile-info">
+        <h2>User Profile</h2>
+        <div class="field">
+            <img src="img/image_compte/{{ app.user.imagePersonne }}" style="width:50px; border-radius: 50%;" alt="Profile Image" />
+            <span class="icon">✏️</span>
+            <label for="email">email:</label>
+            <span class="value">{{ app.user.getemail() }}</span>
+            <span class="icon">✏️</span>
+        </div>
+        <div class="field">
+            <label for="nom_personne">Nom:</label>
+            <span class="value">{{ app.user.getNomPersonne() }}</span>
+            <span class="icon">✏️</span>
+        </div>
+        <div class="field">
+            <label for="prenom_personne">Prénom:</label>
+            <span class="value">{{ app.user.getPrenomPersonne() }}</span>
+            <span class="icon">✏️</span>
+        </div>
+
+        {% if 'ADMIN' in app.user.getRoles() %}
+            <div class="field">
+                <label for="roleAdmin">Rôle Admin:</label>
+                <span class="value">{{ app.user.getRoleAdmin() }}</span>
+                <span class="icon">✏️</span>
+            </div>
+        {% elseif 'CLIENT' in app.user.getRoles() %}
+            <div class="field">
+                <label for="age">Âge:</label>
+                <span class="value">{{ app.user.getAge() }}</span>
+                <span class="icon">✏️</span>
+            </div>
+            <div class="field">
+                <label for="genre">Genre:</label>
+                <span class="value">{{ app.user.getGenre() }}</span>
+                <span class="icon">✏️</span>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
