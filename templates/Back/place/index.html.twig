@@ -117,7 +117,44 @@
         {% endfor %}
         </tbody>
     </table>
-    {{ knp_pagination_render(places) }}
+    <div class="d-flex justify-content-center">
+       
+      <style>
+    .pagination {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+}
+
+.pagination li {
+    margin: 0 5px;
+}
+
+.pagination li a {
+    display: inline-block;
+    padding: 5px 10px;
+    text-decoration: none;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    color: #333;
+}
+
+.pagination li.active a {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+.pagination li.disabled a {
+    pointer-events: none;
+    background-color: #eee;
+    color: #888;
+    border-color: #ccc;
+}
+</style> 
+        {{ knp_pagination_render(places, 'pagination.html.twig') }}
+    </div>
 
     {# <a href="{{ path('app_place_new', {'idP': idP}) }}">Create new</a> #}
 <script>

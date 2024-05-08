@@ -160,14 +160,16 @@ class RendezVousController extends AbstractController
         $client = $this->getUser();
         $query =  $client->getLesRendezVous();
         $lesRendezVousByClient = $paginator->paginate(
+            
             $query,
             $request->query->getInt('page', 1), // Current page number
-            4 // Items per page
+        3 // Items per page
         );
         return $this->render('Front/rendez_vous/showRV.html.twig', [
             'controller_name' => 'RendezVousController',
             'lesRVdeClient' => $lesRendezVousByClient,
             'container' => $container,
+            'query' => $paginator,
         ]);
     }
 

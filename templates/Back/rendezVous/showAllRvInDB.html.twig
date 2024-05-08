@@ -7,6 +7,40 @@
         margin: 10px;
         width: 30px; /* Adjust this value as needed */
     } 
+  
+    .pagination {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+}
+
+.pagination li {
+    margin: 0 5px;
+}
+
+.pagination li a {
+    display: inline-block;
+    padding: 5px 10px;
+    text-decoration: none;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    color: #333;
+}
+
+.pagination li.active a {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+.pagination li.disabled a {
+    pointer-events: none;
+    background-color: #eee;
+    color: #888;
+    border-color: #ccc;
+}
+
 </style>
 
     <table class="table table-striped table-middle-aligned table-borderless" style=" width: 70%;">
@@ -52,5 +86,9 @@
      <a href="{{ path('back_rendezVous_add') }}" class="btn btn-sm btn-primary">
     <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Ajouter RendezVous'|trans }}
         </a>
+
+
+        {{ knp_pagination_render(query, 'pagination.html.twig') }}
+    </div>
 
 {% endblock %}

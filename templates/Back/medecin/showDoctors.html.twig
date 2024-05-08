@@ -2,19 +2,7 @@
 {% block main %}
     <h1>{{ 'List des medecins'|trans }}</h1>
 
-  <style>
-    table {
-        margin: 10px;
-       
-    } 
-    h1 {
-        margin-left: 20px;
-    }
-    
 
-
-
-</style>
     <form action="{{ path('app_medecins_search') }}" method="GET">
         <input type="text" id="query" name="query">
         <button type="submit">Search</button>
@@ -83,10 +71,63 @@
         </a>
         
     {# pagination----------------------------------- #}
+
+
+      <style>
+    table {
+        margin: 10px;
+       
+    } 
+    h1 {
+        margin-left: 20px;
+    }
+  
+    .pagination {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+}
+
+.pagination li {
+    margin: 0 5px;
+}
+
+.pagination li a {
+    display: inline-block;
+    padding: 5px 10px;
+    text-decoration: none;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    color: #333;
+}
+
+.pagination li.active a {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+.pagination li.disabled a {
+    pointer-events: none;
+    background-color: #eee;
+    color: #888;
+    border-color: #ccc;
+}
+
+
+</style>
+
+
     <div class="container py-5">
   <div class="d-flex justify-content-center">
-    {{ knp_pagination_render(doctors) }}
+    {{ knp_pagination_render(doctors,  'pagination.html.twig') }}
 
     </div>
 </div>
+
+
+
+
+
 {% endblock %}

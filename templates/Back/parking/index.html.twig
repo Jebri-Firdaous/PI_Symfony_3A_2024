@@ -42,6 +42,47 @@
 {% endblock %} #}
 
 {% block main %}
+
+
+<style>
+
+/* custom_pagination_styles.css */
+.pagination {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+}
+
+.pagination li {
+    margin: 0 5px;
+}
+
+.pagination li a {
+    display: inline-block;
+    padding: 5px 10px;
+    text-decoration: none;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    color: #333;
+}
+
+.pagination li.active a {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+.pagination li.disabled a {
+    pointer-events: none;
+    background-color: #eee;
+    color: #888;
+    border-color: #ccc;
+}
+
+</style>
+
+
 <div class="content">
 <br> <h1>Liste Parking ( <a href="{{ path('app_parking_new') }}"><i class="fas fa-plus"></i></a> )</h1> <br>
 
@@ -119,43 +160,42 @@
 <style>
     .pagination {
     display: flex;
+    justify-content: center;
     list-style: none;
     padding: 0;
-    justify-content: center;
 }
 
-.page-item {
-    margin-right: 5px;
+.pagination li {
+    margin: 0 5px;
 }
 
-.page-link {
+.pagination li a {
     display: inline-block;
-    padding: 8px 12px;
+    padding: 5px 10px;
+    text-decoration: none;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    color: #333;
+}
+
+.pagination li.active a {
     background-color: #007bff;
     color: #fff;
-    border: 1px solid #007bff;
-    border-radius: 4px;
-    text-decoration: none;
-    transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+    border-color: #007bff;
 }
 
-.page-link:hover {
-    background-color: #0056b3;
-    border-color: #0056b3;
+.pagination li.disabled a {
+    pointer-events: none;
+    background-color: #eee;
+    color: #888;
+    border-color: #ccc;
 }
-
-.page-item.active .page-link {
-    background-color: #0056b3;
-    border-color: #0056b3;
-}
-
-.page-link:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
-}
-
-</style>
-{{ knp_pagination_render(pag) }}
+</style> 
+<div class="d-flex justify-content-center">
+       
+      
+    {{ knp_pagination_render(pag, 'pagination.html.twig') }}
+</div>
 </div>
     {# <a href="{{ path('app_parking_new') }}">Create new</a> #}
     <script>

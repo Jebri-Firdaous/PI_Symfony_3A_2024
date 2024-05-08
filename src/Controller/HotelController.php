@@ -73,7 +73,7 @@ class HotelController extends AbstractController
             ->leftJoin('App\Entity\Reservation', 'r', 'WITH', 'r.idHotel = h.idHotel')
             ->groupBy('h.idHotel, h.nomHotel, h.adressHotel, h.prix1, h.prix2, h.prix3')
             ->orderBy('totalReservations', 'DESC')
-            ->setMaxResults(4)
+            ->setMaxResults(3)
             ->getQuery()
             ->getResult();
     

@@ -290,7 +290,7 @@ public function editBillet (Request $req,ManagerRegistry $Manager,billetReposito
         $paginatedList = $paginator->paginate(
             $nonPaginatedList, /* query NOT result */
             $req->query->getInt('page', 1),
-            3
+            1
         );
     return $this->renderForm('back/billetback.html.twig',
     ['f'=>$form,
