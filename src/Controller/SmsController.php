@@ -15,7 +15,7 @@ class SmsController extends AbstractController
       
 
         $sid = "AC20860627b7ea9659eea11b1a6bd3c231";
-        $token = "eefae6ca2a5474833cf907fc1cf3a1b1";
+        $token = "3d2fd82514a32f54643babc92187c1bb";
         $destination = $request->query->get('destination');
     $dateDepart = $request->query->get('dateDepart');
     $prix = $request->query->get('prix');

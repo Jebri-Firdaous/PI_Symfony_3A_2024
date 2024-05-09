@@ -68,7 +68,7 @@ class MedecinController extends AbstractController
             $doctors = $paginator->paginate(
                 $medecins, 
                 $request->query->getInt('page', 1), 
-                10 
+                3 
             );
         } else {
 
@@ -76,7 +76,7 @@ class MedecinController extends AbstractController
             $doctors = $paginator->paginate(
                 $query,
             $request->query->getInt('page', 1), // Current page number
-            4 // Items per page
+            2 // Items per page
         );
         }
 

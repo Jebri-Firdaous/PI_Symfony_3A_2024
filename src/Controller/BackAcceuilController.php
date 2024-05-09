@@ -104,7 +104,7 @@ class BackAcceuilController extends AbstractController
         $list = $paginator->paginate(
             $list, /* query NOT result */
             $req->query->getInt('page', 1),
-            3
+            2
         );
         $station = new Station();
         $form = $this->createForm(StationType::class, $station);
