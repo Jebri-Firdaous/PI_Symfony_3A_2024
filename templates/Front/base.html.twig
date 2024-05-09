@@ -80,7 +80,7 @@
    <li><a href="{{ path ('app_hotel_index_Front')}}" {% if currentRoute == 'app_hotel_index_Front' %}class="active"{% endif %}>Tourisme</a></li>
    <li><a href="{{ path ('app_contact')}}" {% if currentRoute == 'app_contact' %}class="active"{% endif %}>Contact</a></li>
        <li class="dropdown has-dropdown"> <a href="#"><span class="text-dark">        
-      <img src="img/image_compte/{{ app.user.imagePersonne }}" style="width:50px; border-radius: 10%;" alt="Profile Image" />
+      <img src="{{asset('img/image_compte/' ~ app.user.imagePersonne )}}" style="width:50px; border-radius: 10%;" alt="Profile Image" />
 
 </span><i class="bi bi-chevron-down"></i></a>
       <ul>

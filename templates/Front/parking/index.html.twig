@@ -48,12 +48,12 @@
     <script src="https://unpkg.com/esri-leaflet-vector@4.2.3/dist/esri-leaflet-vector.js"></script>
 {% endblock %}
 
-{% block section2 %}
+{% block body %}
 <!-- Vesitable Shop Start-->
 <div class="container-fluid vesitable py-5">
     <div class="container py-5">
         <h1 class="mb-0">Liste des Parkings</h1>
-        <div class="owl-carousel vegetable-carousel justify-content-center" style="border-color: aqua;">
+        <div class="owl-carousel vegetable-carousel justify-content-center" style="height:150px">
         {% for p in parkings %}
             <div  id="div{{p.getIdParking}}v2" class="border border-primary rounded position-relative vesitable-item">
                 {% if p.getNombrePlaceOcc() - repo.nbPlaces(p.getIdParking()) == 0  %}
@@ -72,6 +72,7 @@
             </div>
         {% endfor %}
         </div>
+        <br><br><br><br>
         {% set parkingIds = [] %}
         {% set parkinglong = [] %}
         {% set parkinglat = [] %}
@@ -79,7 +80,7 @@
             {% set parkingIds = parkingIds|merge([p.getIdParking()]) %}
             {% set parkinglong = parkinglong|merge([p.getLongitude()]) %}
             {% set parkinglat = parkinglat|merge([p.getLatitude()]) %}
-            <div id="div{{p.getIdParking}}" style="display: none; grid-template-columns: 1fr 1fr; gap: 20px;" class="border border-primary rounded position-relative">
+            <div id="div{{p.getIdParking}}" style="display: none; grid-template-columns: 1fr 1fr; gap: 100px;" class="border border-primary rounded position-relative">
                 <div class="p-4 rounded-bottom" style="padding: 10px;">
                     <h4>{{ p.getNomParking() }} Parking</h4>
                     {# <h4>&emsp;Parking</h4> #}
