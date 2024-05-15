@@ -1,12 +1,25 @@
 {% extends 'Back/base.html.twig' %}
 {% block main %}
-    <h1>{{ 'List des medecins'|trans }}</h1>
-
+ <div class="container">
+ &nbsp;
+        <div class="row justify-content-end">
+            <div class="col-md-6 text-right">
+                <h1 style="font-family: Arial, sans-serif; color: black; font-size: 35px;">Liste des medecins :</h1>
+            </div>
+            <div class="col-md-6 d-flex justify-content-end"> 
+    <div class="mt-4">
+        <a href="{{ path('app_medecin_add') }}"  class="btn btn-success">
+            <i class="align-middle me-1" data-feather="plus-circle"></i> Ajouter un nouvel medecin
+        </a>
+    </div>
+</div>
+   
 
     <form action="{{ path('app_medecins_search') }}" method="GET">
         <input type="text" id="query" name="query">
         <button type="submit">Search</button>
     </form>
+    &nbsp;
     {# ------------------------- #}
       <form action="{{ path('app_medecins_tri') }}" method="GET">
         <label for="order">Ordre :</label>
@@ -22,18 +35,18 @@
             <!-- Ajoutez d'autres options pour les champs de tri si nécessaire -->
         </select>
 
-        <button type="submit" class="btn btn-primary">Trier</button>
+        <button type="submit" class="btn btn-secondary">Trier</button>
     </form>
-
+&nbsp;
     <table class="table table-striped table-middle-aligned table-borderless" >
         <thead>
             <tr>
                 <th scope="col">{{ 'Nom'|trans }}</th>
-                <th scope="col"><i class="fa fa-calendar" aria-hidden="true"></i> {{ 'Prenom'|trans }}</th>
-                <th scope="col"><i class="fa fa-calendar" aria-hidden="true"></i> {{ 'Numero Tel'|trans }}</th>
-                <th scope="col"><i class="fa fa-calendar" aria-hidden="true"></i> {{ 'Adresse'|trans }}</th>
-                <th scope="col"><i class="fa fa-calendar" aria-hidden="true"></i> {{ 'Specialité'|trans }}</th>
-                <th scope="col"><i class="fa fa-calendar" aria-hidden="true"></i>    Actions </th>
+                <th scope="col"> {{ 'Prenom'|trans }}</th>
+                <th scope="col"> {{ 'Numero Tel'|trans }}</th>
+                <th scope="col"> {{ 'Adresse'|trans }}</th>
+                <th scope="col"> {{ 'Specialité'|trans }}</th>
+                <th scope="col">  Actions </th>
             </tr>
         </thead>
         <tbody>
@@ -50,11 +63,11 @@
                 <td class="text-right">
                     <div class="item-actions">
                         <a href="{{ path('app_medecin_delete', {id: doctor.idMedecin}) }}" class="btn btn-sm btn-secondary">
-                            <i class="fa fa-eye" aria-hidden="true"></i> {{ 'delete'|trans }}
+                            <i class="fa fa-eye" aria-hidden="true"></i> {{ 'Supprimer'|trans }}
                         </a>
 
                         <a href="{{ path('app_medecin_edit', {id: doctor.idMedecin}) }}" class=" btn btn-sm btn-primary">
-                            <i class="fa fa-edit" aria-hidden="true"></i> {{ 'edit'|trans }}
+                            <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Modifier'|trans }}
                         </a>
                     </div>
                 </td>
@@ -66,9 +79,7 @@
         {% endfor %}
         </tbody>
     </table>
-     <a href="{{ path('app_medecin_add') }}" class="btn btn-sm btn-primary">
-    <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Ajouter Medecin'|trans }}
-        </a>
+
         
     {# pagination----------------------------------- #}
 

@@ -45,7 +45,7 @@ class DoctorType extends AbstractType
                 ],
             ])
             
-            ->add('save', SubmitType::class)
+            ->add('Ajouter', SubmitType::class)
         ;
     }
 

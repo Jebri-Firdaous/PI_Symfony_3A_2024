@@ -41,12 +41,24 @@
 }
 
 </style>
+  &nbsp;
+    <div class="container">
+        <div class="row justify-content-end">
+            <div class="col-md-6 text-right">
+                <h1 style="font-family: Arial, sans-serif; color: black; font-size: 35px;">Liste des réservations :</h1>
+            </div>
+            <div class="col-md-6 d-flex justify-content-end"> 
+    <div class="mt-4">
+        <a href="{{ path('app_tourisme_back') }}" class="btn btn-success">
+            <i class="align-middle me-1" data-feather="plus-circle"></i> Ajouter réservation
+        </a>
+    </div>
+</div>
+&nbsp;
     <input type="text" id="searchInput" class="form-control mb-3" placeholder="Search...">
 
      <div class="row">
                                 <div class="card-header">
-<h2 style="font-weight: bold; color: #2f64b1; text-align: center;">Liste des Reservations</h2>
-
 
     <div>
     <a href="{{ path('tri') }}" class="d-inline-block">
@@ -85,14 +97,15 @@
                 <td>{{ reservation.typeChambre }}</td>
                 <td>{{ reservation.idHotel ? reservation.idHotel.nomHotel : 'Aucun hôtel associé' }}</td>
                 <td>
-                    <a href="{{ path('app_reservation_delete_back', {'refReservation': reservation.refReservation}) }}">
-                      <span class="icon">🗑️</span>
-                    </a>
-                    &nbsp;
-                    <a href="{{ path('app_reservation_edit_back', {'refReservation': reservation.refReservation}) }}">
-                    <span class="icon">✏️</span>
-                    </a>
+                    <a href="{{ path('app_reservation_delete_back', {'refReservation': reservation.refReservation}) }}" class=" btn btn-sm btn-secondary">
+                            <i class="fa fa-eye" aria-hidden="true"></i> {{ 'Supprimer'|trans }}
+                        </a>
+
+                        <a href="{{ path('app_reservation_edit_back', {'refReservation': reservation.refReservation}) }}" class=" btn btn-sm btn-primary">
+                            <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Modifier'|trans }}
+                        </a>
                 </td>
+              
             </tr>
         {% else %}
             <tr>
@@ -147,9 +160,7 @@ function updateTable(data) {
             });
         </script>
 
-    <a href="{{ path('app_tourisme_back') }}">
-    <i class="align-middle" data-feather="arrow-left"></i>
-    </a>
+ 
 
 
 

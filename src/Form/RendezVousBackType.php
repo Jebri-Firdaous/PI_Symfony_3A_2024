@@ -78,7 +78,7 @@ class RendezVousBackType extends AbstractType
                 
 
             ->add('dateRendezVous')
-            ->add('save', SubmitType::class)
+            ->add('Ajouter', SubmitType::class)
         ;
 
         $builder->addEventListener(

@@ -44,6 +44,20 @@
 }
 
 </style>
+  &nbsp;
+    <div class="container">
+        <div class="row justify-content-end">
+            <div class="col-md-6 text-right">
+                <h1 style="font-family: Arial, sans-serif; color: black; font-size: 35px;">Liste des hotels :</h1>
+            </div>
+            <div class="col-md-6 d-flex justify-content-end"> 
+    <div class="mt-4">
+        <a href="{{ path('app_hotel_new') }}" class="btn btn-success">
+            <i class="align-middle me-1" data-feather="plus-circle"></i> Ajouter un nouvel hotel
+        </a>
+    </div>
+</div>
+&nbsp;
 
     <input type="text" id="searchInput" class="form-control mb-3" placeholder="Search...">
 {#
@@ -71,16 +85,18 @@
                         <p class="card-text">Numero 2: {{ hotel.numero2 }}</p>
                         <p class="card-text">Numero 3: {{ hotel.numero3 }}</p>
                     </div>
+                   
                      {% if qrCodes[hotel.idHotel] is defined %}
                             <img src="{{ asset(qrCodes[hotel.idHotel]) }}"  style="width: 80px; height: 80px;" alt="QR Code">
                         {% endif %}
-                    <div class="card-footer">
-                        <a href="{{ path('app_hotel_delete', {'idHotel': hotel.idHotel}) }}">
-                            <span class="icon">🗑️</span>
+                         &nbsp;
+                    <div class="item-actions">
+                        <a href="{{ path('app_hotel_delete', {'idHotel': hotel.idHotel}) }}" class="btn btn-sm btn-secondary">
+                            <i class="fa fa-eye" aria-hidden="true"></i> {{ 'Supprimer'|trans }}
                         </a>
-                        &nbsp;
-                        <a href="{{ path('app_hotel_edit', {'idHotel': hotel.idHotel}) }}">
-                            <span class="icon">✏️</span>
+
+                        <a href="{{ path('app_hotel_edit', {'idHotel': hotel.idHotel}) }}" class=" btn btn-sm btn-primary">
+                            <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Modifier'|trans }}
                         </a>
                     </div>
                 </div>
@@ -90,8 +106,7 @@
         {% endfor %}
     </div>
 
-    <a href="{{ path('app_hotel_new') }}">Créer un hotel</a>
-
+   
     <script>
         // JavaScript code for searching and updating the cards
         function search() {

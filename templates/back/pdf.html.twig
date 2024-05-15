@@ -52,14 +52,18 @@
     </style>
 </head>
 <body>
-<img src="{{ absolute_url (asset('img\city.png'))}}" >
+
 <div class="date-info">Datée le : {{ date|date('Y-m-d') }}</div>
 {% block body %}
+ <img src="{{ absolute_url(asset('img/logo1.png')) }}" alt="Logo E-CITY" data-aos="fade-in">
 <div class="row">
     <div class="col-md-8">
         <div class="card">
             <div class="card-body">
+           
+
                 <h2 class="title">liste des billets</h2>
+                
                 <h3 class="subtitle"></h3>
                 
 

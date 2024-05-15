@@ -48,6 +48,14 @@ class AcceuilController extends AbstractController
             'container' => $container,
         ]);
     }
+    #[Route('/profileAdmin', name: 'app_profile_admin')]
+    public function profileAdmin(ContainerInterface $container): Response
+    {
+        return $this->render('user/profileadmin.html.twig', [
+            'controller_name' => 'AcceuilController',
+            'container' => $container,
+        ]);
+    }
 
     #[Route('/transport', name: 'app_transport')]
     public function show(Request $req,ManagerRegistry $Manager,billetRepository $repo,UserRepository $us,PaginatorInterface $paginator ): Response

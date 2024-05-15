@@ -1,18 +1,24 @@
 {% extends 'Back/base.html.twig' %}
 
 {% block main %}
-    <h1>{{ 'List de tous les rendez-vous'|trans }}</h1>
-    {# search static => with button #}
-{# <form action="{{ path('app_rv_search') }}" method="GET">
-        <input type="text" id="query" name="query">
-        <button type="submit">Search</button>
-    </form> #}
+ <div class="container">
+ &nbsp;
+        <div class="row justify-content-end">
+            <div class="col-md-6 text-right">
+                <h1 style="font-family: Arial, sans-serif; color: black; font-size: 35px;">Liste des rendez-vous :</h1>
+            </div>
+            <div class="col-md-6 d-flex justify-content-end"> 
+    <div class="mt-4">
+        <a href="{{ path('back_rendezVous_add') }}" class="btn btn-success">
+            <i class="align-middle me-1" data-feather="plus-circle"></i> Ajouter rendez-vous
+        </a>
+    </div>
+</div>
 
-    {# search dynamic  #}
     <form id="searchForm" action="{{ path('app_rv_search') }}" method="GET">
     <input type="text" id="query" name="query">
     </form>
-
+ &nbsp;
      {# AJAX script to handle dynamic search #}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
    <script>
@@ -49,7 +55,7 @@
        
     });
 });
-
+ &nbsp;
 </script>
 
 
@@ -68,9 +74,9 @@
         <!-- Ajoutez d'autres options pour les champs de tri si nécessaire -->
     </select>
 
-    <button type="submit" class="btn btn-primary">Trier</button>
+    <button type="submit" class="btn btn-secondary">Trier</button>
 </form>
-
+ &nbsp;
 
     <div class="search-appointments"></div>
     <div class="appointments-grid">
@@ -82,15 +88,17 @@
                     <div class="appointment-specialty">{{ rv.getIdMedecin().specialiteMedecin }}</div>
                     <div class="appointment-date">{{ rv.getDateRendezVous().format('d/m/Y H:i') }}</div>
                     <div class="appointment-address">{{ rv.getIdMedecin().getAddressMedecin() }}</div>
+                      &nbsp;
                 </div>
-                <div class="appointment-actions">
+              
+            
                     <a href="{{ path('back_rendezVous_delete', {id: rv.getRefRendezVous()}) }}" class="btn btn-sm btn-secondary">
-                        <i class="fa fa-trash" aria-hidden="true"></i> {{ 'delete'|trans }}
+                        <i class="fa fa-trash" aria-hidden="true"></i> {{ 'Supprimer'|trans }}
                     </a>
                     <a href="{{ path('back_rendezVous_edit', {id: rv.getRefRendezVous()}) }}" class="btn btn-sm btn-primary">
-                        <i class="fa fa-edit" aria-hidden="true"></i> {{ 'edit'|trans }}
+                        <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Modifier'|trans }}
                     </a>
-                </div>
+               
             </div>
         {% else %}
             <div class="no-appointments">
@@ -99,10 +107,7 @@
         {% endfor %}
     </div>
 
-    <a href="{{ path('back_rendezVous_add') }}" class="btn btn-sm btn-primary">
-        <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Ajouter RendezVous'|trans }}
-    </a>
-
+   
     <style>
         .appointments-grid {
             display: grid;

@@ -7,16 +7,21 @@
         <!-- Votre en-tête ici -->
     </header>
 
+              &nbsp;
     <div class="container">
-            <h1 class="text-center" , style="font-weight: bold; color: #2f64b1; text-align: center;">Entrer nouvel Hotel</h1>
+        <div class="row justify-content-end">
+            <div class=" text-center">
+                <h1 style="font-family: Arial, sans-serif; color: black; font-size: 35px;">Ajouter hotel :</h1>
+            </div>
+           
+
+</div>
 
         <div class="form-container">
             {{ include('Back/hotel/_form.html.twig') }}
         </div>
 
-        <a href="{{ path('app_hotel_index') }}">List
-        <i class="align-middle" data-feather="list"></i>
-        </a>
+        
     </div>
     
 {% endblock %}

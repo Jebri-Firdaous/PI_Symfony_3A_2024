@@ -1,9 +1,22 @@
-<link href="css/app.css" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-<title>{% block title %}E-city{% endblock %}</title>
-
-  <link href="{{ asset ('img/icone.png') }}" rel="icon">
-  
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}E-city{% endblock %}</title>
+    <link href="css/app.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="{{ asset ('img/icone.png') }}" rel="icon">
+    <style>
+        body {
+            background-image: url('{{ asset('img/background.png') }}'); /* Chemin relatif vers votre image de fond */
+            background-size: cover;
+            background-position: center;
+            margin: 0; /* Supprime les marges par défaut du corps */
+            padding: 0; /* Supprime les paddings par défaut du corps */
+        }
+    </style>
+</head>
 
 {% block section %}
 
@@ -16,11 +29,12 @@
 
 						<div class="text-center mt-4">
 	<a href="{{ path ('app_acceuil')}}">
-		<h1 style="color: #37423b; font-size: 35px;">
-			<strong>E-CITY</strong>
-		</h1>
+		<h1 style="color: white; font-size: 35px;">
+    <strong>E-CITY</strong>
+</h1>
+
 	</a>
-	<p  style=" font-size: 20px; font-weight: bold;"> Créer un compte</p>
+	<p  style=" color: white;font-size: 20px; font-weight: bold;"> Créer un compte</p>
 </div>
 
 						<div class="card">

@@ -81,10 +81,20 @@
 }
 
 </style>
+  &nbsp;
+    <div class="container">
+        <div class="row justify-content-end">
+            <div class="col-md-6 text-right">
+                <h1 style="font-family: Arial, sans-serif; color: black; font-size: 35px;">Liste des parking :</h1>
+            </div>
+            <div class="col-md-6 d-flex justify-content-end"> 
+    <div class="mt-4">
+        <a href="{{ path('app_parking_new') }}" class="btn btn-success">
+            <i class="align-middle me-1" data-feather="plus-circle"></i> Ajouter un nouvel parking
+        </a>
+    </div>
+</div>
 
-
-<div class="content">
-<br> <h1>Liste Parking ( <a href="{{ path('app_parking_new') }}"><i class="fas fa-plus"></i></a> )</h1> <br>
 
 <div style="display: grid; grid-template-columns: 1fr 1fr;">
     <!-- Add the radio button to toggle the visibility of the filter combo box -->

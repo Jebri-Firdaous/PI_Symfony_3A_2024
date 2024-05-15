@@ -26,7 +26,7 @@
 <!-- Template Stylesheet -->
 <link href="{{asset('parking/css/style.css')}}" rel="stylesheet">
 
-<!--  MAP -->>
+<!--  MAP -->
 <style>
       #map {
         position: relative;
@@ -50,9 +50,13 @@
 
 {% block body %}
 <!-- Vesitable Shop Start-->
+<img src="{{ asset('img/parking.png') }}" alt="" data-aos="fade-in" style="width: 100%; max-width: 100%;">
 <div class="container-fluid vesitable py-5">
+
+
+    
     <div class="container py-5">
-        <h1 class="mb-0">Liste des Parkings</h1>
+        <h2 class="text-center mb-4">Liste des Parkings</h2>
         <div class="owl-carousel vegetable-carousel justify-content-center" style="height:150px">
         {% for p in parkings %}
             <div  id="div{{p.getIdParking}}v2" class="border border-primary rounded position-relative vesitable-item">

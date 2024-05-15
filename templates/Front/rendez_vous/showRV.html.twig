@@ -2,10 +2,15 @@
 {# templates/task/new.html.twig #}
 
 {% block section %}
+  <!-- Section d'accueil -->
+    <img src="{{ asset('img/1.png') }}" alt="" data-aos="fade-in" style="width: 100%; max-width: 100%;">
+
+&nbsp;
+    
      {# AJAX script to handle dynamic search #}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-      <h1 style="margin-left: 39px; margin-top: 10px;">{{ 'Mes RendezVous'|trans }}</h1>
+      <h2 class="text-center mb-4">{{ 'MES RENDEZ VOUS'|trans }}</h2>
 
   <style>
     table {
@@ -15,7 +20,7 @@
 </style>
      {# search dynamic  #}
     <form id="searchForm" action="{{ path('front_app_rv_search') }}" method="GET">
-    <input style="margin-left: 40px;" type="text" id="query" name="query">
+    <input style="margin-left: 40px;" type="text" id="query" name="query" placeholder="Search...">
     </form>
 
      <script>
@@ -68,7 +73,7 @@
         <!-- Ajoutez d'autres options pour les champs de tri si nécessaire -->
     </select>
 
-    <button type="submit" class="btn  tributton"   style="background-color: #17a2b8 " >Trier</button>
+    <button type="submit" >Trier</button>
 </form>
 
 
@@ -104,12 +109,11 @@
 
                 <td class="text-right">
                     <div class="item-actions">
-                        <a href="{{ path('front_rendezVous_delete', {id: rv.getRefRendezVous() }) }}" class="btn btn-sm btn-secondary">
-                            <i class="fa fa-eye" aria-hidden="true"></i> {{ 'delete'|trans }}
+                        <a href="{{ path('front_rendezVous_delete', {id: rv.getRefRendezVous() }) }}" class="btn btn-danger"><i class="bi bi-trash"></i> 
                         </a>
 
                         <a href="{{ path('front_rendezVous_edit', {id: rv.getRefRendezVous()}) }}" class="btn btn-sm btn-primary">
-                            <i class="fa fa-edit" aria-hidden="true"></i> {{ 'edit'|trans }}
+                            <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Modifier'|trans }}
                         </a> 
                     </div>
                 </td>
@@ -124,10 +128,17 @@
              {# </div> #}
         </tbody>
     </table>
-    </div>
-    <a style="margin-left: 39px; margin-top: 10px;background-color: #17a2b8" href="{{ path('front_rendezVous_add') }}" class="btn btn-sm btn-primary">
-             <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Ajouter Rendez Vous'|trans }}
+     &nbsp;
+<div style="display: flex; justify-content: center;">
+    <a href="{{ path('front_rendezVous_add') }}" style="display: inline-block; padding: 10px 20px; background-color: #57C0DD; color: #fff; border-radius: 5px; text-decoration: none;">
+        <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Ajouter Rendez Vous'|trans }}
     </a>
+</div>
+
+
+
+    </div>
+   
 
      <div class="container py-5">
   <div class="d-flex justify-content-center">

@@ -2,6 +2,22 @@
 
 {% block title %}Hotel index{% endblock %}
 {% block section %}
+
+<img src="{{ asset('img/3.png') }}" alt="" data-aos="fade-in" style="width: 100%; max-width: 100%;">
+&nbsp;
+<h2 class="text-center mb-4">LISTE HOTELS</h2>
+  <div class="container">
+        <div style="text-align: right;">
+            <a href="{{ path('app_weather') }}">
+                <img src="{{ asset('img/sun.png') }}" style="width: 50px; height: 50px;"> Temperature
+            </a>
+        </div>
+         <div style="text-align: left;">
+        <a href="{{ path('app_bot') }}">
+            <img src="{{ asset('img/chatbot.png') }}" style="width: 50px; height: 50px;"> Aide
+        </a>
+    </div>
+&nbsp;
     <input type="text" id="searchInput" class="form-control mb-3" placeholder="Search...">
 {#
     <form class="search-form d-flex align-items-center" method="GET" action="{{ path('search2') }}">
@@ -9,7 +25,7 @@
         <button type="submit" title="Search"><i class="bi bi-search"></i></button>
     </form>
 #}
-
+&nbsp;
     <div>
         <a href="{{ path('triFrontHotel') }}" class="d-inline-block">
             <button type="button" style="padding: 10px; margin-right: 10px;" class="btn btn-outline-info">tri croissant</button>
@@ -20,21 +36,22 @@
         </a>
     </div>
 
-    <div class="container">
-        <div style="text-align: right;">
-            <a href="{{ path('app_weather') }}">
-                <img src="{{ asset('img/sun.png') }}" style="width: 50px; height: 50px;"> Temperature
-            </a>
-        </div>
-
-        <h1 class="text-center" style="font-weight: bold; color: #2f64b1; text-align: center;">Liste des Hôtels</h1>
+  &nbsp;
+        
 
         <div class="row card-container">
             {% for hotel in hotels %}
-                <div class="col-md-4 mb-3">
-                    <div class="card">
+            
+                <div class="col-md-3 mb-3">
+                
+                    <div class="card article-card border rounded" style="width: 100%; max-width: 400px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);">
+                     
                         <div class="card-body">
-                            <h5 class="card-title">{{ hotel.nomHotel }}</h5>
+                       <div style="display: flex; align-items: center;">
+    <img src="{{ asset('img/hotel.png') }}" class="card-img-top article-image" style="width: 100px; height: 100px; margin-right: 20px;">
+    <h4 class="card-title font-weight-bold mb-0">{{ hotel.nomHotel }}</h4>
+</div>
+
                             <p class="card-text">Adresse: {{ hotel.adressHotel }}</p>
                             <p class="card-text">Prix 1: {{ hotel.prix1 }}</p>
                             <p class="card-text">Prix 2: {{ hotel.prix2 }}</p>
@@ -44,9 +61,7 @@
                             <p class="card-text">Numero 3: {{ hotel.numero3 }}</p>
                         </div>
                         
-                        {% if qrCodes[hotel.idHotel] is defined %}
-                            <img src="{{ asset(qrCodes[hotel.idHotel]) }}"  style="width: 80px; height: 80px;" alt="QR Code">
-                        {% endif %}
+                       
 
                         <div class="card-footer">
                             <a href="{{ path('app_tourisme', {'idHotel': hotel.idHotel}) }}" class="btn btn-success btn-block" style="background-color: #57C0DD;border: none;">Réserver</a>
@@ -62,14 +77,7 @@
         </div>
     </div>
 
-    <div style="text-align: right;">
-        <a href="{{ path('app_bot') }}">
-            <img src="{{ asset('img/chatbot.png') }}" style="width: 50px; height: 50px;"> Chatting
-        </a>
-    </div>
-
-    <span class="icon"> Retour à la liste ➡ </span>
-
+   
 
     <script>
         // JavaScript code for searching and updating the cards

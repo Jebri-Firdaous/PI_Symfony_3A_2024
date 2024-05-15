@@ -53,10 +53,15 @@
 
 </style>
 
-<div class="example-wrapper" >
-<div style="background-color: #343a40; padding: 30px ;margin-bottom: 40px;"> 
-    <h2 style="text-align: center; color:white ">Ajouter Billet</h2>
-    </div>
+  &nbsp;
+    <div class="container">
+        <div class="row justify-content-end">
+            <div class="text-center">
+                <h1 style="font-family: Arial, sans-serif; color: black; font-size: 35px;">Ajouter billet :</h1>
+            </div>
+            <div class="col-md-6 d-flex justify-content-end"> 
+    
+</div>
     
     <div class="row justify-content-center" > <!-- Centrer les champs du formulaire -->
         <div class="col-md-6"> <!-- Utilisation de 6 colonnes pour chaque champ -->
@@ -111,15 +116,20 @@
         <i data-feather="file-text" style="width: 32px; height: 32px;"></i>
     </a>
 </div> #}
-
- <a href="{{ path('Extract_data') }}"  >
-        <i data-feather="file-text" style="width: 25px; height: 25px;"></i>
+ &nbsp;
+<div class="text-end">
+    <a href="{{ path('Extract_data') }}" class="btn btn-sm btn-outline-secondary">
+        <i class="bi bi-file-pdf"></i> Télécharger PDF
     </a>
+</div>
+
+
 <div style="margin-top: 20px;"> <!-- Ajustez la marge supérieure selon vos besoins -->
  <i data-feather="search"></i>
 
   <input type="text" id="searchInput" oninput="search()" placeholder="Rechercher destination/date...">
   <i data-feather="refresh-cw" title="Trier par date" onclick="sortTable()"></i> 
+&nbsp;
     <table class="table table-bordered" id="billetTable">
         <thead>
             <tr>

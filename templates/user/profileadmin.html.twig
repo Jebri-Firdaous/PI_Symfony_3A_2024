@@ -472,9 +472,7 @@
                             <a href="javascript:void();" data-target="#profile" data-toggle="pill" class="nav-link active show"><i class="icon-user"></i> <span class="hidden-xs">Profile</span></a>
                             </li>
                         
-                            <li class="nav-item">
-                            <a href="javascript:void();" data-target="#edit" data-toggle="pill" class="nav-link"><i class="icon-note"></i> <span class="hidden-xs">Edit</span></a>
-                            </li>
+
                         </ul>
                         <div class="tab-content p-3">
                             <div class="tab-pane active show" id="profile">
@@ -490,51 +488,7 @@
 
 
                             </div>
-<div class="tab-pane" id="edit">
-  <div class="tab-pane" id="edit">
-    <form action="{{ path('app_profile_edit') }}" method="POST">
-<form id="editForm" action="{{ path('app_user_edit', {'id': app.user.id}) }}" method="post" enctype="multipart/form-data" >
-<div class="form-group row">
-<label class="col-lg-3 col-form-label form-control-label">nom</label>
-<div class="col-lg-9">
-<input class="form-control" type="text" value={{app.user.getNomPersonne()}}>
-</div>
-</div>
-<div class="form-group row">
-<label class="col-lg-3 col-form-label form-control-label">prenom</label>
-<div class="col-lg-9">
-<input class="form-control" type="text" value={{app.user.getPrenomPersonne()}}>
-</div>
-</div>
-<div class="form-group row">
-<label class="col-lg-3 col-form-label form-control-label">Email</label>
-<div class="col-lg-9">
-<input class="form-control" type="email" value={{app.user.getEmail()}}>
-</div>
-</div>
-<div class="form-group row">
-<label class="col-lg-3 col-form-label form-control-label">image profile</label>
-<div class="col-lg-9">
-<input class="form-control" type="file" value={{app.user.getImagePersonne()}}>
-</div>
-</div>
-
-<div class="form-group row">
-<label class="col-lg-3 col-form-label form-control-label"></label>
-<div class="col-lg-9">
-<div>
-<input type="reset" class="btn btn-secondary" value="Cancel">
-</div>
-<div>
-<input type="button" class="btn btn-primary" value="Save Changes">
-</div>
-</div>
-</div>
-</form>
-    </form>
-</div>
-
-</div>                            
+                          
 
 
 

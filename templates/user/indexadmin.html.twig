@@ -40,10 +40,20 @@ button:hover {
 {% endblock %}
 {% block main %}
 <div class="row" style="margin-left: 2px; margin-right: 2px;">
-    <div class="card flex-fill">
-        <div class="card-header">
-            <h2 style="font-weight: bold; color: #2f64b1; text-align: center;">Liste des Administrateurs</h2>
-        </div>
+     &nbsp;
+    <div class="container">
+        <div class="row justify-content-end">
+            <div class="col-md-6 text-right">
+                <h1 style="font-family: Arial, sans-serif; color: black; font-size: 35px;">Liste des administrateurs :</h1>
+            </div>
+            <div class="col-md-6 d-flex justify-content-end"> 
+    <div class="mt-4">
+        <a href="{{ path('app_user_new_admin') }}" class="btn btn-success">
+            <i class="align-middle me-1" data-feather="plus-circle"></i> Ajouter un nouvel administrateur
+        </a>
+    </div>
+</div>
+ &nbsp;
         <table class="table table-hover my-0">
             <thead>
                 <tr>
@@ -81,9 +91,16 @@ button:hover {
                         <td>🟢</td>
                     {% endif %}
                     <td>
-                        <a ><span class="icon">Banner</span> </a>
-                        <a class="deleteBtn" href="{{ path('app_user_delete_admin', {id: user.getId()}) }}"><span class="icon">🗑️</span></a>
-                        <a href="{{ path('app_user_edit', {id: user.getId()}) }}"><span class="icon">✏️</span></a>
+                        
+                       
+                        <a href="{{ path('app_user_delete_admin', {id: user.getId()}) }}" class="btn btn-sm btn-secondary">
+                            <i class="fa fa-eye" aria-hidden="true"></i> {{ 'Supprimer'|trans }}
+                        </a>
+
+                        <a href="{{ path('app_user_edit', {id: user.getId()}) }}" class=" btn btn-sm btn-primary">
+                        
+                            <i class="fa fa-edit" aria-hidden="true"></i> {{ 'Modifier'|trans }}
+                        </a>
                     </td>
                 </tr>
                 {% endif %}
@@ -94,7 +111,7 @@ button:hover {
 </div>
 <!-- Incluez le script JavaScript -->
 
-<a href="{{ path('app_user_new_admin') }}" class="btn-primary">Ajouter </a>
+
 {% endblock %}
 {% block javascript %}
 <script>
